@@ -1,6 +1,6 @@
 package br.com.diego.soares.domain.entity;
 
-import br.com.diego.soares.domain.enums.DiaSemana;
+import br.com.diego.soares.domain.enums.DiaSemanaEnum;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +24,7 @@ public class Horario extends PanacheEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "dia_semana", nullable = false)
-    private DiaSemana diaSemana;
+    private DiaSemanaEnum diaSemana;
 
     @NotNull
     @Column(name = "hora_inicio", nullable = false)
