@@ -1,18 +1,18 @@
-INSERT INTO disciplina (id, nome) VALUES
-(1, 'Matemática'),
-(2, 'Física'),
-(3, 'Química'),
+﻿INSERT INTO disciplina (id, nome) VALUES
+(1, 'Matematica'),
+(2, 'Fisica'),
+(3, 'Quimica'),
 (4, 'Biologia'),
-(5, 'História'),
+(5, 'Historia'),
 (6, 'Geografia'),
-(7, 'Português'),
-(8, 'Inglês'),
+(7, 'Portugues'),
+(8, 'Ingles'),
 (9, 'Filosofia'),
 (10, 'Sociologia'),
-(11, 'Programação'),
+(11, 'Programacao'),
 (12, 'Estrutura de Dados'),
 (13, 'Algoritmos'),
-(14, 'Cálculo'),
+(14, 'Calculo'),
 (15, 'Banco de Dados');
 
 INSERT INTO professor (id, nome) VALUES
@@ -23,39 +23,39 @@ INSERT INTO professor (id, nome) VALUES
 (5, 'Marcelo Costa');
 
 INSERT INTO horario (id, dia_semana, hora_inicio, hora_fim) VALUES
-(1, '2', '08:00:00', '10:00:00'),
-(2, '2', '19:00:00', '21:00:00'),
-(3, '3', '08:00:00', '10:00:00'),
-(4, '3', '14:00:00', '16:00:00'),
-(5, '4', '10:00:00', '12:00:00'),
-(6, '4', '19:00:00', '21:00:00'),
-(7, '5', '08:00:00', '10:00:00'),
-(8, '5', '14:00:00', '16:00:00'),
-(9, '6', '10:00:00', '12:00:00'),
-(10, '6', '19:00:00', '21:00:00');
+(1,  2, '08:00:00', '10:00:00'),
+(2,  2, '19:00:00', '21:00:00'),
+(3,  3, '08:00:00', '10:00:00'),
+(4,  3, '14:00:00', '16:00:00'),
+(5,  4, '10:00:00', '12:00:00'),
+(6,  4, '19:00:00', '21:00:00'),
+(7,  5, '08:00:00', '10:00:00'),
+(8,  5, '14:00:00', '16:00:00'),
+(9,  6, '10:00:00', '12:00:00'),
+(10, 6, '19:00:00', '21:00:00');
 
 INSERT INTO curso (id, nome) VALUES
 (1, 'Engenharia de Software'),
-(2, 'Ciência da Computação'),
-(3, 'Sistemas de Informação'),
-(4, 'Análise e Desenvolvimento de Sistemas'),
-(5, 'Engenharia da Computação'),
-(6, 'Matemática'),
-(7, 'Física'),
-(8, 'Administração'),
+(2, 'Ciencia da Computacao'),
+(3, 'Sistemas de Informacao'),
+(4, 'Analise e Desenvolvimento de Sistemas'),
+(5, 'Engenharia da Computacao'),
+(6, 'Matematica'),
+(7, 'Fisica'),
+(8, 'Administracao'),
 (9, 'Pedagogia');
 
 INSERT INTO coordenador (id, nome, keycloak_id) VALUES
-(1, 'João Coordenador', 'coord-uuid-1'),
-(2, 'Maria Coordenadora', 'coord-uuid-2'),
-(3, 'Paulo Coordenador', 'coord-uuid-3');
+(1, 'Joao Coordenador',  'c0000001-0000-0000-0000-000000000001'),
+(2, 'Maria Coordenadora','c0000001-0000-0000-0000-000000000002'),
+(3, 'Paulo Coordenador', 'c0000001-0000-0000-0000-000000000003');
 
 INSERT INTO aluno (id, nome, keycloak_id, curso_id) VALUES
-(1, 'Lucas Almeida', 'aluno-uuid-1', 1),
-(2, 'Juliana Ferreira', 'aluno-uuid-2', 2),
-(3, 'Bruno Nascimento', 'aluno-uuid-3', 3),
-(4, 'Camila Rodrigues', 'aluno-uuid-4', 1),
-(5, 'Rafael Pereira', 'aluno-uuid-5', 4);
+(1, 'Lucas Almeida',    'a0000001-0000-0000-0000-000000000001', 1),
+(2, 'Juliana Ferreira', 'a0000001-0000-0000-0000-000000000002', 2),
+(3, 'Bruno Nascimento', 'a0000001-0000-0000-0000-000000000003', 3),
+(4, 'Camila Rodrigues', 'a0000001-0000-0000-0000-000000000004', 1),
+(5, 'Rafael Pereira',   'a0000001-0000-0000-0000-000000000005', 4);
 
 INSERT INTO matriz_curricular (id, disciplina_id, professor_id, horario_id, quantidade_maxima_alunos, coordenador_id, ativo) VALUES
 (1, 11, 1, 1, 40, 1, true),
