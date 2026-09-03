@@ -1,0 +1,118 @@
+{
+  "realm": "get-matriculas",
+  "enabled": true,
+  "displayName": "Gestão de Matrículas",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": true,
+  "bruteForceProtected": true,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      {
+        "name": "coordenador",
+        "description": "Papel de coordenador acadêmico"
+      },
+      {
+        "name": "aluno",
+        "description": "Papel de aluno"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "get-matriculas-back",
+      "enabled": true,
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "serviceAccountsEnabled": true,
+      "secret": "get-matriculas-back-secret"
+    },
+    {
+      "clientId": "get-matriculas-front",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "http://localhost:80/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4200",
+        "http://localhost"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "coordenador1",
+      "enabled": true,
+      "email": "coordenador1@unifor.br",
+      "firstName": "João",
+      "lastName": "Coordenador",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "coordenador"
+      ]
+    },
+    {
+      "username": "coordenador2",
+      "enabled": true,
+      "email": "coordenador2@unifor.br",
+      "firstName": "Maria",
+      "lastName": "Coordenadora",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "coordenador"
+      ]
+    },
+    {
+      "username": "aluno1",
+      "enabled": true,
+      "email": "aluno1@unifor.br",
+      "firstName": "Lucas",
+      "lastName": "Almeida",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "aluno"
+      ]
+    },
+    {
+      "username": "aluno2",
+      "enabled": true,
+      "email": "aluno2@unifor.br",
+      "firstName": "Juliana",
+      "lastName": "Ferreira",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "senha123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "aluno"
+      ]
+    }
+  ]
+}
