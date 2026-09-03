@@ -1,28 +1,28 @@
 import {
-  HttpEvent,
-  HttpHandlerFn,
   HttpInterceptorFn,
+  HttpHandlerFn,
   HttpRequest,
+  HttpEvent,
 } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { AutenticacaoService } from '../services/autenticacao.service';
 import { from, Observable, switchMap } from 'rxjs';
-import { AutenticacaoService } from './autenticacao.service';
+import { inject } from '@angular/core';
 
 export const interceptorAutorizacao: HttpInterceptorFn = (
   requisicao: HttpRequest<unknown>,
   proximo: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
-  const autenticacaoService = inject(AutenticacaoService);
+  const autenticacaoService: AutenticacaoService = inject(AutenticacaoService);
 
-  return from(autenticacaoService.renovarToken()).pipe(
+  return from(autenticacaoService.renovarTokenAcesso()).pipe(
     switchMap(() => {
-      const token: string | undefined = autenticacaoService.obterToken();
+      const token: string | undefined = autenticacaoService.obterTokenAcesso();
 
       if (!token) {
         return proximo(requisicao);
       }
 
-      const requisicaoAutenticada = requisicao.clone({
+      const requisicaoAutenticada: HttpRequest<unknown> = requisicao.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
       });
 

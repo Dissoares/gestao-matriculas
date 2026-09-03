@@ -3,16 +3,16 @@ import {
   ApplicationConfig,
   APP_INITIALIZER,
 } from '@angular/core';
-import { interceptorAutorizacao } from './core/interceptor-autorizacao.interceptor';
+import { interceptorAutorizacao } from '../../../../libs/auth/interceptors/interceptor-autorizacao.interceptor';
+import { AutenticacaoService } from '../../../../libs/auth/services/autenticacao.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { AutenticacaoService } from './core/autenticacao.service';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 
 function inicializarAutenticacao(
   autenticacaoService: AutenticacaoService,
 ): () => Promise<boolean> {
-  return () => autenticacaoService.inicializar();
+  return () => autenticacaoService.inicializarKeyCloak();
 }
 
 export const configuracaoApp: ApplicationConfig = {
