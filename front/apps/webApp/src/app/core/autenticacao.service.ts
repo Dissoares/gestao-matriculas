@@ -24,4 +24,16 @@ export class AutenticacaoService {
   public renovarTokenAutenticacao(): Promise<boolean> {
     return this.instanciaKeycloak.updateToken(30);
   }
+
+  public ehUsuarioAutenticado(): boolean {
+    return !!this.instanciaKeycloak.authenticated;
+  }
+
+  public possuiPerfilValido(perfil: string): boolean {
+    return this.instanciaKeycloak.hasRealmRole(perfil);
+  }
+
+  finalizarSessao(): void {
+    this.instanciaKeycloak.logout({ redirectUri: window.location.origin });
+  }
 }
