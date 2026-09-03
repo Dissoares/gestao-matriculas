@@ -7,7 +7,7 @@ import { interceptorAutorizacao } from './core/interceptor-autorizacao.intercept
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AutenticacaoService } from './core/autenticacao.service';
 import { provideRouter } from '@angular/router';
-import { rotasApp } from './app.routes';
+import { appRoutes } from './app.routes';
 
 function inicializarAutenticacao(
   autenticacaoService: AutenticacaoService,
@@ -18,7 +18,7 @@ function inicializarAutenticacao(
 export const configuracaoApp: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(rotasApp),
+    provideRouter(appRoutes),
     provideHttpClient(withInterceptors([interceptorAutorizacao])),
     {
       provide: APP_INITIALIZER,
