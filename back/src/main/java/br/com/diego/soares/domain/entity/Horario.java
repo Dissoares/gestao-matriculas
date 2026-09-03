@@ -1,12 +1,9 @@
 package br.com.diego.soares.domain.entity;
 
+import br.com.diego.soares.converter.DiaSemanaEnumConverter;
 import br.com.diego.soares.domain.enums.DiaSemanaEnum;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +19,7 @@ import java.time.LocalTime;
 public class Horario extends PanacheEntity {
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = DiaSemanaEnumConverter.class)
     @Column(name = "dia_semana", nullable = false)
     private DiaSemanaEnum diaSemana;
 
