@@ -5,16 +5,35 @@ services:
     environment:
       POSTGRES_DB: get_matriculas
       POSTGRES_USER: administrathor
-      POSTGRES_PASSWORD: alunox789xyz
+      POSTGRES_PASSWORD: alun0x789xyz
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./infra/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U administrathor -d get_matriculas"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2
+    container_name: get-matriculas-keycloak
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: administrathor
+      KC_DB_PASSWORD: alunox789xyz
+      KEYCLOAK_ADMIN: keycloakadmin
+      KEYCLOAK_ADMIN_PASSWORD: acess0x789xyz
+      KC_HTTP_PORT: 8180
+    ports:
+      - "8180:8180"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
