@@ -17,11 +17,11 @@ export class AutenticacaoService {
     return this.instanciaKeycloak.init(opcoes);
   }
 
-  public obterTokenAutenticacao(): string | undefined {
+  public obterTokenAcesso(): string | undefined {
     return this.instanciaKeycloak.token;
   }
 
-  public renovarTokenAutenticacao(): Promise<boolean> {
+  public renovarTokenAcesso(): Promise<boolean> {
     return this.instanciaKeycloak.updateToken(30);
   }
 
@@ -33,7 +33,5 @@ export class AutenticacaoService {
     return this.instanciaKeycloak.hasRealmRole(perfil);
   }
 
-  finalizarSessao(): void {
-    this.instanciaKeycloak.logout({ redirectUri: window.location.origin });
-  }
+  public finalizarSessao(): void {}
 }
