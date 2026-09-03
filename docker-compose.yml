@@ -25,9 +25,9 @@ services:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
       KC_DB_USERNAME: administrathor
-      KC_DB_PASSWORD: alunox789xyz
-      KEYCLOAK_ADMIN: keycloakadmin
-      KEYCLOAK_ADMIN_PASSWORD: acess0x789xyz
+      KC_DB_PASSWORD: alun0x789xyz
+      KC_BOOTSTRAP_ADMIN_USERNAME: keycloakadmin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: acess0x789xyz
       KC_HTTP_PORT: 8180
     ports:
       - "8180:8180"
