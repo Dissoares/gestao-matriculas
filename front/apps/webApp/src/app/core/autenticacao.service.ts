@@ -16,4 +16,12 @@ export class AutenticacaoService {
     };
     return this.instanciaKeycloak.init(opcoes);
   }
+
+  public obterTokenAutenticacao(): string | undefined {
+    return this.instanciaKeycloak.token;
+  }
+
+  public renovarTokenAutenticacao(): Promise<boolean> {
+    return this.instanciaKeycloak.updateToken(30);
+  }
 }
