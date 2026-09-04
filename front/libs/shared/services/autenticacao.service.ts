@@ -12,6 +12,7 @@ export class AutenticacaoService {
   public inicializarKeyCloak(): Promise<boolean> {
     const opcoes: KeycloakInitOptions = {
       onLoad: 'login-required',
+      pkceMethod: 'S256',
       checkLoginIframe: false,
     };
     return this.instanciaKeycloak.init(opcoes);
