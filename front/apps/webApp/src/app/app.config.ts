@@ -5,13 +5,13 @@ import {
   APP_INITIALIZER,
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { interceptorAutorizacao } from '../../../../libs/auth/interceptors/index';
-import { AutenticacaoService } from '../../../../libs/shared/services/index';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { interceptorAutorizacao } from '@front/auth/interceptors';
+import { AutenticacaoService } from '@front/shared/services';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
-import Aura from '@primeng/themes/aura';
+import Aura from '@primeuix/themes/aura';
 
 function inicializarAutenticacao(
   autenticacaoService: AutenticacaoService,
@@ -27,7 +27,9 @@ export const configuracaoApp: ApplicationConfig = {
     provideRouter(appRoutes),
     provideHttpClient(withInterceptors([interceptorAutorizacao])),
     providePrimeNG({
-      theme: { preset: Aura, options: { darkModeSelector: false } },
+      theme: {
+        preset: Aura,
+      },
     }),
     {
       provide: APP_INITIALIZER,

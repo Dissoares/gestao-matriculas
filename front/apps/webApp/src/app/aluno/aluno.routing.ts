@@ -1,4 +1,4 @@
-import { RotasEnum } from '../../../../../libs/shared/enums';
+import { RotasEnum } from '@front/shared/enums';
 import { Routes } from '@angular/router';
 
 export const ROTAS_ALUNO: Routes = [

@@ -1,4 +1,4 @@
-import { AutenticacaoService } from '../../../../../../libs/shared/services/index';
+import { AutenticacaoService } from '@front/shared/services';
 import { Component, inject, OnInit } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';

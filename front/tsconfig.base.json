@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "baseUrl": ".",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "bundler",
@@ -10,11 +11,33 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": false,
-    "paths": {}
+    "paths": {
+      "@front/auth/guards": [
+        "libs/auth/guards/index.ts"
+      ],
+      "@front/auth/interceptors": [
+        "libs/auth/interceptors/index.ts"
+      ],
+      "@front/shared/enums": [
+        "libs/shared/enums/index.ts"
+      ],
+      "@front/shared/models": [
+        "libs/shared/models/index.ts"
+      ],
+      "@front/shared/services": [
+        "libs/shared/services/index.ts"
+      ]
+    }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

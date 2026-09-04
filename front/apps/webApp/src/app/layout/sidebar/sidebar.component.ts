@@ -1,8 +1,5 @@
-import { AutenticacaoService } from '../../../../../../libs/shared/services/index';
-import {
-  PerfilEnum,
-  RotasEnum,
-} from '../../../../../../libs/shared/enums/index';
+import { AutenticacaoService } from '@front/shared/services';
+import { PerfilEnum, RotasEnum } from '@front/shared/enums';
 import { Component, inject, OnInit } from '@angular/core';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuItem } from 'primeng/api';

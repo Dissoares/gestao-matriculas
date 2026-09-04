@@ -1,8 +1,5 @@
-import {
-  CoordenadorGuard,
-  AlunoGuard,
-} from '../../../../libs/auth/guards/index';
-import { RotasEnum } from '../../../../libs/shared/enums';
+import { CoordenadorGuard, AlunoGuard } from '@front/auth/guards';
+import { RotasEnum } from '@front/shared/enums';
 import { Route } from '@angular/router';
 
 export const appRoutes: Array<Route> = [
