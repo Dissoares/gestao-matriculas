@@ -3,7 +3,7 @@ import { PerfilEnum, RotasEnum } from '../../shared/enums/index';
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 
-export const coordenadorGuard: CanActivateFn = () => {
+export const CoordenadorGuard: CanActivateFn = () => {
   const autenticacaoService = inject(AutenticacaoService);
   const router = inject(Router);
 

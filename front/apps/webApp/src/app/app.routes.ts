@@ -1,53 +1,39 @@
-import {
-  coordenadorGuard,
-  alunoGuard,
-} from '../../../../libs/auth/guards/index';
+import { AlunoGuard, CoordenadorGuard } from '../../../../libs/auth/guards/index';
 import { RotasEnum } from '../../../../libs/shared/enums';
 import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
-  {
-    path: '',
-    redirectTo: RotasEnum.LOGIN,
-    pathMatch: 'full',
-  },
   {
     path: RotasEnum.LOGIN,
     loadComponent: () =>
       import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
-    path: RotasEnum.ROTA.COORDENADOR,
-    canActivate: [coordenadorGuard],
+    path: '',
+    loadComponent: () =>
+      import('./layout/content/content.component').then(
+        (m) => m.ContentComponent,
+      ),
     children: [
       {
-        path: RotasEnum.COORDENADOR.MATRIZ.LISTAR,
-        loadComponent: () =>
-          import('../app/coordenador/matriz/listagem/listagem.component').then(
-            (m) => m.ListagemComponent,
+        path: RotasEnum.ROTA.COORDENADOR,
+        canActivate: [CoordenadorGuard],
+        loadChildren: () =>
+          import('./coordenador/coordenador.routing').then(
+            (m) => m.ROTAS_COORDENADOR,
           ),
       },
-      {
-        path: RotasEnum.COORDENADOR.MATRIZ.NOVA,
-        loadComponent: () =>
-          import(
-            '../app/coordenador/matriz/formulario/formulario.component'
-          ).then((m) => m.FormularioComponent),
-      },
-      {
-        path: `${RotasEnum.COORDENADOR.MATRIZ.LISTAR}/:id/${RotasEnum.COORDENADOR.MATRIZ.EDITAR}`,
-        loadComponent: () =>
-          import(
-            '../app/coordenador/matriz/formulario/formulario.component'
-          ).then((m) => m.FormularioComponent),
+       {
+        path: RotasEnum.ROTA.ALUNO,
+        canActivate: [AlunoGuard],
+        loadChildren: () =>
+          import('./coordenador/coordenador.routing').then(
+            (m) => m.ROTAS_COORDENADOR,
+          ),
       },
     ],
   },
-  {
-    path: RotasEnum.ROTA.ALUNO,
-    canActivate: [alunoGuard],
-    children: [],
-  },
+
   {
     path: '**',
     redirectTo: RotasEnum.LOGIN,
