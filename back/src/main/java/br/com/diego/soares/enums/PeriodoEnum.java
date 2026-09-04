@@ -1,4 +1,4 @@
-package br.com.diego.soares.domain.enums;
+package br.com.diego.soares.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;

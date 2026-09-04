@@ -1,4 +1,4 @@
-package br.com.diego.soares.domain.entity;
+package br.com.diego.soares.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;

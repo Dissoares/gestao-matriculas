@@ -1,6 +1,6 @@
-package br.com.diego.soares.converter;
+package br.com.diego.soares.utils;
 
-import br.com.diego.soares.domain.enums.DiaSemanaEnum;
+import br.com.diego.soares.enums.DiaSemanaEnum;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
