@@ -1,33 +1,29 @@
 package br.com.diego.soares.service;
 
-import br.com.diego.soares.exception.BusinessException;
-import jakarta.enterprise.context.ApplicationScoped;
-import br.com.diego.soares.enums.PeriodoEnum;
-import jakarta.transaction.Transactional;
-import br.com.diego.soares.repository.*;
-import jakarta.ws.rs.ForbiddenException;
-import jakarta.ws.rs.NotFoundException;
 import br.com.diego.soares.entity.*;
-import java.util.stream.Collectors;
+import br.com.diego.soares.repository.*;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import java.time.LocalTime;
-import java.util.HashSet;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
+
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MatrizCurricularService {
+
     @Inject MatrizCurricularRepository matrizRepository;
     @Inject CoordenadorRepository coordenadorRepository;
     @Inject DisciplinaRepository disciplinaRepository;
     @Inject ProfessorRepository professorRepository;
     @Inject HorarioRepository horarioRepository;
     @Inject CursoRepository cursoRepository;
-    @Inject MatriculaRepository matriculaRepository;
 
     @Transactional
     public MatrizCurricular criar(MatrizCurricular dados, String keycloakId) {
-        Coordenador coordenador = buscarCoordenador(keycloakId);
+        Coordenador coordenador = coordenadorRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(() -> new NotFoundException("Coordenador não encontrado"));
 
         Disciplina disciplina = disciplinaRepository.findByIdOptional(dados.getDisciplina().getId())
                 .orElseThrow(() -> new NotFoundException("Disciplina não encontrada"));
@@ -40,7 +36,11 @@ public class MatrizCurricularService {
 
         List<Long> cursosIds = dados.getCursosAutorizados().stream()
                 .map(c -> c.getId()).collect(Collectors.toList());
-        List<Curso> cursos = resolverCursos(cursosIds);
+
+        List<Curso> cursos = cursosIds.stream()
+                .map(id -> cursoRepository.findByIdOptional(id)
+                        .orElseThrow(() -> new NotFoundException("Curso " + id + " não encontrado")))
+                .collect(Collectors.toList());
 
         MatrizCurricular matriz = new MatrizCurricular();
         matriz.setDisciplina(disciplina);
@@ -53,6 +53,13 @@ public class MatrizCurricularService {
 
         matrizRepository.persist(matriz);
 
-        return toResponse(matriz, 0L);
+        // Inicializa lazy para serialização
+        matriz.getDisciplina().getNome();
+        matriz.getProfessor().getNome();
+        matriz.getHorario().getDiaSemana();
+        matriz.getCoordenador().getNome();
+        matriz.getCursosAutorizados().size();
+
+        return matriz;
     }
 }
