@@ -13,8 +13,6 @@ public class DiaSemanaEnumConverter implements AttributeConverter<DiaSemanaEnum,
 
     @Override
     public DiaSemanaEnum convertToEntityAttribute(Integer codigo) {
-        return codigo != null
-                ? DiaSemanaEnum.fromCodigo(codigo)
-                : null;
+        return codigo != null ? DiaSemanaEnum.fromCodigo(codigo) : null;
     }
 }

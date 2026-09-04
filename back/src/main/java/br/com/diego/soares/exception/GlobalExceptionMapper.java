@@ -10,9 +10,6 @@ public class GlobalExceptionMapper implements ExceptionMapper<BusinessException>
 
     @Override
     public Response toResponse(BusinessException e) {
-        return Response.status(Response.Status.BAD_REQUEST)
-                .type(MediaType.APPLICATION_JSON)
-                .entity(new ErrorResponse(e.getMessage()))
-                .build();
+        return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(new ErrorResponse(e.getMessage())).build();
     }
 }

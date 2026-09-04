@@ -39,8 +39,6 @@ public enum DiaSemanaEnum {
             }
         }
 
-        throw new IllegalArgumentException(
-                "Código inválido para DiaSemanaEnum: " + codigo
-        );
+        throw new IllegalArgumentException("Código inválido para DiaSemanaEnum: " + codigo);
     }
 }

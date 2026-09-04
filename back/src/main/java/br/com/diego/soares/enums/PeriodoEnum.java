@@ -35,8 +35,6 @@ public enum PeriodoEnum {
             }
         }
 
-        throw new IllegalArgumentException(
-                "Código inválido para PeriodoEnum: " + codigo
-        );
+        throw new IllegalArgumentException("Código inválido para PeriodoEnum: " + codigo);
     }
 }
