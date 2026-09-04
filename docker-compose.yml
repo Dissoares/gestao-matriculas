@@ -34,7 +34,7 @@ services:
     ports:
       - "8180:8180"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8180/health/ready || exit 1"]
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/9000'"]
       interval: 20s
       timeout: 10s
       retries: 10
