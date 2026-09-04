@@ -1,16 +1,16 @@
-<p-toolbar>
-    <ng-template #start>
-        <p-button icon="pi pi-plus" class="mr-2" text severity="secondary" />
-        <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
-        <p-button icon="pi pi-upload" text severity="secondary" />
-    </ng-template>
-    <ng-template #center>
-        <p-iconfield iconPosition="left">
-            <p-inputicon class="pi pi-search" />
-            <input type="text" pInputText placeholder="Search" />
-        </p-iconfield>
-    </ng-template>
-    <ng-template #end>
-        <p-splitbutton label="Save" [model]="items" />
-    </ng-template>
+<p-toolbar styleClass="header-toolbar">
+  <ng-template #start>
+    <div class="header-brand">
+      <i class="pi pi-graduation-cap header-brand-icon"></i>
+      <span class="header-brand-name">Gestão de Matrículas</span>
+    </div>
+  </ng-template>
+
+  <ng-template #end>
+    <div class="header-user">
+      <p-avatar [label]="nomeUsuario.charAt(0).toUpperCase()" shape="circle" styleClass="header-avatar" />
+      <span class="header-username">{{ nomeUsuario }}</span>
+      <p-button label="Sair" icon="pi pi-sign-out" severity="secondary" [text]="true" (onClick)="sair()" />
+    </div>
+  </ng-template>
 </p-toolbar>

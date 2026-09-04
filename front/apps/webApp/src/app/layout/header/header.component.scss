@@ -1,0 +1,41 @@
+.header-toolbar {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+
+  &-icon {
+    font-size: 1.5rem;
+    color: var(--p-primary-color);
+  }
+
+  &-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--p-text-color);
+  }
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-avatar {
+  background-color: var(--p-primary-color);
+  color: #fff;
+  font-weight: 600;
+}
+
+.header-username {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--p-text-color);
+}

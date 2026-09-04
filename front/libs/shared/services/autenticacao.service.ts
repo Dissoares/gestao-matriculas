@@ -39,6 +39,13 @@ export class AutenticacaoService {
     return this.instanciaKeycloak.hasRealmRole(perfil.descricao);
   }
 
+  public obterNomeUsuario(): string {
+    return (
+      (this.instanciaKeycloak.tokenParsed?.['preferred_username'] as string) ??
+      'Usuário'
+    );
+  }
+
   public autenticarUsuario(): void {
     this.instanciaKeycloak.login();
   }
