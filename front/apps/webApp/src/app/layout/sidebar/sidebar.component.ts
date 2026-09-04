@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DrawerModule } from 'primeng/drawer';
+
 @Component({
   standalone: true,
   selector: 'app-sidebar',
@@ -8,6 +9,7 @@ import { DrawerModule } from 'primeng/drawer';
   imports: [DrawerModule],
 })
 export class SidebarComponent implements OnInit {
+  public visible: boolean = true;
   constructor() {}
 
   public ngOnInit() {}

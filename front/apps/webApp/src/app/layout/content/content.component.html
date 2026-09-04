@@ -1,3 +1,10 @@
-<main class="conteudo">
-  <router-outlet />
-</main>
+<div class="layout">
+  <app-header />
+  <div class="layout-body">
+    <app-sidebar />
+    <main class="layout-content">
+      <router-outlet />
+    </main>
+  </div>
+  <app-footer />
+</div>

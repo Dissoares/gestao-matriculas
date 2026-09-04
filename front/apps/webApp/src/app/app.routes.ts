@@ -1,8 +1,11 @@
-import { AlunoGuard, CoordenadorGuard } from '../../../../libs/auth/guards/index';
+import {
+  CoordenadorGuard,
+  AlunoGuard,
+} from '../../../../libs/auth/guards/index';
 import { RotasEnum } from '../../../../libs/shared/enums';
 import { Route } from '@angular/router';
 
-export const appRoutes: Route[] = [
+export const appRoutes: Array<Route> = [
   {
     path: RotasEnum.LOGIN,
     loadComponent: () =>
@@ -23,13 +26,11 @@ export const appRoutes: Route[] = [
             (m) => m.ROTAS_COORDENADOR,
           ),
       },
-       {
+      {
         path: RotasEnum.ROTA.ALUNO,
         canActivate: [AlunoGuard],
         loadChildren: () =>
-          import('./coordenador/coordenador.routing').then(
-            (m) => m.ROTAS_COORDENADOR,
-          ),
+          import('./aluno/aluno.routing').then((m) => m.ROTAS_ALUNO),
       },
     ],
   },
