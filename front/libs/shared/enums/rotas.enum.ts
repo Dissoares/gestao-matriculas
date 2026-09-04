@@ -8,9 +8,9 @@ export class RotasEnum {
 
   static readonly COORDENADOR = {
     MATRIZ: {
-      LISTAR: 'matriz',
-      NOVA: 'matriz/nova',
-      EDITAR: 'matriz/editar',
+      LISTAR: 'matrizes',
+      NOVA: 'matrizes/nova',
+      EDITAR: 'editar',
     },
   };
 

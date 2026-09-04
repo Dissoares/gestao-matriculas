@@ -15,9 +15,12 @@ export class LoginComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.COORDENADOR)) {
-      this.router.navigate([RotasEnum.COORDENADOR.MATRIZ.LISTAR]);
+      this.router.navigate([
+        RotasEnum.ROTA.COORDENADOR,
+        RotasEnum.COORDENADOR.MATRIZ.LISTAR,
+      ]);
     } else if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.ALUNO)) {
-      this.router.navigate([RotasEnum.ALUNO.MATRICULAS.LISTAR]);
+      this.router.navigate([RotasEnum.ROTA.ALUNO, RotasEnum.ALUNO.AULAS]);
     }
   }
 }
