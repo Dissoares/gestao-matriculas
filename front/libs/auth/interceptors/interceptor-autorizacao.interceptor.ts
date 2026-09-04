@@ -4,7 +4,7 @@ import {
   HttpRequest,
   HttpEvent,
 } from '@angular/common/http';
-import { AutenticacaoService } from '../services/autenticacao.service';
+import { AutenticacaoService } from '../../shared/services/autenticacao.service';
 import { from, Observable, switchMap } from 'rxjs';
 import { inject } from '@angular/core';
 
