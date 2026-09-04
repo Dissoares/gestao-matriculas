@@ -1,4 +1,4 @@
-﻿INSERT INTO disciplina (id, nome) VALUES
+INSERT INTO disciplina (id, nome) VALUES
 (1, 'Matematica'),
 (2, 'Fisica'),
 (3, 'Quimica'),
@@ -71,10 +71,10 @@ INSERT INTO matriz_curso (matriz_id, curso_id) VALUES
 (4, 1), (4, 2), (4, 3), (4, 4),
 (5, 1), (5, 2), (5, 5);
 
-ALTER SEQUENCE disciplina_seq RESTART WITH 16;
-ALTER SEQUENCE professor_seq RESTART WITH 6;
-ALTER SEQUENCE horario_seq RESTART WITH 11;
-ALTER SEQUENCE curso_seq RESTART WITH 10;
-ALTER SEQUENCE coordenador_seq RESTART WITH 4;
-ALTER SEQUENCE aluno_seq RESTART WITH 6;
-ALTER SEQUENCE matriz_curricular_seq RESTART WITH 6;
+SELECT setval('disciplina_seq', 16);
+SELECT setval('professor_seq', 6);
+SELECT setval('horario_seq', 11);
+SELECT setval('curso_seq', 10);
+SELECT setval('coordenador_seq', 4);
+SELECT setval('aluno_seq', 6);
+SELECT setval('matriz_curricular_seq', 6);
