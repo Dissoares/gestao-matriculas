@@ -5,9 +5,7 @@
     "types": []
   },
   "include": [
-    "src/**/*.ts",
-    "../../libs/auth/services/autenticacao.service.ts",
-    "../../libs/auth/interceptors/interceptor-autorizacao.interceptor.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "src/**/*.spec.ts",
