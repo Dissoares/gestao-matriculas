@@ -1,12 +1,13 @@
+import { AutenticacaoService } from '../../shared/services/autenticacao.service';
+import { PerfilEnum } from '../../shared/enums/perfil.enum';
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { AutenticacaoService } from '../../shared/services/autenticacao.service';
 
 export const coordenadorGuard: CanActivateFn = () => {
   const autenticacaoService = inject(AutenticacaoService);
   const router = inject(Router);
 
-  if (autenticacaoService.possuiPerfilValido('coordenador')) {
+  if (autenticacaoService.possuiPerfilValido(PerfilEnum.COORDENADOR)) {
     return true;
   }
 

@@ -3,7 +3,6 @@ import { alunoGuard } from '../../../../libs/auth/guards/aluno.guard';
 import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
     loadComponent: () =>

@@ -1,4 +1,5 @@
 import { AutenticacaoService } from '../../../../../libs/shared/services/autenticacao.service';
+import { PerfilEnum } from '../../../../../libs/shared/enums/perfil.enum';
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -13,9 +14,9 @@ export class LoginComponent implements OnInit {
   private readonly router = inject(Router);
 
   public ngOnInit(): void {
-    if (this.autenticacaoService.possuiPerfilValido('coordenador')) {
+    if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.COORDENADOR)) {
       this.router.navigate(['/coordenador/matrizes']);
-    } else if (this.autenticacaoService.possuiPerfilValido('aluno')) {
+    } else if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.ALUNO)) {
       this.router.navigate(['/aluno/disponiveis']);
     }
   }

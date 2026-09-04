@@ -1,4 +1,5 @@
 import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
+import { PerfilEnum } from '../enums/perfil.enum';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
@@ -30,8 +31,8 @@ export class AutenticacaoService {
     return !!this.instanciaKeycloak.authenticated;
   }
 
-  public possuiPerfilValido(perfil: string): boolean {
-    return this.instanciaKeycloak.hasRealmRole(perfil);
+  public possuiPerfilValido(perfil: PerfilEnum): boolean {
+    return this.instanciaKeycloak.hasRealmRole(perfil.descricao);
   }
 
   public finalizarSessao(): void {}
