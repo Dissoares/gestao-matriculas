@@ -6,7 +6,7 @@ export const appRoutes: Array<Route> = [
   {
     path: RotasEnum.LOGIN,
     loadComponent: () =>
-      import('./login/login.component').then((m) => m.LoginComponent),
+      import('./modules/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: '',
@@ -24,7 +24,7 @@ export const appRoutes: Array<Route> = [
         path: RotasEnum.ROTA.COORDENADOR,
         canActivate: [CoordenadorGuard],
         loadChildren: () =>
-          import('./coordenador/coordenador.routing').then(
+          import('./modules/coordenador/coordenador.routing').then(
             (m) => m.ROTAS_COORDENADOR,
           ),
       },
@@ -32,7 +32,7 @@ export const appRoutes: Array<Route> = [
         path: RotasEnum.ROTA.ALUNO,
         canActivate: [AlunoGuard],
         loadChildren: () =>
-          import('./aluno/aluno.routing').then((m) => m.ROTAS_ALUNO),
+          import('./modules/aluno/aluno.routing').then((m) => m.ROTAS_ALUNO),
       },
     ],
   },

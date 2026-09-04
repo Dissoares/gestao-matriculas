@@ -17,6 +17,6 @@ import lombok.Setter;
 public class Curso extends PanacheEntity {
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 }
