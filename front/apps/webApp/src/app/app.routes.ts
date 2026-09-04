@@ -1,4 +1,4 @@
-import { CoordenadorGuard, AlunoGuard } from '@front/auth/guards';
+import { AlunoGuard, CoordenadorGuard } from '@front/shared/guards';
 import { RotasEnum } from '@front/shared/enums';
 import { Route } from '@angular/router';
 
