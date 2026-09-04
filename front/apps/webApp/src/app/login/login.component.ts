@@ -13,7 +13,16 @@ export class LoginComponent implements OnInit {
   private readonly autenticacaoService = inject(AutenticacaoService);
   private readonly router = inject(Router);
 
+  public carregando: boolean = true;
+  public erroAutenticacao: boolean = false;
+
   public ngOnInit(): void {
+    if (!this.autenticacaoService.ehUsuarioAutenticado()) {
+      this.carregando = false;
+      this.erroAutenticacao = true;
+      return;
+    }
+
     if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.COORDENADOR)) {
       this.router.navigate([
         RotasEnum.ROTA.COORDENADOR,
@@ -21,6 +30,13 @@ export class LoginComponent implements OnInit {
       ]);
     } else if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.ALUNO)) {
       this.router.navigate([RotasEnum.ROTA.ALUNO, RotasEnum.ALUNO.AULAS]);
+    } else {
+      this.carregando = false;
+      this.erroAutenticacao = true;
     }
+  }
+
+  public entrar(): void {
+    this.autenticacaoService.autenticarUsuario();
   }
 }

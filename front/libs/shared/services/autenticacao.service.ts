@@ -10,13 +10,17 @@ export class AutenticacaoService {
     clientId: 'get-matriculas-front',
   });
 
-  public inicializarKeyCloak(): Promise<boolean> {
-    const opcoes: KeycloakInitOptions = {
-      onLoad: 'login-required',
-      pkceMethod: 'S256',
-      checkLoginIframe: false,
-    };
-    return this.instanciaKeycloak.init(opcoes);
+  public async inicializarKeyCloak(): Promise<boolean> {
+    try {
+      const opcoes: KeycloakInitOptions = {
+        onLoad: 'login-required',
+        pkceMethod: 'S256',
+        checkLoginIframe: false,
+      };
+      return await this.instanciaKeycloak.init(opcoes);
+    } catch {
+      return false;
+    }
   }
 
   public obterTokenAcesso(): string | undefined {
@@ -35,5 +39,11 @@ export class AutenticacaoService {
     return this.instanciaKeycloak.hasRealmRole(perfil.descricao);
   }
 
-  public finalizarSessao(): void {}
+  public autenticarUsuario(): void {
+    this.instanciaKeycloak.login();
+  }
+
+  public finalizarSessao(): void {
+    this.instanciaKeycloak.logout({ redirectUri: window.location.origin });
+  }
 }

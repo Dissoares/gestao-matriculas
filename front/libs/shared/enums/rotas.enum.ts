@@ -10,7 +10,7 @@ export class RotasEnum {
     MATRIZ: {
       LISTAR: 'matrizes',
       NOVA: 'matrizes/nova',
-      EDITAR: 'editar',
+      EDITAR: 'matrizes/:id/editar',
     },
   };
 

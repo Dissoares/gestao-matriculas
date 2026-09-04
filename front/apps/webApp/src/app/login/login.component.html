@@ -1,1 +1,10 @@
-<div></div>
+<div class="login-container">
+  @if (carregando) {
+    <p>Autenticando...</p>
+  } @else if (erroAutenticacao) {
+    <div class="login-card">
+      <h2>Gestão de Matrículas</h2>
+      <button (click)="entrar()">Entrar</button>
+    </div>
+  }
+</div>

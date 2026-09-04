@@ -19,6 +19,11 @@ export const appRoutes: Array<Route> = [
       ),
     children: [
       {
+        path: '',
+        redirectTo: RotasEnum.LOGIN,
+        pathMatch: 'full',
+      },
+      {
         path: RotasEnum.ROTA.COORDENADOR,
         canActivate: [CoordenadorGuard],
         loadChildren: () =>

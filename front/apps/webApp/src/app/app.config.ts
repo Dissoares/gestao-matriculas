@@ -1,5 +1,6 @@
 import {
   provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
   ApplicationConfig,
   APP_INITIALIZER,
 } from '@angular/core';
@@ -18,6 +19,7 @@ function inicializarAutenticacao(
 export const configuracaoApp: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideZonelessChangeDetection(),
     provideRouter(appRoutes),
     provideHttpClient(withInterceptors([interceptorAutorizacao])),
     {

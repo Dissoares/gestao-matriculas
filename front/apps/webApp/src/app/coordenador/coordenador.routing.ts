@@ -3,6 +3,11 @@ import { Routes } from '@angular/router';
 
 export const ROTAS_COORDENADOR: Routes = [
   {
+    path: '',
+    redirectTo: RotasEnum.COORDENADOR.MATRIZ.LISTAR,
+    pathMatch: 'full',
+  },
+  {
     path: RotasEnum.COORDENADOR.MATRIZ.LISTAR,
     loadComponent: () =>
       import('./matriz/listagem/listagem.component').then(
