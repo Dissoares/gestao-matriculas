@@ -1,6 +1,6 @@
-import { AutenticacaoService } from '../../shared/services/autenticacao.service';
-import { PerfilEnum, RotasEnum } from '../../shared/enums/index';
+import { AutenticacaoService } from '../services/autenticacao.service';
 import { CanActivateFn, Router } from '@angular/router';
+import { PerfilEnum, RotasEnum } from '../enums';
 import { inject } from '@angular/core';
 
 export const CoordenadorGuard: CanActivateFn = () => {
