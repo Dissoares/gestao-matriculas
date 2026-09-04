@@ -54,6 +54,9 @@ services:
       QUARKUS_DATASOURCE_PASSWORD: alun0x789xyz
       QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8180/realms/get-matriculas
       QUARKUS_OIDC_CLIENT_ID: get-matriculas-back
+      QUARKUS_OIDC_TOKEN_ISSUER: http://localhost:8180/realms/get-matriculas
+      QUARKUS_HIBERNATE_ORM_SCHEMA_MANAGEMENT_STRATEGY: drop-and-create
+      QUARKUS_HIBERNATE_ORM_SQL_LOAD_SCRIPT: insert-dados.sql
     ports:
       - "8080:8080"
     restart: on-failure
