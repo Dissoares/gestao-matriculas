@@ -1,5 +1,5 @@
-import { AutenticacaoService } from '../../../../../libs/shared/services/autenticacao.service';
-import { PerfilEnum } from '../../../../../libs/shared/enums/perfil.enum';
+import { AutenticacaoService } from '../../../../../libs/shared/services/index';
+import { PerfilEnum } from '../../../../../libs/shared/enums/index';
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 

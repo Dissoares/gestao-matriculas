@@ -3,8 +3,8 @@ import {
   ApplicationConfig,
   APP_INITIALIZER,
 } from '@angular/core';
-import { interceptorAutorizacao } from '../../../../libs/auth/interceptors/interceptor-autorizacao.interceptor';
-import { AutenticacaoService } from '../../../../libs/shared/services/autenticacao.service';
+import { interceptorAutorizacao } from '../../../../libs/auth/interceptors/index';
+import { AutenticacaoService } from '../../../../libs/shared/services/index';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';

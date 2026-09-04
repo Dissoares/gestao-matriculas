@@ -1,22 +1,27 @@
-import { coordenadorGuard } from '../../../../libs/auth/guards/coordenador.guard';
-import { alunoGuard } from '../../../../libs/auth/guards/aluno.guard';
+import {
+  coordenadorGuard,
+  alunoGuard,
+} from '../../../../libs/auth/guards/index';
+import { RotasEnum } from '../../../../libs/shared/enums';
 import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
   {
-    path: 'login',
+    path: RotasEnum.LOGIN,
     loadComponent: () =>
       import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
-    path: 'coordenador',
+    path: RotasEnum.ROTA.COORDENADOR,
     canActivate: [coordenadorGuard],
-    children: [{ path: '', redirectTo: 'matrizes', pathMatch: 'full' }],
   },
   {
-    path: 'aluno',
+    path: RotasEnum.ROTA.ALUNO,
     canActivate: [alunoGuard],
-    children: [{ path: '', redirectTo: 'disponiveis', pathMatch: 'full' }],
   },
-  { path: '**', redirectTo: 'login' },
+  {
+    path: '**',
+    redirectTo: RotasEnum.LOGIN,
+    pathMatch: 'full',
+  },
 ];

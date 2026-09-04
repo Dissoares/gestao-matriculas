@@ -1,5 +1,5 @@
 import { AutenticacaoService } from '../../shared/services/autenticacao.service';
-import { PerfilEnum } from '../../shared/enums/perfil.enum';
+import { PerfilEnum, RotasEnum } from '../../shared/enums/index';
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 
@@ -11,5 +11,5 @@ export const coordenadorGuard: CanActivateFn = () => {
     return true;
   }
 
-  return router.createUrlTree(['/login']);
+  return router.createUrlTree([RotasEnum.LOGIN]);
 };
