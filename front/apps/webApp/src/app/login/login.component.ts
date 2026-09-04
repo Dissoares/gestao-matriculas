@@ -1,5 +1,5 @@
 import { AutenticacaoService } from '../../../../../libs/shared/services/index';
-import { PerfilEnum } from '../../../../../libs/shared/enums/index';
+import { PerfilEnum, RotasEnum } from '../../../../../libs/shared/enums/index';
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -15,9 +15,9 @@ export class LoginComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.COORDENADOR)) {
-      this.router.navigate(['/coordenador/matrizes']);
+      this.router.navigate([RotasEnum.COORDENADOR.MATRIZ.LISTAR]);
     } else if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.ALUNO)) {
-      this.router.navigate(['/aluno/disponiveis']);
+      this.router.navigate([RotasEnum.ALUNO.MATRICULAS.LISTAR]);
     }
   }
 }
