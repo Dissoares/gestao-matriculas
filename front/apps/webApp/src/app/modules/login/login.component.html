@@ -1,10 +1,37 @@
-<div class="login-container">
-  @if (carregando) {
-    <p>Autenticando...</p>
-  } @else if (erroAutenticacao) {
-    <div class="login-card">
-      <h2>Gestão de Matrículas</h2>
-      <button (click)="entrar()">Entrar</button>
+<div class="login-pagina">
+  <div class="login-marca">
+    <i class="pi pi-graduation-cap login-icone-marca"></i>
+    <h1>Gestão de Matrículas</h1>
+    <p>Sistema acadêmico de gestão e matrícula em aulas</p>
+  </div>
+
+  @if (carregando()) {
+  <div class="login-estado">
+    <i class="pi pi-spin pi-spinner login-spinner"></i>
+    <span>Autenticando, aguarde...</span>
+  </div>
+  } @else if (erroConexao()) {
+  <p-card styleClass="login-cartao">
+    <div class="login-cartao-conteudo">
+      <i class="pi pi-lock login-cartao-icone"></i>
+      <h2>Acesso restrito</h2>
+      <p>Faça login com suas credenciais institucionais para continuar.</p>
+      <p-button label="Entrar com Keycloak" icon="pi pi-sign-in" styleClass="w-full" (onClick)="entrar()" />
     </div>
+  </p-card>
+  } @else if (semPermissao()) {
+  <p-card styleClass="login-cartao">
+    <div class="login-cartao-conteudo">
+      <i class="pi pi-ban login-cartao-icone login-cartao-icone--erro"></i>
+      <h2>Sem permissão de acesso</h2>
+      <p>
+        Sua conta não possui o perfil de <strong>Aluno</strong> ou
+        <strong>Coordenador</strong> necessário para utilizar o sistema. Entre
+        em contato com a administração.
+      </p>
+      <p-button label="Sair" icon="pi pi-sign-out" severity="secondary" [outlined]="true" styleClass="w-full"
+        (onClick)="sair()" />
+    </div>
+  </p-card>
   }
 </div>

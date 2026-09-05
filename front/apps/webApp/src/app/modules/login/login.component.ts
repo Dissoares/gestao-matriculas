@@ -1,25 +1,29 @@
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { AutenticacaoService } from '@front/shared/services';
 import { PerfilEnum, RotasEnum } from '@front/shared/enums';
-import { Component, inject, OnInit } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [ButtonModule, CardModule],
   templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
   private readonly autenticacaoService = inject(AutenticacaoService);
   private readonly router = inject(Router);
 
-  public carregando: boolean = true;
-  public erroAutenticacao: boolean = false;
+  public readonly carregando = signal(true);
+  public readonly erroConexao = signal(false);
+  public readonly semPermissao = signal(false);
 
   public ngOnInit(): void {
     if (!this.autenticacaoService.ehUsuarioAutenticado()) {
-      this.carregando = false;
-      this.erroAutenticacao = true;
+      this.erroConexao.set(true);
+      this.carregando.set(false);
       return;
     }
 
@@ -31,12 +35,16 @@ export class LoginComponent implements OnInit {
     } else if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.ALUNO)) {
       this.router.navigate([RotasEnum.ROTA.ALUNO, RotasEnum.ALUNO.AULAS]);
     } else {
-      this.carregando = false;
-      this.erroAutenticacao = true;
+      this.semPermissao.set(true);
+      this.carregando.set(false);
     }
   }
 
   public entrar(): void {
     this.autenticacaoService.autenticarUsuario();
+  }
+
+  public sair(): void {
+    this.autenticacaoService.finalizarSessao();
   }
 }
