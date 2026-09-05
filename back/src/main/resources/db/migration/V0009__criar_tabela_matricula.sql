@@ -4,6 +4,7 @@ CREATE TABLE matricula (
     matriz_curricular_id BIGINT   NOT NULL,
     data_matricula      TIMESTAMP NOT NULL,
     PRIMARY KEY (id),
+    CONSTRAINT uq_matricula_aluno_matriz UNIQUE (aluno_id, matriz_curricular_id),
     CONSTRAINT fk_matricula_aluno  FOREIGN KEY (aluno_id)             REFERENCES aluno(id),
     CONSTRAINT fk_matricula_matriz FOREIGN KEY (matriz_curricular_id) REFERENCES matriz_curricular(id)
 );

@@ -11,7 +11,11 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 
 @ApplicationPath("/")
 @OpenAPIDefinition(info = @Info(title = "Gestão de Matrículas API", version = "1.0.0"))
-@SecurityScheme(securitySchemeName = "oauth2", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(password = @OAuthFlow(tokenUrl = "http://localhost:8180/realms/get-matriculas/protocol/openid-connect/token")))
+@SecurityScheme(
+        securitySchemeName = "keycloak",
+        type = SecuritySchemeType.OAUTH2,
+        flows = @OAuthFlows(password = @OAuthFlow(
+                tokenUrl = "http://localhost:8180/realms/get-matriculas/protocol/openid-connect/token")))
 
 public class OpenApiConfig extends Application {
 }
