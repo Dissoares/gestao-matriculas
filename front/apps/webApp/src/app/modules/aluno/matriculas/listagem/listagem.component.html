@@ -1,19 +1,23 @@
-<section class="pagina-matriculas">
-  <div class="cabecalho-pagina">
-    <div>
-      <h1>Minhas matrículas</h1>
-      <p>Consulte as aulas em que você está matriculado.</p>
+<p-toast />
+<p-card styleClass="pagina-card">
+  <ng-template #header>
+    <div class="pagina-card-header">
+      <div>
+        <h1>Minhas matrículas</h1>
+        <p class="subtitulo">Consulte as aulas em que você está matriculado.</p>
+      </div>
+      <p-button label="Atualizar" icon="pi pi-refresh" severity="secondary" [outlined]="true"
+        (onClick)="buscarMatriculas()" />
     </div>
-    <p-button label="Atualizar" icon="pi pi-refresh" severity="secondary" [outlined]="true"
-      (onClick)="buscarMatriculas()" />
-  </div>
-  @if (mensagemErro()) {
-  <p class="mensagem-erro" role="alert">{{ mensagemErro() }}</p>
-  }
+  </ng-template>
+
   @if (carregando()) {
-  <p>Carregando matrículas...</p>
+  <div class="estado-carregando">
+    <p-progressspinner strokeWidth="4" styleClass="spinner-pequeno" />
+    <span>Carregando matrículas...</span>
+  </div>
   } @else {
-  <p-table [value]="matriculas()" dataKey="id">
+  <p-table [value]="matriculas()" dataKey="id" styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines">
     <ng-template #header>
       <tr>
         <th>Disciplina</th>
@@ -24,17 +28,27 @@
     </ng-template>
     <ng-template #body let-matricula>
       <tr>
-        <td>{{ matricula.disciplina.nome }}</td>
+        <td>
+          <strong>{{ matricula.disciplina.nome }}</strong>
+        </td>
         <td>{{ matricula.professor.nome }}</td>
-        <td>{{ descreverHorario(matricula) }}</td>
+        <td>
+          <i class="pi pi-clock" style="margin-right: 0.4rem; color: var(--p-text-muted-color)"></i>
+          {{ descreverHorario(matricula) }}
+        </td>
         <td>{{ matricula.dataMatricula | date: 'dd/MM/yyyy HH:mm' }}</td>
       </tr>
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="4">Você ainda não possui matrículas.</td>
+        <td colspan="4">
+          <div class="estado-vazio">
+            <i class="pi pi-inbox"></i>
+            <span>Você ainda não possui matrículas.</span>
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>
   }
-</section>
+</p-card>

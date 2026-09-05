@@ -1,59 +1,68 @@
-.pagina-formulario {
+.pagina-card {
+  max-width: 800px;
   margin: 0 auto;
-  max-width: 760px;
 }
 
-.cabecalho-pagina {
-  align-items: center;
+.pagina-card-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem 0;
 }
 
-.cabecalho-pagina h1,
-.cabecalho-pagina p {
-  margin: 0;
-}
-
-.cabecalho-pagina p {
+.subtitulo {
   color: var(--p-text-muted-color);
-  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 
-.cabecalho-pagina a {
-  color: var(--p-primary-color);
-  text-decoration: none;
-}
-
-.cartao {
-  background: var(--p-surface-0);
-  border: 1px solid var(--p-surface-200);
-  border-radius: 0.5rem;
+.formulario-grid {
   display: grid;
-  gap: 1rem;
-  padding: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  padding-top: 0.5rem;
 }
 
-label {
-  display: grid;
-  font-weight: 600;
+.campo {
+  display: flex;
+  flex-direction: column;
   gap: 0.35rem;
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--p-text-muted-color);
+  }
 }
 
-small {
+.campo-full {
+  grid-column: 1 / -1;
+}
+
+.campo-erro {
   color: var(--p-red-600, #dc2626);
-  font-weight: 400;
+  font-size: 0.8rem;
 }
 
 .acoes-formulario {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   justify-content: flex-end;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--p-surface-200);
 }
 
-.mensagem-erro {
-  background: var(--p-red-50, #fef2f2);
-  border-radius: 0.35rem;
-  color: var(--p-red-700, #b91c1c);
-  padding: 0.75rem;
+.estado-carregando {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: var(--p-text-muted-color);
+}
+
+.spinner-pequeno {
+  width: 32px;
+  height: 32px;
 }

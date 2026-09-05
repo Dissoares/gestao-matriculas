@@ -1,41 +1,67 @@
-.header-toolbar {
-  border-radius: 0;
-  border-left: none;
-  border-right: none;
-  border-top: none;
-}
-
-.header-brand {
+.header {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
-
-  &-icon {
-    font-size: 1.5rem;
-    color: var(--p-primary-color);
-  }
-
-  &-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--p-text-color);
-  }
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 64px;
+  background: var(--p-primary-700);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
 }
 
-.header-user {
+.header-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-icone {
+  font-size: 1.75rem;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.header-texto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.header-titulo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.header-subtitulo {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.header-usuario {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
 .header-avatar {
-  background-color: var(--p-primary-color);
+  background-color: rgba(255, 255, 255, 0.2);
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
-.header-username {
+.header-usuario-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.header-usuario-nome {
   font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--p-text-color);
+  font-weight: 600;
+  color: #fff;
 }

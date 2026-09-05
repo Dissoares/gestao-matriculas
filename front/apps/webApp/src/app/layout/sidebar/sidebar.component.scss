@@ -5,9 +5,25 @@
   border-right: 1px solid var(--p-surface-200);
   padding: 1rem 0;
   flex-shrink: 0;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.04);
 }
 
-.sidebar-menu {
-  width: 100%;
+.sidebar-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--p-text-muted-color);
+  padding: 0.5rem 1rem 0.25rem;
+}
+
+:host ::ng-deep .p-panelmenu-panel {
   border: none;
+  border-radius: 0;
+}
+
+:host ::ng-deep .p-panelmenu-header-content {
+  border-radius: 0;
+  border: none;
+  padding: 0.6rem 1rem;
 }

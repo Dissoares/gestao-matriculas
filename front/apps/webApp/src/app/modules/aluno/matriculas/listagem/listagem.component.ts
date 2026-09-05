@@ -1,9 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MatriculaService } from '@front/shared/services';
 import { Matricula } from '@front/shared/models';
 import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 import { DatePipe } from '@angular/common';
+import { CardModule } from 'primeng/card';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -11,14 +15,22 @@ import { finalize } from 'rxjs';
   selector: 'app-matriculas-listagem',
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.scss',
-  imports: [ButtonModule, DatePipe, TableModule],
+  imports: [
+    ButtonModule,
+    CardModule,
+    DatePipe,
+    ProgressSpinnerModule,
+    TableModule,
+    ToastModule,
+  ],
+  providers: [MessageService],
 })
 export class ListagemComponent implements OnInit {
   private readonly servicoMatricula = inject(MatriculaService);
+  private readonly messageService = inject(MessageService);
 
   public readonly matriculas = signal<Matricula[]>([]);
   public readonly carregando = signal(false);
-  public readonly mensagemErro = signal('');
 
   public ngOnInit(): void {
     this.buscarMatriculas();
@@ -32,9 +44,14 @@ export class ListagemComponent implements OnInit {
       .subscribe({
         next: (matriculas) => this.matriculas.set(matriculas),
         error: (erro) =>
-          this.mensagemErro.set(
-            erro.error?.mensagem ?? 'Não foi possível carregar as matrículas.',
-          ),
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail:
+              erro.error?.mensagem ??
+              'Não foi possível carregar as matrículas.',
+            life: 5000,
+          }),
       });
   }
 
@@ -49,6 +66,6 @@ export class ListagemComponent implements OnInit {
       'Sexta',
       'Sábado',
     ];
-    return `${dias[matricula.horario.diaSemana]} - ${matricula.horario.horaInicio} às ${matricula.horario.horaFim}`;
+    return `${dias[matricula.horario.diaSemana]} ${matricula.horario.horaInicio}–${matricula.horario.horaFim}`;
   }
 }

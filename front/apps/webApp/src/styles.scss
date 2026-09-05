@@ -10,6 +10,30 @@ html,
 body {
   height: 100%;
   font-family: var(--p-font-family, system-ui, sans-serif);
-  background-color: var(--p-surface-50, #f8f9fa);
-  color: var(--p-text-color, #1f2937);
+  background-color: var(--p-surface-100);
+  color: var(--p-text-color);
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--p-text-color);
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background: var(--p-surface-50);
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--p-surface-100);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--p-text-muted-color);
 }

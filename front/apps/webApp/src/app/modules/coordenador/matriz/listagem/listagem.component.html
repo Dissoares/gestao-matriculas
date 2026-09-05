@@ -1,82 +1,119 @@
-<section class="pagina-matrizes">
-  <div class="cabecalho-pagina">
-    <div>
-      <h1>Matrizes curriculares</h1>
-      <p>Gerencie as aulas sob sua responsabilidade.</p>
+<p-toast />
+<p-confirmdialog />
+
+<p-card styleClass="pagina-card">
+  <ng-template #header>
+    <div class="pagina-card-header">
+      <div>
+        <h1>Matrizes curriculares</h1>
+        <p class="subtitulo">Gerencie as aulas sob sua responsabilidade.</p>
+      </div>
+      <p-button label="Nova aula" icon="pi pi-plus" routerLink="/coordenador/matrizes/nova" />
     </div>
-    <a class="acao-principal" routerLink="/coordenador/matrizes/nova">Nova aula</a>
-  </div>
+  </ng-template>
 
   @if (mensagemErro()) {
-  <p class="mensagem-erro" role="alert">{{ mensagemErro() }}</p>
+  <p-message severity="error" [text]="mensagemErro()" styleClass="w-full mb-3" />
   }
 
-  <div class="cartao filtros">
-    <label>
-      Horário inicial
-      <input type="time" [(ngModel)]="filtros.horaInicio" />
-    </label>
-    <label>
-      Horário final
-      <input type="time" [(ngModel)]="filtros.horaFim" />
-    </label>
-    <label>
-      Período
-      <p-select [(ngModel)]="filtros.periodo" [options]="[
-          { nome: 'Manhã', id: 1 },
-          { nome: 'Tarde', id: 2 },
-          { nome: 'Noite', id: 3 },
-        ]" optionLabel="nome" optionValue="id" [showClear]="true" placeholder="Todos" />
-    </label>
-    <label>
-      Curso autorizado
-      <p-select [(ngModel)]="filtros.cursoId" [options]="referencias()?.cursos ?? []" optionLabel="nome"
-        optionValue="id" [showClear]="true" placeholder="Todos" />
-    </label>
-    <label>
-      Máximo de alunos
-      <p-inputnumber [(ngModel)]="filtros.quantidadeMaxima" [min]="1" [useGrouping]="false" />
-    </label>
-    <div class="acoes-filtros">
-      <p-button label="Filtrar" icon="pi pi-filter" (onClick)="buscar()" />
-      <p-button label="Limpar" severity="secondary" [outlined]="true" (onClick)="limparFiltros()" />
+  <div class="secao-filtros">
+    <div class="filtros-grid">
+      <div class="filtro-campo">
+        <label>Horário inicial</label>
+        <input pInputText type="time" [(ngModel)]="filtros.horaInicio" />
+      </div>
+      <div class="filtro-campo">
+        <label>Horário final</label>
+        <input pInputText type="time" [(ngModel)]="filtros.horaFim" />
+      </div>
+      <div class="filtro-campo">
+        <label>Período</label>
+        <p-select [(ngModel)]="filtros.periodo" [options]="[
+            { nome: 'Manhã', id: 1 },
+            { nome: 'Tarde', id: 2 },
+            { nome: 'Noite', id: 3 },
+          ]" optionLabel="nome" optionValue="id" [showClear]="true" placeholder="Todos" />
+      </div>
+      <div class="filtro-campo">
+        <label>Curso autorizado</label>
+        <p-select [(ngModel)]="filtros.cursoId" [options]="referencias()?.cursos ?? []" optionLabel="nome"
+          optionValue="id" [showClear]="true" placeholder="Todos" />
+      </div>
+      <div class="filtro-campo">
+        <label>Máximo de alunos</label>
+        <p-inputnumber [(ngModel)]="filtros.quantidadeMaxima" [min]="1" [useGrouping]="false" placeholder="Qualquer" />
+      </div>
+      <div class="filtro-acoes">
+        <p-button label="Filtrar" icon="pi pi-filter" (onClick)="buscar()" />
+        <p-button label="Limpar" severity="secondary" [outlined]="true" (onClick)="limparFiltros()" />
+      </div>
     </div>
   </div>
 
   @if (carregando()) {
-  <p class="estado">Carregando matrizes...</p>
+  <div class="estado-carregando">
+    <p-progressspinner strokeWidth="4" styleClass="spinner-pequeno" />
+    <span>Carregando matrizes...</span>
+  </div>
   } @else {
-  <p-table [value]="matrizes()" dataKey="id" [paginator]="true" [rows]="8" [rowsPerPageOptions]="[8, 16, 32]">
+  <p-table [value]="matrizes()" dataKey="id" [paginator]="true" [rows]="8" [rowsPerPageOptions]="[8, 16, 32]"
+    [showCurrentPageReport]="true" currentPageReportTemplate="{first} a {last} de {totalRecords} aulas"
+    styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines">
     <ng-template #header>
       <tr>
         <th>Disciplina</th>
         <th>Professor</th>
         <th>Horário</th>
         <th>Cursos autorizados</th>
-        <th>Vagas</th>
-        <th>Ações</th>
+        <th style="width: 110px; text-align: center">Vagas</th>
+        <th style="width: 130px; text-align: center">Ações</th>
       </tr>
     </ng-template>
     <ng-template #body let-matriz>
       <tr>
-        <td>{{ matriz.disciplina.nome }}</td>
-        <td>{{ matriz.professor.nome }}</td>
-        <td>{{ descreverHorario(matriz) }}</td>
-        <td>{{ descreverCursos(matriz) }}</td>
         <td>
-          {{ matriz.vagasOcupadas }} / {{ matriz.quantidadeMaximaAlunos }}
+          <strong>{{ matriz.disciplina.nome }}</strong>
         </td>
-        <td class="acoes-tabela">
-          <p-button label="Editar" [text]="true" (onClick)="editar(matriz)" />
-          <p-button label="Excluir" severity="danger" [text]="true" (onClick)="excluir(matriz)" />
+        <td>{{ matriz.professor.nome }}</td>
+        <td>
+          <i class="pi pi-clock" style="margin-right: 0.4rem; color: var(--p-text-muted-color)"></i>
+          {{ descreverHorario(matriz) }}
+        </td>
+        <td>
+          <div class="tags-cursos">
+            @for (curso of matriz.cursosAutorizados; track curso.id) {
+            <p-tag [value]="curso.nome" severity="secondary" />
+            }
+          </div>
+        </td>
+        <td style="text-align: center">
+          <p-tag [value]="
+                matriz.vagasOcupadas + '/' + matriz.quantidadeMaximaAlunos
+              " [severity]="
+                matriz.vagasOcupadas < matriz.quantidadeMaximaAlunos
+                  ? 'success'
+                  : 'danger'
+              " />
+        </td>
+        <td>
+          <div class="acoes-tabela">
+            <p-button icon="pi pi-pencil" [text]="true" size="small" (onClick)="editar(matriz)" pTooltip="Editar" />
+            <p-button icon="pi pi-trash" severity="danger" [text]="true" size="small" (onClick)="excluir(matriz)"
+              pTooltip="Excluir" />
+          </div>
         </td>
       </tr>
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="6">Nenhuma aula encontrada.</td>
+        <td colspan="6">
+          <div class="estado-vazio">
+            <i class="pi pi-inbox"></i>
+            <span>Nenhuma aula encontrada para os filtros selecionados.</span>
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>
   }
-</section>
+</p-card>

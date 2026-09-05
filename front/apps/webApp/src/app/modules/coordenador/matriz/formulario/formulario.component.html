@@ -1,46 +1,54 @@
-<section class="pagina-formulario">
-  <div class="cabecalho-pagina">
-    <div>
-      <h1>{{ idMatriz ? 'Editar aula' : 'Nova aula' }}</h1>
-      <p>
-        {{
-        idMatriz
-        ? 'Disciplina e quantidade de vagas não são alteradas nesta etapa.'
-        : 'Selecione os dados
-        acadêmicos pré-cadastrados.'
-        }}
-      </p>
+<p-toast />
+<p-card styleClass="pagina-card">
+  <ng-template #header>
+    <div class="pagina-card-header">
+      <div>
+        <h1>{{ idMatriz ? 'Editar aula' : 'Nova aula' }}</h1>
+        <p class="subtitulo">
+          {{
+          idMatriz
+          ? 'Disciplina e quantidade de vagas não são alteráveis.'
+          : 'Preencha os dados da aula a ser ofertada.'
+          }}
+        </p>
+      </div>
+      <p-button label="Voltar" icon="pi pi-arrow-left" severity="secondary" [outlined]="true"
+        routerLink="/coordenador/matrizes" />
     </div>
-    <a routerLink="/coordenador/matrizes">Voltar</a>
-  </div>
+  </ng-template>
 
   @if (carregando()) {
-  <p>Carregando formulário...</p>
+  <div class="estado-carregando">
+    <p-progressspinner strokeWidth="4" styleClass="spinner-pequeno" />
+    <span>Carregando formulário...</span>
+  </div>
   } @else {
   @if (mensagemErro()) {
-  <p class="mensagem-erro" role="alert">{{ mensagemErro() }}</p>
+  <p-message severity="error" [text]="mensagemErro()" styleClass="w-full mb-4" />
   }
-  <form [formGroup]="formulario" (ngSubmit)="salvar()" class="cartao">
-    <label>
-      Disciplina
+  <form [formGroup]="formulario" (ngSubmit)="salvar()" class="formulario-grid">
+    <div class="campo">
+      <label>Disciplina</label>
       <p-select formControlName="disciplinaId" [options]="referencias()?.disciplinas ?? []" optionLabel="nome"
-        optionValue="id" placeholder="Selecione" />
+        optionValue="id" placeholder="Selecione a disciplina" styleClass="w-full" />
       @if (campoInvalido('disciplinaId')) {
-      <small>Selecione uma disciplina.</small>
+      <small class="campo-erro">Selecione uma disciplina.</small>
       }
-    </label>
-    <label>
-      Professor
+    </div>
+
+    <div class="campo">
+      <label>Professor</label>
       <p-select formControlName="professorId" [options]="referencias()?.professores ?? []" optionLabel="nome"
-        optionValue="id" placeholder="Selecione" />
+        optionValue="id" placeholder="Selecione o professor" styleClass="w-full" />
       @if (campoInvalido('professorId')) {
-      <small>Selecione um professor.</small>
+      <small class="campo-erro">Selecione um professor.</small>
       }
-    </label>
-    <label>
-      Horário
+    </div>
+
+    <div class="campo">
+      <label>Horário</label>
       <p-select formControlName="horarioId" [options]="referencias()?.horarios ?? []" optionLabel="id" optionValue="id"
-        placeholder="Selecione">
+        placeholder="Selecione o horário" styleClass="w-full">
         <ng-template let-horario #item>{{
           descreverHorario(horario)
           }}</ng-template>
@@ -49,34 +57,38 @@
           }}</ng-template>
       </p-select>
       @if (campoInvalido('horarioId')) {
-      <small>Selecione um horário.</small>
+      <small class="campo-erro">Selecione um horário.</small>
       }
-    </label>
-    <label>
-      Cursos autorizados
+    </div>
+
+    <div class="campo campo-full">
+      <label>Cursos autorizados</label>
       <p-multiselect formControlName="cursosAutorizadosIds" [options]="referencias()?.cursos ?? []" optionLabel="nome"
-        optionValue="id" placeholder="Selecione um ou mais cursos" />
+        optionValue="id" placeholder="Selecione um ou mais cursos" styleClass="w-full" />
       @if (campoInvalido('cursosAutorizadosIds')) {
-      <small>Selecione ao menos um curso.</small>
+      <small class="campo-erro">Selecione ao menos um curso.</small>
       }
-    </label>
-    <label>
-      Quantidade máxima de alunos
-      <p-inputnumber formControlName="quantidadeMaximaAlunos" [min]="1" [useGrouping]="false" />
+    </div>
+
+    <div class="campo">
+      <label>Quantidade máxima de alunos</label>
+      <p-inputnumber formControlName="quantidadeMaximaAlunos" [min]="1" [useGrouping]="false" placeholder="Ex: 30"
+        styleClass="w-full" />
       @if (campoInvalido('quantidadeMaximaAlunos')) {
-      <small>Informe uma quantidade positiva.</small>
+      <small class="campo-erro">Informe uma quantidade positiva.</small>
       }
-    </label>
-    <div class="acoes-formulario">
+    </div>
+
+    <div class="campo-full acoes-formulario">
       <p-button type="submit" [label]="
             salvando()
               ? 'Salvando...'
               : idMatriz
                 ? 'Salvar alterações'
                 : 'Criar aula'
-          " [disabled]="salvando()" />
+          " icon="pi pi-check" [loading]="salvando()" />
       <p-button label="Cancelar" severity="secondary" [outlined]="true" routerLink="/coordenador/matrizes" />
     </div>
   </form>
   }
-</section>
+</p-card>

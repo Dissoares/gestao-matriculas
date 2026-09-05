@@ -1,16 +1,16 @@
-<p-toolbar styleClass="header-toolbar">
-  <ng-template #start>
-    <div class="header-brand">
-      <i class="pi pi-graduation-cap header-brand-icon"></i>
-      <span class="header-brand-name">Gestão de Matrículas</span>
+<header class="header">
+  <div class="header-marca">
+    <i class="pi pi-graduation-cap header-icone"></i>
+    <div class="header-texto">
+      <span class="header-titulo">Gestão de Matrículas</span>
+      <span class="header-subtitulo">Sistema Acadêmico</span>
     </div>
-  </ng-template>
-
-  <ng-template #end>
-    <div class="header-user">
-      <p-avatar [label]="nomeUsuario.charAt(0).toUpperCase()" shape="circle" styleClass="header-avatar" />
-      <span class="header-username">{{ nomeUsuario }}</span>
-      <p-button label="Sair" icon="pi pi-sign-out" severity="secondary" [text]="true" (onClick)="sair()" />
+  </div>
+  <div class="header-usuario">
+    <p-avatar [label]="nomeUsuario.charAt(0).toUpperCase()" shape="circle" styleClass="header-avatar" />
+    <div class="header-usuario-info">
+      <span class="header-usuario-nome">{{ nomeUsuario }}</span>
     </div>
-  </ng-template>
-</p-toolbar>
+    <p-button label="Sair" icon="pi pi-sign-out" severity="contrast" [text]="true" size="small" (onClick)="sair()" />
+  </div>
+</header>

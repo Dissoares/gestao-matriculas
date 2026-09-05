@@ -4,13 +4,21 @@ import {
   MatrizCurricular,
 } from '@front/shared/models';
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { MatrizCurricularService } from '@front/shared/services';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Router, RouterLink } from '@angular/router';
+import { MessageModule } from 'primeng/message';
+import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -20,16 +28,26 @@ import { finalize } from 'rxjs';
   styleUrls: ['./listagem.component.scss'],
   imports: [
     ButtonModule,
+    CardModule,
+    ConfirmDialogModule,
     FormsModule,
     InputNumberModule,
+    MessageModule,
+    ProgressSpinnerModule,
     RouterLink,
     SelectModule,
     TableModule,
+    TagModule,
+    ToastModule,
+    TooltipModule,
   ],
+  providers: [MessageService, ConfirmationService],
 })
 export class ListagemComponent implements OnInit {
   private readonly servicoMatriz = inject(MatrizCurricularService);
   private readonly roteador = inject(Router);
+  private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
 
   public readonly matrizes = signal<MatrizCurricular[]>([]);
   public readonly referencias = signal<ReferenciasMatrizCurricular | null>(
@@ -69,16 +87,33 @@ export class ListagemComponent implements OnInit {
   }
 
   public excluir(matriz: MatrizCurricular): void {
-    if (
-      !window.confirm(
-        `Deseja excluir logicamente a aula de ${matriz.disciplina.nome}?`,
-      )
-    ) {
-      return;
-    }
-    this.servicoMatriz.excluir(matriz.id).subscribe({
-      next: () => this.buscar(),
-      error: (erro) => this.mensagemErro.set(this.obterMensagemErro(erro)),
+    this.confirmationService.confirm({
+      message: `Deseja excluir logicamente a aula de <strong>${matriz.disciplina.nome}</strong>? Esta ação não pode ser desfeita.`,
+      header: 'Confirmar exclusão',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Excluir',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.servicoMatriz.excluir(matriz.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: 'Aula excluída com sucesso.',
+              life: 4000,
+            });
+            this.buscar();
+          },
+          error: (erro) =>
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: this.obterMensagemErro(erro),
+              life: 5000,
+            }),
+        });
+      },
     });
   }
 
@@ -105,7 +140,7 @@ export class ListagemComponent implements OnInit {
       'Sexta',
       'Sábado',
     ];
-    return `${dias[horario.diaSemana]} - ${horario.horaInicio} às ${horario.horaFim}`;
+    return `${dias[horario.diaSemana]} ${horario.horaInicio}–${horario.horaFim}`;
   }
 
   private obterMensagemErro(erro: { error?: { mensagem?: string } }): string {
