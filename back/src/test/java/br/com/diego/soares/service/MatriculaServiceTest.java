@@ -1,31 +1,32 @@
 package br.com.diego.soares.service;
 
-import br.com.diego.soares.entity.Aluno;
-import br.com.diego.soares.entity.Curso;
-import br.com.diego.soares.entity.Disciplina;
-import br.com.diego.soares.entity.Horario;
-import br.com.diego.soares.entity.MatrizCurricular;
-import br.com.diego.soares.entity.Professor;
-import br.com.diego.soares.enums.DiaSemanaEnum;
-import br.com.diego.soares.exception.ExcecaoNegocio;
-import br.com.diego.soares.repository.AlunoRepository;
-import br.com.diego.soares.repository.MatriculaRepository;
 import br.com.diego.soares.repository.MatrizCurricularRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import br.com.diego.soares.repository.MatriculaRepository;
+import br.com.diego.soares.repository.AlunoRepository;
+import br.com.diego.soares.exception.ExcecaoNegocio;
+import br.com.diego.soares.entity.MatrizCurricular;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import br.com.diego.soares.enums.DiaSemanaEnum;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
+import br.com.diego.soares.entity.Disciplina;
+import br.com.diego.soares.entity.Professor;
+import br.com.diego.soares.entity.Horario;
 import static org.mockito.Mockito.verify;
+import br.com.diego.soares.entity.Aluno;
+import br.com.diego.soares.entity.Curso;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
+import jakarta.ws.rs.core.Response;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import java.time.LocalTime;
+import java.util.Optional;
+import org.mockito.Mock;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class MatriculaServiceTest {
@@ -35,14 +36,54 @@ class MatriculaServiceTest {
     @Mock MatriculaRepository repositorioMatricula;
 
     @Test
+    void devePersistirMatriculaQuandoTodasAsRegrasSaoAtendidas() {
+        Aluno aluno = alunoDoCurso(1L);
+        MatrizCurricular matriz = matrizComCursoAutorizado(1L);
+
+        when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
+        when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
+        when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
+        when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(0L);
+        when(repositorioMatricula.existeConflitoDeHorario(eq("aluno-1"), eq(DiaSemanaEnum.SEGUNDA), any(), any())).thenReturn(false);
+
+        novoServico().matricular(10L, "aluno-1");
+
+        ArgumentCaptor<br.com.diego.soares.entity.Matricula> captor = ArgumentCaptor.forClass(br.com.diego.soares.entity.Matricula.class);
+        verify(repositorioMatricula).persist(captor.capture());
+        assertEquals(aluno, captor.getValue().getAluno());
+        assertEquals(matriz, captor.getValue().getMatrizCurricular());
+    }
+
+    @Test
+    void deveImpedirMatriculaQuandoAlunoNaoExiste() {
+        when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.empty());
+
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+
+        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        verify(repositorioMatricula, never()).persist(any());
+    }
+
+    @Test
+    void deveImpedirMatriculaQuandoAulaNaoExiste() {
+        when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(alunoDoCurso(1L)));
+        when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(null);
+
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+
+        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        verify(repositorioMatricula, never()).persist(any());
+    }
+
+    @Test
     void deveImpedirMatriculaQuandoCursoNaoEstaAutorizado() {
         Aluno aluno = alunoDoCurso(1L);
         MatrizCurricular matriz = matrizComCursoAutorizado(2L);
+
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class,
-                () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
 
         assertEquals("curso_nao_autorizado", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
@@ -52,12 +93,12 @@ class MatriculaServiceTest {
     void deveImpedirMatriculaQuandoAlunoJaEstaMatriculado() {
         Aluno aluno = alunoDoCurso(1L);
         MatrizCurricular matriz = matrizComCursoAutorizado(1L);
+
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
         when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(true);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class,
-                () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
 
         assertEquals("regra_de_negocio", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
@@ -68,13 +109,13 @@ class MatriculaServiceTest {
         Aluno aluno = alunoDoCurso(1L);
         MatrizCurricular matriz = matrizComCursoAutorizado(1L);
         matriz.setQuantidadeMaximaAlunos(1);
+
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
         when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(1L);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class,
-                () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
 
         assertEquals("regra_de_negocio", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
@@ -84,39 +125,19 @@ class MatriculaServiceTest {
     void deveImpedirMatriculaQuandoHaConflitoDeHorario() {
         Aluno aluno = alunoDoCurso(1L);
         MatrizCurricular matriz = matrizComCursoAutorizado(1L);
+
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
         when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(0L);
-        when(repositorioMatricula.existeConflitoDeHorario(
-                eq("aluno-1"), eq(DiaSemanaEnum.SEGUNDA), any(), any())).thenReturn(true);
+        when(repositorioMatricula.existeConflitoDeHorario(eq("aluno-1"), eq(DiaSemanaEnum.SEGUNDA), any(), any())).thenReturn(true);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class,
-                () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
 
         assertEquals("regra_de_negocio", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
     }
 
-    @Test
-    void devePersistirMatriculaQuandoTodasAsRegrasSaoAtendidas() {
-        Aluno aluno = alunoDoCurso(1L);
-        MatrizCurricular matriz = matrizComCursoAutorizado(1L);
-        when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
-        when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
-        when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
-        when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(0L);
-        when(repositorioMatricula.existeConflitoDeHorario(
-                eq("aluno-1"), eq(DiaSemanaEnum.SEGUNDA), any(), any())).thenReturn(false);
-
-        novoServico().matricular(10L, "aluno-1");
-
-        ArgumentCaptor<br.com.diego.soares.entity.Matricula> captor =
-                ArgumentCaptor.forClass(br.com.diego.soares.entity.Matricula.class);
-        verify(repositorioMatricula).persist(captor.capture());
-        assertEquals(aluno, captor.getValue().getAluno());
-        assertEquals(matriz, captor.getValue().getMatrizCurricular());
-    }
 
     private MatriculaService novoServico() {
         return new MatriculaService(repositorioAluno, repositorioMatriz, repositorioMatricula);
