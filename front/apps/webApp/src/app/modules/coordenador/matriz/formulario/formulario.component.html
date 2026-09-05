@@ -1,3 +1,82 @@
-<p>
-  matrizes-formulario works!
-</p>
+<section class="pagina-formulario">
+  <div class="cabecalho-pagina">
+    <div>
+      <h1>{{ idMatriz ? 'Editar aula' : 'Nova aula' }}</h1>
+      <p>
+        {{
+        idMatriz
+        ? 'Disciplina e quantidade de vagas não são alteradas nesta etapa.'
+        : 'Selecione os dados
+        acadêmicos pré-cadastrados.'
+        }}
+      </p>
+    </div>
+    <a routerLink="/coordenador/matrizes">Voltar</a>
+  </div>
+
+  @if (carregando()) {
+  <p>Carregando formulário...</p>
+  } @else {
+  @if (mensagemErro()) {
+  <p class="mensagem-erro" role="alert">{{ mensagemErro() }}</p>
+  }
+  <form [formGroup]="formulario" (ngSubmit)="salvar()" class="cartao">
+    <label>
+      Disciplina
+      <p-select formControlName="disciplinaId" [options]="referencias()?.disciplinas ?? []" optionLabel="nome"
+        optionValue="id" placeholder="Selecione" />
+      @if (campoInvalido('disciplinaId')) {
+      <small>Selecione uma disciplina.</small>
+      }
+    </label>
+    <label>
+      Professor
+      <p-select formControlName="professorId" [options]="referencias()?.professores ?? []" optionLabel="nome"
+        optionValue="id" placeholder="Selecione" />
+      @if (campoInvalido('professorId')) {
+      <small>Selecione um professor.</small>
+      }
+    </label>
+    <label>
+      Horário
+      <p-select formControlName="horarioId" [options]="referencias()?.horarios ?? []" optionLabel="id" optionValue="id"
+        placeholder="Selecione">
+        <ng-template let-horario #item>{{
+          descreverHorario(horario)
+          }}</ng-template>
+        <ng-template let-horario #selectedItem>{{
+          descreverHorario(horario)
+          }}</ng-template>
+      </p-select>
+      @if (campoInvalido('horarioId')) {
+      <small>Selecione um horário.</small>
+      }
+    </label>
+    <label>
+      Cursos autorizados
+      <p-multiselect formControlName="cursosAutorizadosIds" [options]="referencias()?.cursos ?? []" optionLabel="nome"
+        optionValue="id" placeholder="Selecione um ou mais cursos" />
+      @if (campoInvalido('cursosAutorizadosIds')) {
+      <small>Selecione ao menos um curso.</small>
+      }
+    </label>
+    <label>
+      Quantidade máxima de alunos
+      <p-inputnumber formControlName="quantidadeMaximaAlunos" [min]="1" [useGrouping]="false" />
+      @if (campoInvalido('quantidadeMaximaAlunos')) {
+      <small>Informe uma quantidade positiva.</small>
+      }
+    </label>
+    <div class="acoes-formulario">
+      <p-button type="submit" [label]="
+            salvando()
+              ? 'Salvando...'
+              : idMatriz
+                ? 'Salvar alterações'
+                : 'Criar aula'
+          " [disabled]="salvando()" />
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" routerLink="/coordenador/matrizes" />
+    </div>
+  </form>
+  }
+</section>

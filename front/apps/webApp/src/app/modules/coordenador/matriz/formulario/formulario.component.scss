@@ -1,0 +1,59 @@
+.pagina-formulario {
+  margin: 0 auto;
+  max-width: 760px;
+}
+
+.cabecalho-pagina {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.cabecalho-pagina h1,
+.cabecalho-pagina p {
+  margin: 0;
+}
+
+.cabecalho-pagina p {
+  color: var(--p-text-muted-color);
+  margin-top: 0.35rem;
+}
+
+.cabecalho-pagina a {
+  color: var(--p-primary-color);
+  text-decoration: none;
+}
+
+.cartao {
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: 0.5rem;
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+label {
+  display: grid;
+  font-weight: 600;
+  gap: 0.35rem;
+}
+
+small {
+  color: var(--p-red-600, #dc2626);
+  font-weight: 400;
+}
+
+.acoes-formulario {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.mensagem-erro {
+  background: var(--p-red-50, #fef2f2);
+  border-radius: 0.35rem;
+  color: var(--p-red-700, #b91c1c);
+  padding: 0.75rem;
+}
