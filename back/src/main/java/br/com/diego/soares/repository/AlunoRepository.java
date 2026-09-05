@@ -1,9 +1,8 @@
 package br.com.diego.soares.repository;
 
-import br.com.diego.soares.entity.Aluno;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-
+import br.com.diego.soares.entity.Aluno;
 import java.util.Optional;
 
 @ApplicationScoped

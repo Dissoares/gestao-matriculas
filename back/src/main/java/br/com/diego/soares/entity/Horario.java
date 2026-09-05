@@ -1,18 +1,17 @@
 package br.com.diego.soares.entity;
 
-import br.com.diego.soares.enums.DiaSemanaEnum;
 import br.com.diego.soares.utils.DiaSemanaEnumConverter;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.Column;
+import br.com.diego.soares.enums.DiaSemanaEnum;
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalTime;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "horario")

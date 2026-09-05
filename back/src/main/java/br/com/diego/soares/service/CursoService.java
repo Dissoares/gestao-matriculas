@@ -1,8 +1,8 @@
 package br.com.diego.soares.service;
 
-import br.com.diego.soares.entity.Curso;
 import br.com.diego.soares.repository.CursoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import br.com.diego.soares.entity.Curso;
 import jakarta.inject.Inject;
 import java.util.List;
 

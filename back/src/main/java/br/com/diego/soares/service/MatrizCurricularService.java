@@ -25,13 +25,12 @@ import br.com.diego.soares.entity.Horario;
 import jakarta.transaction.Transactional;
 import br.com.diego.soares.entity.Curso;
 import jakarta.ws.rs.core.Response;
+import java.util.stream.Collectors;
 import jakarta.inject.Inject;
-
 import java.util.Collection;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MatrizCurricularService {
@@ -74,6 +73,7 @@ public class MatrizCurricularService {
         validarOfertaEmHorarioDiferente(disciplina.id, horario.id, null);
 
         MatrizCurricular matriz = new MatrizCurricular();
+
         matriz.setCoordenador(coordenador);
         matriz.setDisciplina(disciplina);
         matriz.setProfessor(professor);
@@ -81,29 +81,25 @@ public class MatrizCurricularService {
         matriz.setCursosAutorizados(cursos);
         matriz.setQuantidadeMaximaAlunos(requisicao.quantidadeMaximaAlunos());
         matriz.setAtivo(true);
+
         repositorioMatriz.persist(matriz);
 
         return MatrizResposta.de(matriz, 0);
     }
 
     @Transactional
-    public List<MatrizResposta> listar(
-            String idKeycloak,
-            LocalTime horaInicio,
-            LocalTime horaFim,
-            Integer periodoCodigo,
-            Long cursoId,
-            Integer quantidadeMaxima) {
+    public List<MatrizResposta> listar(String idKeycloak, LocalTime horaInicio, LocalTime horaFim, Integer periodoCodigo, Long cursoId, Integer quantidadeMaxima) {
+
         if (horaInicio != null && horaFim != null && !horaInicio.isBefore(horaFim)) {
             throw new ExcecaoNegocio("O horário inicial do filtro deve ser menor que o horário final.");
         }
+
         if (quantidadeMaxima != null && quantidadeMaxima <= 0) {
             throw new ExcecaoNegocio("A quantidade máxima do filtro deve ser positiva.");
         }
 
         PeriodoEnum periodo = periodoCodigo == null ? null : converterPeriodo(periodoCodigo);
-        return repositorioMatriz.buscarAtivasDoCoordenador(
-                        idKeycloak, horaInicio, horaFim, periodo, cursoId, quantidadeMaxima)
+        return repositorioMatriz.buscarAtivasDoCoordenador(idKeycloak, horaInicio, horaFim, periodo, cursoId, quantidadeMaxima)
                 .stream()
                 .map(matriz -> MatrizResposta.de(matriz, repositorioMatricula.contarPorIdMatriz(matriz.getId())))
                 .toList();
@@ -129,12 +125,14 @@ public class MatrizCurricularService {
         matriz.setProfessor(professor);
         matriz.setHorario(horario);
         matriz.setCursosAutorizados(cursos);
+
         return MatrizResposta.de(matriz, repositorioMatricula.contarPorIdMatriz(idMatriz));
     }
 
     @Transactional
     public void excluir(Long idMatriz, String idKeycloak) {
         MatrizCurricular matriz = obterMatrizDoCoordenador(idMatriz, idKeycloak);
+
         if (repositorioMatricula.contarPorIdMatriz(idMatriz) > 0) {
             throw new ExcecaoNegocio("Não é possível excluir uma aula que possui alunos matriculados.");
         }
@@ -146,19 +144,17 @@ public class MatrizCurricularService {
         return new ReferenciasMatrizResposta(
                 repositorioDisciplina.list("id").stream().map(d -> new IdNomeResposta(d.id, d.getNome())).toList(),
                 repositorioProfessor.list("id").stream().map(p -> new IdNomeResposta(p.id, p.getNome())).toList(),
-                repositorioHorario.list("id").stream().map(h -> new HorarioResposta(
-                        h.id, h.getDiaSemana(), h.getHoraInicio(), h.getHoraFim())).toList(),
+                repositorioHorario.list("id").stream().map(h -> new HorarioResposta(h.id, h.getDiaSemana(), h.getHoraInicio(), h.getHoraFim())).toList(),
                 repositorioCurso.list("id").stream().map(c -> new IdNomeResposta(c.id, c.getNome())).toList());
     }
 
     private Coordenador obterCoordenador(String idKeycloak) {
-        return repositorioCoordenador.buscarPorIdKeycloak(idKeycloak)
-                .orElseThrow(() -> naoEncontrado("coordenador"));
+        return repositorioCoordenador.buscarPorIdKeycloak(idKeycloak).orElseThrow(() -> naoEncontrado("coordenador"));
     }
 
     private MatrizCurricular obterMatrizDoCoordenador(Long idMatriz, String idKeycloak) {
-        MatrizCurricular matriz = repositorioMatriz.buscarAtivaDoCoordenadorPorId(idMatriz, idKeycloak)
-                .orElseThrow(() -> naoEncontrado("aula da matriz curricular"));
+        MatrizCurricular matriz = repositorioMatriz.buscarAtivaDoCoordenadorPorId(idMatriz, idKeycloak).orElseThrow(() -> naoEncontrado("aula da matriz curricular"));
+
         matriz.getCursosAutorizados().size();
         return matriz;
     }
@@ -199,6 +195,7 @@ public class MatrizCurricularService {
                 .map(Matricula::getAluno)
                 .map(aluno -> aluno.getCurso().id)
                 .anyMatch(idCurso -> !idsCursos.contains(idCurso));
+
         if (removeriaAlunoMatriculado) {
             throw new ExcecaoNegocio("A alteração removeria o curso de um aluno já matriculado.");
         }
