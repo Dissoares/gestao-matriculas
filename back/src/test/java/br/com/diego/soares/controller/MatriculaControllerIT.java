@@ -1,5 +1,7 @@
 package br.com.diego.soares.controller;
 
+import br.com.diego.soares.PostgreSQLTestResource;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.security.TestSecurity;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
 @QuarkusTest
+@QuarkusTestResource(PostgreSQLTestResource.class)
 class MatriculaControllerIT {
 
     static final String ALUNO_1 = "a0000001-0000-0000-0000-000000000001";

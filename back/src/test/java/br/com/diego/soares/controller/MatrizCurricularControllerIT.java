@@ -1,5 +1,7 @@
 package br.com.diego.soares.controller;
 
+import br.com.diego.soares.PostgreSQLTestResource;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
@@ -10,6 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 @QuarkusTest
+@QuarkusTestResource(PostgreSQLTestResource.class)
 class MatrizCurricularControllerIT {
 
     static final String COORDENADOR_1 = "c0000001-0000-0000-0000-000000000001";
