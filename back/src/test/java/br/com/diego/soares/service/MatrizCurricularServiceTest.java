@@ -48,6 +48,44 @@ class MatrizCurricularServiceTest {
     @Mock CursoRepository repositorioCurso;
     @Mock MatriculaRepository repositorioMatricula;
 
+    private MatrizCurricularService novoServico() {
+        return new MatrizCurricularService(
+                repositorioMatriz,
+                repositorioCoordenador,
+                repositorioDisciplina,
+                repositorioProfessor,
+                repositorioHorario,
+                repositorioCurso,
+                repositorioMatricula
+        );
+    }
+
+    private Disciplina disciplinaComId(Long id) {
+        Disciplina disciplina = new Disciplina();
+        disciplina.id = id;
+        return disciplina;
+    }
+
+    private Professor professorComId(Long id) {
+        Professor professor = new Professor();
+        professor.id = id;
+        return professor;
+    }
+
+    private Horario horarioValido(Long id) {
+        Horario horario = new Horario();
+        horario.id = id;
+        horario.setHoraInicio(LocalTime.of(8, 0));
+        horario.setHoraFim(LocalTime.of(10, 0));
+        return horario;
+    }
+
+    private Curso cursoComId(Long id) {
+        Curso curso = new Curso();
+        curso.id = id;
+        return curso;
+    }
+
     @Test
     void deveCriarMatrizComDadosValidos() {
         Disciplina disciplina = disciplinaComId(1L);
@@ -65,7 +103,7 @@ class MatrizCurricularServiceTest {
         novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1");
 
         ArgumentCaptor<MatrizCurricular> captor = ArgumentCaptor.forClass(MatrizCurricular.class);
-        verify(repositorioMatriz).persist(captor.capture());
+        verify(repositorioMatriz).persist((MatrizCurricular) captor.capture());
         MatrizCurricular criada = captor.getValue();
         assertEquals(disciplina, criada.getDisciplina());
         assertEquals(horario, criada.getHorario());
@@ -79,7 +117,7 @@ class MatrizCurricularServiceTest {
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
         assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
-        verify(repositorioMatriz, never()).persist(any());
+        verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
     @Test
@@ -90,7 +128,7 @@ class MatrizCurricularServiceTest {
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
         assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
-        verify(repositorioMatriz, never()).persist(any());
+        verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
     @Test
@@ -102,7 +140,7 @@ class MatrizCurricularServiceTest {
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
         assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
-        verify(repositorioMatriz, never()).persist(any());
+        verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
     @Test
@@ -115,7 +153,7 @@ class MatrizCurricularServiceTest {
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
         assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
-        verify(repositorioMatriz, never()).persist(any());
+        verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
     @Test
@@ -129,7 +167,7 @@ class MatrizCurricularServiceTest {
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
         assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
-        verify(repositorioMatriz, never()).persist(any());
+        verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
     @Test
@@ -143,7 +181,7 @@ class MatrizCurricularServiceTest {
 
         assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
-        verify(repositorioMatriz, never()).persist(any());
+        verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
     @Test
@@ -201,35 +239,5 @@ class MatrizCurricularServiceTest {
 
         assertThrows(ExcecaoNegocio.class, () -> novoServico().excluir(10L, "coordenador-1"));
         assertTrue(matriz.getAtivo());
-    }
-
-    private MatrizCurricularService novoServico() {
-        return new MatrizCurricularService(repositorioMatriz, repositorioCoordenador, repositorioDisciplina, repositorioProfessor, repositorioHorario, repositorioCurso, repositorioMatricula);
-    }
-
-    private Disciplina disciplinaComId(Long id) {
-        Disciplina disciplina = new Disciplina();
-        disciplina.id = id;
-        return disciplina;
-    }
-
-    private Professor professorComId(Long id) {
-        Professor professor = new Professor();
-        professor.id = id;
-        return professor;
-    }
-
-    private Horario horarioValido(Long id) {
-        Horario horario = new Horario();
-        horario.id = id;
-        horario.setHoraInicio(LocalTime.of(8, 0));
-        horario.setHoraFim(LocalTime.of(10, 0));
-        return horario;
-    }
-
-    private Curso cursoComId(Long id) {
-        Curso curso = new Curso();
-        curso.id = id;
-        return curso;
     }
 }
