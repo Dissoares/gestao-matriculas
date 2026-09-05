@@ -16,9 +16,7 @@ export const ROTAS_ALUNO: Routes = [
   },
   {
     path: RotasEnum.ALUNO.MATRICULAS.NOVA,
-    loadComponent: () =>
-      import('./matriculas/formulario/formulario.component').then(
-        (m) => m.FormularioComponent,
-      ),
+    redirectTo: RotasEnum.ALUNO.AULAS,
+    pathMatch: 'full',
   },
 ];
