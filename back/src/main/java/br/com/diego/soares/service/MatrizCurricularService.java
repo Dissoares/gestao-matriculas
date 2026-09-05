@@ -142,10 +142,10 @@ public class MatrizCurricularService {
     @Transactional
     public ReferenciasMatrizResposta listarReferencias() {
         return new ReferenciasMatrizResposta(
-                repositorioDisciplina.list("id").stream().map(d -> new IdNomeResposta(d.id, d.getNome())).toList(),
-                repositorioProfessor.list("id").stream().map(p -> new IdNomeResposta(p.id, p.getNome())).toList(),
-                repositorioHorario.list("id").stream().map(h -> new HorarioResposta(h.id, h.getDiaSemana(), h.getHoraInicio(), h.getHoraFim())).toList(),
-                repositorioCurso.list("id").stream().map(c -> new IdNomeResposta(c.id, c.getNome())).toList());
+                repositorioDisciplina.listAll().stream().map(d -> new IdNomeResposta(d.id, d.getNome())).toList(),
+                repositorioProfessor.listAll().stream().map(p -> new IdNomeResposta(p.id, p.getNome())).toList(),
+                repositorioHorario.listAll().stream().map(h -> new HorarioResposta(h.id, h.getDiaSemana(), h.getHoraInicio(), h.getHoraFim())).toList(),
+                repositorioCurso.listAll().stream().map(c -> new IdNomeResposta(c.id, c.getNome())).toList());
     }
 
     private Coordenador obterCoordenador(String idKeycloak) {
