@@ -1,3 +1,82 @@
-<p>
-  matrizes-listagem works!
-</p>
+<section class="pagina-matrizes">
+  <div class="cabecalho-pagina">
+    <div>
+      <h1>Matrizes curriculares</h1>
+      <p>Gerencie as aulas sob sua responsabilidade.</p>
+    </div>
+    <a class="acao-principal" routerLink="/coordenador/matrizes/nova">Nova aula</a>
+  </div>
+
+  @if (mensagemErro()) {
+  <p class="mensagem-erro" role="alert">{{ mensagemErro() }}</p>
+  }
+
+  <div class="cartao filtros">
+    <label>
+      Horário inicial
+      <input type="time" [(ngModel)]="filtros.horaInicio" />
+    </label>
+    <label>
+      Horário final
+      <input type="time" [(ngModel)]="filtros.horaFim" />
+    </label>
+    <label>
+      Período
+      <p-select [(ngModel)]="filtros.periodo" [options]="[
+          { nome: 'Manhã', id: 1 },
+          { nome: 'Tarde', id: 2 },
+          { nome: 'Noite', id: 3 },
+        ]" optionLabel="nome" optionValue="id" [showClear]="true" placeholder="Todos" />
+    </label>
+    <label>
+      Curso autorizado
+      <p-select [(ngModel)]="filtros.cursoId" [options]="referencias()?.cursos ?? []" optionLabel="nome"
+        optionValue="id" [showClear]="true" placeholder="Todos" />
+    </label>
+    <label>
+      Máximo de alunos
+      <p-inputnumber [(ngModel)]="filtros.quantidadeMaxima" [min]="1" [useGrouping]="false" />
+    </label>
+    <div class="acoes-filtros">
+      <p-button label="Filtrar" icon="pi pi-filter" (onClick)="buscar()" />
+      <p-button label="Limpar" severity="secondary" [outlined]="true" (onClick)="limparFiltros()" />
+    </div>
+  </div>
+
+  @if (carregando()) {
+  <p class="estado">Carregando matrizes...</p>
+  } @else {
+  <p-table [value]="matrizes()" dataKey="id" [paginator]="true" [rows]="8" [rowsPerPageOptions]="[8, 16, 32]">
+    <ng-template #header>
+      <tr>
+        <th>Disciplina</th>
+        <th>Professor</th>
+        <th>Horário</th>
+        <th>Cursos autorizados</th>
+        <th>Vagas</th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-matriz>
+      <tr>
+        <td>{{ matriz.disciplina.nome }}</td>
+        <td>{{ matriz.professor.nome }}</td>
+        <td>{{ descreverHorario(matriz) }}</td>
+        <td>{{ descreverCursos(matriz) }}</td>
+        <td>
+          {{ matriz.vagasOcupadas }} / {{ matriz.quantidadeMaximaAlunos }}
+        </td>
+        <td class="acoes-tabela">
+          <p-button label="Editar" [text]="true" (onClick)="editar(matriz)" />
+          <p-button label="Excluir" severity="danger" [text]="true" (onClick)="excluir(matriz)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6">Nenhuma aula encontrada.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  }
+</section>
