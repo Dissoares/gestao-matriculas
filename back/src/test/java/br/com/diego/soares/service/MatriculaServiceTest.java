@@ -58,7 +58,9 @@ class MatriculaServiceTest {
     void deveImpedirMatriculaQuandoAlunoNaoExiste() {
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.empty());
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
+                novoServico().matricular(10L, "aluno-1")
+        );
 
         assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
         verify(repositorioMatricula, never()).persist(any());
@@ -69,7 +71,9 @@ class MatriculaServiceTest {
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(alunoDoCurso(1L)));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(null);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
+                novoServico().matricular(10L, "aluno-1")
+        );
 
         assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
         verify(repositorioMatricula, never()).persist(any());
@@ -83,7 +87,9 @@ class MatriculaServiceTest {
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
+                novoServico().matricular(10L, "aluno-1")
+        );
 
         assertEquals("curso_nao_autorizado", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
@@ -98,7 +104,9 @@ class MatriculaServiceTest {
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
         when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(true);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
+                novoServico().matricular(10L, "aluno-1")
+        );
 
         assertEquals("regra_de_negocio", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
@@ -115,7 +123,9 @@ class MatriculaServiceTest {
         when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(1L);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
+                novoServico().matricular(10L, "aluno-1")
+        );
 
         assertEquals("regra_de_negocio", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
@@ -132,7 +142,9 @@ class MatriculaServiceTest {
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(0L);
         when(repositorioMatricula.existeConflitoDeHorario(eq("aluno-1"), eq(DiaSemanaEnum.SEGUNDA), any(), any())).thenReturn(true);
 
-        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().matricular(10L, "aluno-1"));
+        ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
+                novoServico().matricular(10L, "aluno-1")
+        );
 
         assertEquals("regra_de_negocio", excecao.obterCodigo());
         verify(repositorioMatricula, never()).persist(any());
