@@ -1,0 +1,40 @@
+<section class="pagina-matriculas">
+  <div class="cabecalho-pagina">
+    <div>
+      <h1>Minhas matrículas</h1>
+      <p>Consulte as aulas em que você está matriculado.</p>
+    </div>
+    <p-button label="Atualizar" icon="pi pi-refresh" severity="secondary" [outlined]="true"
+      (onClick)="buscarMatriculas()" />
+  </div>
+  @if (mensagemErro()) {
+  <p class="mensagem-erro" role="alert">{{ mensagemErro() }}</p>
+  }
+  @if (carregando()) {
+  <p>Carregando matrículas...</p>
+  } @else {
+  <p-table [value]="matriculas()" dataKey="id">
+    <ng-template #header>
+      <tr>
+        <th>Disciplina</th>
+        <th>Professor</th>
+        <th>Horário</th>
+        <th>Data da matrícula</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-matricula>
+      <tr>
+        <td>{{ matricula.disciplina.nome }}</td>
+        <td>{{ matricula.professor.nome }}</td>
+        <td>{{ descreverHorario(matricula) }}</td>
+        <td>{{ matricula.dataMatricula | date: 'dd/MM/yyyy HH:mm' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="4">Você ainda não possui matrículas.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  }
+</section>
