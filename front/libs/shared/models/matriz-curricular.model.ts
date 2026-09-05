@@ -1,4 +1,3 @@
-import { Coordenador } from './coordenador.model';
 import { Curso } from './curso.model';
 import { Disciplina } from './disciplina.model';
 import { Horario } from './horario.model';
@@ -11,6 +10,6 @@ export interface MatrizCurricular {
   horario: Horario;
   cursosAutorizados: Curso[];
   quantidadeMaximaAlunos: number;
-  coordenador: Coordenador;
+  vagasOcupadas: number;
   ativo: boolean;
 }
