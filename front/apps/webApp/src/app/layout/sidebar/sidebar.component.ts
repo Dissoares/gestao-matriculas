@@ -33,7 +33,7 @@ export class SidebarComponent implements OnInit {
               routerLink: `/${RotasEnum.ROTA.COORDENADOR}/${RotasEnum.COORDENADOR.MATRIZ.LISTAR}`,
             },
             {
-              label: 'Nova Matriz',
+              label: 'Nova aula',
               icon: 'pi pi-plus',
               routerLink: `/${RotasEnum.ROTA.COORDENADOR}/${RotasEnum.COORDENADOR.MATRIZ.NOVA}`,
             },
@@ -57,11 +57,6 @@ export class SidebarComponent implements OnInit {
               label: 'Minhas Matrículas',
               icon: 'pi pi-list',
               routerLink: `/${RotasEnum.ROTA.ALUNO}/${RotasEnum.ALUNO.MATRICULAS.LISTAR}`,
-            },
-            {
-              label: 'Nova Matrícula',
-              icon: 'pi pi-plus',
-              routerLink: `/${RotasEnum.ROTA.ALUNO}/${RotasEnum.ALUNO.MATRICULAS.NOVA}`,
             },
           ],
         },

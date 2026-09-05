@@ -1,0 +1,30 @@
+.pagina-aulas {
+  margin: 0 auto;
+  max-width: 1100px;
+}
+.cabecalho-pagina {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.cabecalho-pagina h1,
+.cabecalho-pagina p {
+  margin: 0;
+}
+.cabecalho-pagina p {
+  color: var(--p-text-muted-color);
+  margin-top: 0.35rem;
+}
+.mensagem {
+  border-radius: 0.35rem;
+  padding: 0.75rem;
+}
+.erro {
+  background: var(--p-red-50, #fef2f2);
+  color: var(--p-red-700, #b91c1c);
+}
+.sucesso {
+  background: var(--p-green-50, #f0fdf4);
+  color: var(--p-green-700, #15803d);
+}
