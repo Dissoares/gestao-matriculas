@@ -1,24 +1,23 @@
 package br.com.diego.soares.controller;
 
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import br.com.diego.soares.dto.AulaDisponivelResposta;
-import br.com.diego.soares.dto.MatriculaResposta;
+import io.quarkus.security.identity.SecurityIdentity;
 import br.com.diego.soares.service.MatriculaService;
+import br.com.diego.soares.dto.MatriculaResposta;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.GET;
 import java.util.List;
 
 @Path("/api/aluno")
@@ -32,20 +31,20 @@ public class MatriculaController {
     MatriculaService servico;
 
     @Inject
-    JsonWebToken tokenJwt;
+    SecurityIdentity identity;
 
     @GET
     @Path("/aulas-disponiveis")
     @Operation(summary = "Listar aulas disponíveis para o curso do aluno")
     public List<AulaDisponivelResposta> listarAulasDisponiveis() {
-        return servico.listarAulasDisponiveis(tokenJwt.getSubject());
+        return servico.listarAulasDisponiveis(identity.getPrincipal().getName());
     }
 
     @GET
     @Path("/matriculas")
     @Operation(summary = "Listar as próprias matrículas")
     public List<MatriculaResposta> listarMinhasMatriculas() {
-        return servico.listarMinhasMatriculas(tokenJwt.getSubject());
+        return servico.listarMinhasMatriculas(identity.getPrincipal().getName());
     }
 
     @POST
@@ -58,6 +57,6 @@ public class MatriculaController {
             @APIResponse(responseCode = "404", description = "Aluno ou aula não encontrados")
     })
     public Response matricular(@PathParam("matrizId") Long idMatriz) {
-        return Response.status(Response.Status.CREATED).entity(servico.matricular(idMatriz, tokenJwt.getSubject())).build();
+        return Response.status(Response.Status.CREATED).entity(servico.matricular(idMatriz, identity.getPrincipal().getName())).build();
     }
 }
