@@ -8,10 +8,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatrizCurricularService } from '@front/shared/services';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
+import { CardModule } from 'primeng/card';
 import { finalize, forkJoin, of } from 'rxjs';
 
 @Component({
@@ -21,8 +24,11 @@ import { finalize, forkJoin, of } from 'rxjs';
   styleUrls: ['./formulario.component.scss'],
   imports: [
     ButtonModule,
+    CardModule,
     InputNumberModule,
+    MessageModule,
     MultiSelectModule,
+    ProgressSpinnerModule,
     ReactiveFormsModule,
     RouterLink,
     SelectModule,
