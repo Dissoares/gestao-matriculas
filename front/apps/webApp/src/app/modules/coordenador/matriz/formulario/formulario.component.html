@@ -16,12 +16,6 @@
     </div>
   </ng-template>
 
-  @if (carregando()) {
-  <div class="estado-carregando">
-    <p-progressspinner strokeWidth="4" styleClass="spinner-pequeno" />
-    <span>Carregando formulário...</span>
-  </div>
-  } @else {
   @if (mensagemErro()) {
   <p-message severity="error" [text]="mensagemErro()" styleClass="w-full mb-4" />
   }
@@ -85,5 +79,4 @@
       <p-button label="Cancelar" severity="secondary" [outlined]="true" routerLink="/coordenador/matrizes" />
     </div>
   </form>
-  }
 </p-card>

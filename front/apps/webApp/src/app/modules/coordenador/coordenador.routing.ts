@@ -1,3 +1,4 @@
+import { matrizFormularioResolver } from './matriz/formulario/formulario.resolver';
 import { RotasEnum } from '@front/shared/enums';
 import { Routes } from '@angular/router';
 
@@ -16,6 +17,7 @@ export const ROTAS_COORDENADOR: Routes = [
   },
   {
     path: RotasEnum.COORDENADOR.MATRIZ.NOVA,
+    resolve: { formulario: matrizFormularioResolver },
     loadComponent: () =>
       import('./matriz/formulario/formulario.component').then(
         (m) => m.FormularioComponent,
@@ -23,6 +25,7 @@ export const ROTAS_COORDENADOR: Routes = [
   },
   {
     path: RotasEnum.COORDENADOR.MATRIZ.EDITAR,
+    resolve: { formulario: matrizFormularioResolver },
     loadComponent: () =>
       import('./matriz/formulario/formulario.component').then(
         (m) => m.FormularioComponent,

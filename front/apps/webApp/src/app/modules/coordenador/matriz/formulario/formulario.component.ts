@@ -4,11 +4,11 @@
   RequisicaoCriarMatriz,
   MatrizCurricular,
 } from '@front/shared/models';
+import { MatrizFormularioDados } from './formulario.resolver';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatrizCurricularService } from '@front/shared/services';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -16,8 +16,8 @@ import { HorarioPipe } from '@front/shared/pipes';
 import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { finalize, forkJoin, of } from 'rxjs';
 import { CardModule } from 'primeng/card';
+import { finalize } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -31,7 +31,6 @@ import { CardModule } from 'primeng/card';
     InputNumberModule,
     MessageModule,
     MultiSelectModule,
-    ProgressSpinnerModule,
     ReactiveFormsModule,
     RouterLink,
     SelectModule,
@@ -44,7 +43,6 @@ export class FormularioComponent implements OnInit {
   private readonly roteador = inject(Router);
 
   public readonly referencias = signal<ReferenciasMatrizCurricular | null>(null);
-  public readonly carregando = signal(true);
   public readonly salvando = signal(false);
   public readonly mensagemErro = signal('');
   public idMatriz: number | null = null;
@@ -53,23 +51,13 @@ export class FormularioComponent implements OnInit {
   public ngOnInit(): void {
     this.criarFormulario();
 
-    const idDaRota = Number(this.rotaAtiva.snapshot.paramMap.get('id'));
-    this.idMatriz = Number.isInteger(idDaRota) && idDaRota > 0 ? idDaRota : null;
+    const dados = this.rotaAtiva.snapshot.data['formulario'] as MatrizFormularioDados;
+    this.referencias.set(dados.referencias);
 
-    forkJoin({
-      referencias: this.servicoMatriz.listarReferencias(),
-      matriz: this.idMatriz ? this.servicoMatriz.buscarPorId(this.idMatriz) : of(null),
-    }).subscribe({
-      next: ({ referencias, matriz }) => {
-        this.referencias.set(referencias);
-        if (matriz) this.preencherParaEdicao(matriz);
-        this.carregando.set(false);
-      },
-      error: (resposta: HttpErrorResponse) => {
-        this.mensagemErro.set(this.obterMensagemErro(resposta));
-        this.carregando.set(false);
-      },
-    });
+    if (dados.matriz) {
+      this.idMatriz = dados.matriz.id;
+      this.preencherParaEdicao(dados.matriz);
+    }
   }
 
   public salvar(): void {
@@ -138,3 +126,4 @@ export class FormularioComponent implements OnInit {
     return resposta.error?.mensagem ?? 'Não foi possível concluir a operação.';
   }
 }
+
