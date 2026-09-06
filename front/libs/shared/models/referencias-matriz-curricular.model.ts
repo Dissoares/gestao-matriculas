@@ -4,8 +4,8 @@ import { Horario } from './horario.model';
 import { Professor } from './professor.model';
 
 export interface ReferenciasMatrizCurricular {
-  disciplinas: Disciplina[];
-  professores: Professor[];
-  horarios: Horario[];
-  cursos: Curso[];
+  disciplinas: Array<Disciplina>;
+  professores: Array<Professor>;
+  horarios: Array<Horario>;
+  cursos: Array<Curso>;
 }

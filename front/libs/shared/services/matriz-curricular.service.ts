@@ -17,14 +17,14 @@ export class MatrizCurricularService {
 
   public listar(
     filtros: FiltrosMatrizCurricular = {},
-  ): Observable<MatrizCurricular[]> {
+  ): Observable<Array<MatrizCurricular>> {
     let parametros = new HttpParams();
     Object.entries(filtros).forEach(([chave, valor]) => {
       if (valor !== undefined && valor !== null && valor !== '') {
         parametros = parametros.set(chave, String(valor));
       }
     });
-    return this.clienteHttp.get<MatrizCurricular[]>(this.urlBase, {
+    return this.clienteHttp.get<Array<MatrizCurricular>>(this.urlBase, {
       params: parametros,
     });
   }

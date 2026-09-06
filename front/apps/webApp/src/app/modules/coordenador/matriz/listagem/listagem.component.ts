@@ -53,18 +53,15 @@ export class ListagemComponent implements OnInit {
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
 
-  public readonly matrizes = signal<MatrizCurricular[]>([]);
+  public readonly matrizes = signal<Array<MatrizCurricular>>([]);
   public readonly referencias = signal<ReferenciasMatrizCurricular | null>(null);
-  public readonly carregando = signal(false);
-  public readonly mensagemErro = signal('');
+  public readonly carregando = signal<boolean>(false);
+  public readonly mensagemErro = signal<string>('');
   public readonly periodos = PeriodoEnum.obterTodos();
   public filtros: FiltrosMatrizCurricular = {};
 
   public ngOnInit(): void {
-    this.servicoMatriz.listarReferencias().subscribe({
-      next: (referencias) => this.referencias.set(referencias),
-      error: (resposta: HttpErrorResponse) => this.mensagemErro.set(this.obterMensagemErro(resposta)),
-    });
+    this.carregarReferencias();
     this.buscar();
   }
 
@@ -75,8 +72,8 @@ export class ListagemComponent implements OnInit {
       .listar(this.filtros)
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
-        next: (matrizes) => this.matrizes.set(matrizes),
-        error: (resposta: HttpErrorResponse) => this.mensagemErro.set(this.obterMensagemErro(resposta)),
+        next: (matrizes: Array<MatrizCurricular>): void => this.matrizes.set(matrizes),
+        error: (resposta: HttpErrorResponse): void => this.mensagemErro.set(this.obterMensagemErro(resposta)),
       });
   }
 
@@ -97,26 +94,7 @@ export class ListagemComponent implements OnInit {
       acceptLabel: 'Excluir',
       rejectLabel: 'Cancelar',
       acceptButtonStyleClass: 'p-button-danger',
-      accept: () => {
-        this.servicoMatriz.excluir(matriz.id).subscribe({
-          next: () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Sucesso',
-              detail: 'Aula excluída com sucesso.',
-              life: 4000,
-            });
-            this.buscar();
-          },
-          error: (resposta: HttpErrorResponse) =>
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erro',
-              detail: this.obterMensagemErro(resposta),
-              life: 5000,
-            }),
-        });
-      },
+      accept: (): void => this.confirmarExclusao(matriz),
     });
   }
 
@@ -126,6 +104,35 @@ export class ListagemComponent implements OnInit {
 
   public descreverCursos(matriz: MatrizCurricular): string {
     return matriz.cursosAutorizados.map((curso) => curso.nome).join(', ');
+  }
+
+  private carregarReferencias(): void {
+    this.servicoMatriz.listarReferencias().subscribe({
+      next: (referencias: ReferenciasMatrizCurricular): void => this.referencias.set(referencias),
+      error: (resposta: HttpErrorResponse): void => this.mensagemErro.set(this.obterMensagemErro(resposta)),
+    });
+  }
+
+  private confirmarExclusao(matriz: MatrizCurricular): void {
+    this.servicoMatriz.excluir(matriz.id).subscribe({
+      next: (): void => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Aula excluída com sucesso.',
+          life: 4000,
+        });
+        this.buscar();
+      },
+      error: (resposta: HttpErrorResponse): void => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: this.obterMensagemErro(resposta),
+          life: 5000,
+        });
+      },
+    });
   }
 
   private obterMensagemErro(resposta: HttpErrorResponse): string {

@@ -21,6 +21,10 @@ export class LoginComponent implements OnInit {
   public readonly semPermissao = signal(false);
 
   public ngOnInit(): void {
+    this.redirecionarPorPerfil();
+  }
+
+  private redirecionarPorPerfil(): void {
     if (!this.autenticacaoService.ehUsuarioAutenticado()) {
       this.erroConexao.set(true);
       this.carregando.set(false);

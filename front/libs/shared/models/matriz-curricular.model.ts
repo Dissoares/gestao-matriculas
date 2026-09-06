@@ -8,7 +8,7 @@ export interface MatrizCurricular {
   disciplina: Disciplina;
   professor: Professor;
   horario: Horario;
-  cursosAutorizados: Curso[];
+  cursosAutorizados: Array<Curso>;
   quantidadeMaximaAlunos: number;
   vagasOcupadas: number;
   ativo: boolean;

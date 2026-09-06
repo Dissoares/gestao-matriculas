@@ -32,8 +32,8 @@ export class ListagemComponent implements OnInit {
   private readonly servicoMatricula = inject(MatriculaService);
   private readonly messageService = inject(MessageService);
 
-  public readonly matriculas = signal<Matricula[]>([]);
-  public readonly carregando = signal(false);
+  public readonly matriculas = signal<Array<Matricula>>([]);
+  public readonly carregando = signal<boolean>(false);
 
   public ngOnInit(): void {
     this.buscarMatriculas();
@@ -45,14 +45,15 @@ export class ListagemComponent implements OnInit {
       .listarMinhasMatriculas()
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
-        next: (matriculas) => this.matriculas.set(matriculas),
-        error: (resposta: HttpErrorResponse) =>
+        next: (matriculas: Array<Matricula>): void => this.matriculas.set(matriculas),
+        error: (resposta: HttpErrorResponse): void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
             detail: resposta.error?.mensagem ?? 'Não foi possível carregar as matrículas.',
             life: 5000,
-          }),
+          });
+        },
       });
   }
 }

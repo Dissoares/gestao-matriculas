@@ -4,8 +4,15 @@
   RequisicaoCriarMatriz,
   MatrizCurricular,
 } from '@front/shared/models';
-import { MatrizFormularioDados } from './formulario.resolver';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  MatrizFormularioDados,
+  MatrizForm,
+} from './interfaces/formulario.interfaces';
+import {
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatrizCurricularService } from '@front/shared/services';
@@ -38,26 +45,21 @@ import { finalize } from 'rxjs';
 })
 export class FormularioComponent implements OnInit {
   private readonly servicoMatriz = inject(MatrizCurricularService);
-  private readonly fb = inject(FormBuilder);
+  private readonly fb = inject(NonNullableFormBuilder);
   private readonly rotaAtiva = inject(ActivatedRoute);
   private readonly roteador = inject(Router);
 
-  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(null);
-  public readonly salvando = signal(false);
-  public readonly mensagemErro = signal('');
+  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(
+    null,
+  );
+  public readonly salvando = signal<boolean>(false);
+  public readonly mensagemErro = signal<string>('');
   public idMatriz: number | null = null;
-  public formulario!: FormGroup;
+  public formulario!: MatrizForm;
 
   public ngOnInit(): void {
     this.criarFormulario();
-
-    const dados = this.rotaAtiva.snapshot.data['formulario'] as MatrizFormularioDados;
-    this.referencias.set(dados.referencias);
-
-    if (dados.matriz) {
-      this.idMatriz = dados.matriz.id;
-      this.preencherParaEdicao(dados.matriz);
-    }
+    this.carregarDadosDaRota();
   }
 
   public salvar(): void {
@@ -85,10 +87,23 @@ export class FormularioComponent implements OnInit {
         } satisfies RequisicaoCriarMatriz);
 
     requisicao.pipe(finalize(() => this.salvando.set(false))).subscribe({
-      next: () => this.roteador.navigate(['/coordenador/matrizes']),
-      error: (resposta: HttpErrorResponse) => {
+      next: (): void => this.roteador.navigate(['/coordenador/matrizes']),
+      error: (resposta: HttpErrorResponse): void => {
         this.mensagemErro.set(this.obterMensagemErro(resposta));
       },
+    });
+  }
+
+  private criarFormulario(): void {
+    this.formulario = this.fb.group({
+      disciplinaId: [0, [Validators.required, Validators.min(1)]],
+      professorId: [0, [Validators.required, Validators.min(1)]],
+      horarioId: [0, [Validators.required, Validators.min(1)]],
+      cursosAutorizadosIds: this.fb.control<Array<number>>(
+        [],
+        [Validators.required, Validators.minLength(1)],
+      ),
+      quantidadeMaximaAlunos: [0, [Validators.required, Validators.min(1)]],
     });
   }
 
@@ -97,17 +112,15 @@ export class FormularioComponent implements OnInit {
     return !!campo && campo.invalid && (campo.touched || campo.dirty);
   }
 
-  private criarFormulario(): void {
-    this.formulario = this.fb.nonNullable.group({
-      disciplinaId: [0, [Validators.required, Validators.min(1)]],
-      professorId: [0, [Validators.required, Validators.min(1)]],
-      horarioId: [0, [Validators.required, Validators.min(1)]],
-      cursosAutorizadosIds: this.fb.nonNullable.control<number[]>(
-        [],
-        [Validators.required, Validators.minLength(1)],
-      ),
-      quantidadeMaximaAlunos: [0, [Validators.required, Validators.min(1)]],
-    });
+  private carregarDadosDaRota(): void {
+    const dados: MatrizFormularioDados =
+      this.rotaAtiva.snapshot.data['formulario'];
+    this.referencias.set(dados.referencias);
+
+    if (dados.matriz) {
+      this.idMatriz = dados.matriz.id;
+      this.preencherParaEdicao(dados.matriz);
+    }
   }
 
   private preencherParaEdicao(matriz: MatrizCurricular): void {
@@ -126,4 +139,3 @@ export class FormularioComponent implements OnInit {
     return resposta.error?.mensagem ?? 'Não foi possível concluir a operação.';
   }
 }
-

@@ -32,8 +32,8 @@ export class AulasComponent implements OnInit {
   private readonly servicoMatricula = inject(MatriculaService);
   private readonly messageService = inject(MessageService);
 
-  public readonly aulas = signal<AulaDisponivel[]>([]);
-  public readonly carregando = signal(false);
+  public readonly aulas = signal<Array<AulaDisponivel>>([]);
+  public readonly carregando = signal<boolean>(false);
   public readonly matriculando = signal<number | null>(null);
 
   public ngOnInit(): void {
@@ -46,14 +46,15 @@ export class AulasComponent implements OnInit {
       .listarAulasDisponiveis()
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
-        next: (aulas) => this.aulas.set(aulas),
-        error: (resposta: HttpErrorResponse) =>
+        next: (aulas: Array<AulaDisponivel>): void => this.aulas.set(aulas),
+        error: (resposta: HttpErrorResponse): void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
             detail: this.obterMensagemErro(resposta),
             life: 5000,
-          }),
+          });
+        },
       });
   }
 
@@ -63,22 +64,15 @@ export class AulasComponent implements OnInit {
       .matricular(aula.id)
       .pipe(finalize(() => this.matriculando.set(null)))
       .subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Matrícula realizada com sucesso!',
-            life: 4000,
-          });
-          this.buscarAulas();
-        },
-        error: (resposta: HttpErrorResponse) =>
+        next: (): void => this.notificarSucessoEAtualizar(),
+        error: (resposta: HttpErrorResponse): void => {
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
             detail: this.obterMensagemErro(resposta),
             life: 5000,
-          }),
+          });
+        },
       });
   }
 
@@ -86,6 +80,16 @@ export class AulasComponent implements OnInit {
     if (vagasDisponiveis > 5) return 'success';
     if (vagasDisponiveis > 0) return 'warn';
     return 'danger';
+  }
+
+  private notificarSucessoEAtualizar(): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Matrícula realizada com sucesso!',
+      life: 4000,
+    });
+    this.buscarAulas();
   }
 
   private obterMensagemErro(resposta: HttpErrorResponse): string {

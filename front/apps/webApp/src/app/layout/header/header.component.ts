@@ -16,6 +16,10 @@ export class HeaderComponent implements OnInit {
   private readonly autenticacaoService = inject(AutenticacaoService);
 
   public ngOnInit(): void {
+    this.carregarNomeUsuario();
+  }
+
+  private carregarNomeUsuario(): void {
     this.nomeUsuario = this.autenticacaoService.obterNomeUsuario();
   }
 

@@ -1,16 +1,10 @@
-import {
-  ReferenciasMatrizCurricular,
-  MatrizCurricular,
-} from '@front/shared/models';
+import { MatrizFormularioDados } from './interfaces/formulario.interfaces';
 import { MatrizCurricularService } from '@front/shared/services';
 import { ResolveFn } from '@angular/router';
 import { inject } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
 
-export interface MatrizFormularioDados {
-  referencias: ReferenciasMatrizCurricular;
-  matriz: MatrizCurricular | null;
-}
+export { MatrizFormularioDados };
 
 export const matrizFormularioResolver: ResolveFn<MatrizFormularioDados> = (
   route,

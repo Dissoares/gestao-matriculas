@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
     this.itensMenu = this.montarMenu();
   }
 
-  private montarMenu(): MenuItem[] {
+  private montarMenu(): Array<MenuItem> {
     if (this.autenticacaoService.possuiPerfilValido(PerfilEnum.COORDENADOR)) {
       return [
         {
