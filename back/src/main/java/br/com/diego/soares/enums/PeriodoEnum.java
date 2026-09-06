@@ -3,6 +3,7 @@ package br.com.diego.soares.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalTime;
 
 @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
 public enum PeriodoEnum {
@@ -25,6 +26,14 @@ public enum PeriodoEnum {
 
     public String getDescricao() {
         return descricao;
+    }
+
+    public LocalTime[] faixaHorario() {
+        return switch (this) {
+            case MANHA -> new LocalTime[]{LocalTime.of(6, 0), LocalTime.of(12, 0)};
+            case TARDE -> new LocalTime[]{LocalTime.of(12, 0), LocalTime.of(18, 0)};
+            case NOITE -> new LocalTime[]{LocalTime.of(18, 0), LocalTime.MAX};
+        };
     }
 
     @JsonCreator

@@ -40,10 +40,10 @@ public class MatrizCurricularRepository implements PanacheRepository<MatrizCurri
         }
 
         if (periodo != null) {
-            LocalTime[] faixaHorario = periodoParaFaixaHorario(periodo);
+            LocalTime[] faixa = periodo.faixaHorario();
             jpql.append(" AND horario.horaInicio >= :periodoInicio AND horario.horaInicio < :periodoFim");
-            parametros.put("periodoInicio", faixaHorario[0]);
-            parametros.put("periodoFim", faixaHorario[1]);
+            parametros.put("periodoInicio", faixa[0]);
+            parametros.put("periodoFim", faixa[1]);
         }
 
         if (cursoId != null) {
@@ -92,11 +92,4 @@ public class MatrizCurricularRepository implements PanacheRepository<MatrizCurri
                 .getResultList();
     }
 
-    private LocalTime[] periodoParaFaixaHorario(PeriodoEnum periodo) {
-        return switch (periodo) {
-            case MANHA -> new LocalTime[] {LocalTime.of(6, 0), LocalTime.of(12, 0)};
-            case TARDE -> new LocalTime[] {LocalTime.of(12, 0), LocalTime.of(18, 0)};
-            case NOITE -> new LocalTime[] {LocalTime.of(18, 0), LocalTime.MAX};
-        };
-    }
 }

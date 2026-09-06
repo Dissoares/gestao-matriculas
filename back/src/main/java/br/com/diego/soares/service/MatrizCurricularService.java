@@ -13,6 +13,7 @@ import br.com.diego.soares.dto.RequisicaoCriarMatriz;
 import br.com.diego.soares.exception.ExcecaoNegocio;
 import jakarta.enterprise.context.ApplicationScoped;
 import br.com.diego.soares.entity.MatrizCurricular;
+import br.com.diego.soares.mapper.MatrizMapper;
 import br.com.diego.soares.dto.HorarioResposta;
 import br.com.diego.soares.dto.IdNomeResposta;
 import br.com.diego.soares.dto.MatrizResposta;
@@ -42,6 +43,7 @@ public class MatrizCurricularService {
     private final HorarioRepository repositorioHorario;
     private final CursoRepository repositorioCurso;
     private final MatriculaRepository repositorioMatricula;
+    private final MatrizMapper matrizMapper;
 
     @Inject
     public MatrizCurricularService(
@@ -51,7 +53,8 @@ public class MatrizCurricularService {
             ProfessorRepository repositorioProfessor,
             HorarioRepository repositorioHorario,
             CursoRepository repositorioCurso,
-            MatriculaRepository repositorioMatricula) {
+            MatriculaRepository repositorioMatricula,
+            MatrizMapper matrizMapper) {
         this.repositorioMatriz = repositorioMatriz;
         this.repositorioCoordenador = repositorioCoordenador;
         this.repositorioDisciplina = repositorioDisciplina;
@@ -59,6 +62,7 @@ public class MatrizCurricularService {
         this.repositorioHorario = repositorioHorario;
         this.repositorioCurso = repositorioCurso;
         this.repositorioMatricula = repositorioMatricula;
+        this.matrizMapper = matrizMapper;
     }
 
     @Transactional
@@ -73,7 +77,6 @@ public class MatrizCurricularService {
         validarOfertaEmHorarioDiferente(disciplina.id, horario.id, null);
 
         MatrizCurricular matriz = new MatrizCurricular();
-
         matriz.setCoordenador(coordenador);
         matriz.setDisciplina(disciplina);
         matriz.setProfessor(professor);
@@ -84,7 +87,7 @@ public class MatrizCurricularService {
 
         repositorioMatriz.persist(matriz);
 
-        return MatrizResposta.de(matriz, 0);
+        return matrizMapper.paraResposta(matriz, 0);
     }
 
     @Transactional
@@ -101,14 +104,14 @@ public class MatrizCurricularService {
         PeriodoEnum periodo = periodoCodigo == null ? null : converterPeriodo(periodoCodigo);
         return repositorioMatriz.buscarAtivasDoCoordenador(idKeycloak, horaInicio, horaFim, periodo, cursoId, quantidadeMaxima)
                 .stream()
-                .map(matriz -> MatrizResposta.de(matriz, repositorioMatricula.contarPorIdMatriz(matriz.getId())))
+                .map(matriz -> matrizMapper.paraResposta(matriz, repositorioMatricula.contarPorIdMatriz(matriz.getId())))
                 .toList();
     }
 
     @Transactional
     public MatrizResposta buscarPorId(Long idMatriz, String idKeycloak) {
         MatrizCurricular matriz = obterMatrizDoCoordenador(idMatriz, idKeycloak);
-        return MatrizResposta.de(matriz, repositorioMatricula.contarPorIdMatriz(idMatriz));
+        return matrizMapper.paraResposta(matriz, repositorioMatricula.contarPorIdMatriz(idMatriz));
     }
 
     @Transactional
@@ -126,7 +129,7 @@ public class MatrizCurricularService {
         matriz.setHorario(horario);
         matriz.setCursosAutorizados(cursos);
 
-        return MatrizResposta.de(matriz, repositorioMatricula.contarPorIdMatriz(idMatriz));
+        return matrizMapper.paraResposta(matriz, repositorioMatricula.contarPorIdMatriz(idMatriz));
     }
 
     @Transactional
@@ -153,8 +156,8 @@ public class MatrizCurricularService {
     }
 
     private MatrizCurricular obterMatrizDoCoordenador(Long idMatriz, String idKeycloak) {
-        MatrizCurricular matriz = repositorioMatriz.buscarAtivaDoCoordenadorPorId(idMatriz, idKeycloak).orElseThrow(() -> naoEncontrado("aula da matriz curricular"));
-
+        MatrizCurricular matriz = repositorioMatriz.buscarAtivaDoCoordenadorPorId(idMatriz, idKeycloak)
+                .orElseThrow(() -> naoEncontrado("aula da matriz curricular"));
         matriz.getCursosAutorizados().size();
         return matriz;
     }

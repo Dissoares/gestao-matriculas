@@ -7,7 +7,9 @@ import br.com.diego.soares.repository.AlunoRepository;
 import br.com.diego.soares.exception.ExcecaoNegocio;
 import jakarta.enterprise.context.ApplicationScoped;
 import br.com.diego.soares.entity.MatrizCurricular;
+import br.com.diego.soares.mapper.MatriculaMapper;
 import br.com.diego.soares.dto.MatriculaResposta;
+import br.com.diego.soares.mapper.MatrizMapper;
 import br.com.diego.soares.entity.Matricula;
 import jakarta.transaction.Transactional;
 import br.com.diego.soares.entity.Aluno;
@@ -22,12 +24,21 @@ public class MatriculaService {
     private final AlunoRepository repositorioAluno;
     private final MatrizCurricularRepository repositorioMatriz;
     private final MatriculaRepository repositorioMatricula;
+    private final MatrizMapper matrizMapper;
+    private final MatriculaMapper matriculaMapper;
 
     @Inject
-    public MatriculaService(AlunoRepository repositorioAluno, MatrizCurricularRepository repositorioMatriz, MatriculaRepository repositorioMatricula) {
+    public MatriculaService(
+            AlunoRepository repositorioAluno,
+            MatrizCurricularRepository repositorioMatriz,
+            MatriculaRepository repositorioMatricula,
+            MatrizMapper matrizMapper,
+            MatriculaMapper matriculaMapper) {
         this.repositorioAluno = repositorioAluno;
         this.repositorioMatriz = repositorioMatriz;
         this.repositorioMatricula = repositorioMatricula;
+        this.matrizMapper = matrizMapper;
+        this.matriculaMapper = matriculaMapper;
     }
 
     @Transactional
@@ -35,8 +46,7 @@ public class MatriculaService {
         Aluno aluno = obterAluno(idKeycloak);
         return repositorioMatriz.buscarAulasDisponiveisParaCurso(aluno.getCurso().id).stream()
                 .filter(matriz -> !repositorioMatricula.existePorAlunoEMatriz(aluno.id, matriz.getId()))
-                .map(matriz -> AulaDisponivelResposta.de(
-                        matriz, repositorioMatricula.contarPorIdMatriz(matriz.getId())))
+                .map(matriz -> matrizMapper.paraAulaDisponivel(matriz, repositorioMatricula.contarPorIdMatriz(matriz.getId())))
                 .filter(aula -> aula.vagasDisponiveis() > 0)
                 .toList();
     }
@@ -46,7 +56,7 @@ public class MatriculaService {
         Aluno aluno = obterAluno(idKeycloak);
         MatrizCurricular matriz = repositorioMatriz.buscarPorIdParaAtualizacao(idMatriz);
 
-        if (matriz == null || !Boolean.TRUE.equals(matriz.getAtivo())) {
+        if (matriz == null || !matriz.isAtivo()) {
             throw naoEncontrado("aula disponível");
         }
 
@@ -71,13 +81,15 @@ public class MatriculaService {
 
         repositorioMatricula.persist(matricula);
 
-        return MatriculaResposta.de(matricula);
+        return matriculaMapper.paraResposta(matricula);
     }
 
     @Transactional
     public List<MatriculaResposta> listarMinhasMatriculas(String idKeycloak) {
         obterAluno(idKeycloak);
-        return repositorioMatricula.buscarDoAluno(idKeycloak).stream().map(MatriculaResposta::de).toList();
+        return repositorioMatricula.buscarDoAluno(idKeycloak).stream()
+                .map(matriculaMapper::paraResposta)
+                .toList();
     }
 
     private Aluno obterAluno(String idKeycloak) {
@@ -85,7 +97,8 @@ public class MatriculaService {
     }
 
     private void validarCursoAutorizado(Aluno aluno, MatrizCurricular matriz) {
-        boolean autorizado = matriz.getCursosAutorizados().stream().anyMatch(curso -> curso.id.equals(aluno.getCurso().id));
+        boolean autorizado = matriz.getCursosAutorizados().stream()
+                .anyMatch(curso -> curso.id.equals(aluno.getCurso().id));
 
         if (!autorizado) {
             throw new ExcecaoNegocio(Response.Status.FORBIDDEN, "curso_nao_autorizado", "Esta aula não é autorizada para o seu curso.");

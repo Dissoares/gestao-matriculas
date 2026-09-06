@@ -6,8 +6,8 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import br.com.diego.soares.service.CursoService;
+import br.com.diego.soares.dto.IdNomeResposta;
 import io.quarkus.security.Authenticated;
-import br.com.diego.soares.entity.Curso;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.Produces;
 import jakarta.inject.Inject;
@@ -31,7 +31,8 @@ public class CursoController {
             @APIResponse(responseCode = "200", description = "Lista de cursos"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido")
     })
-    public List<Curso> listar() {
-        return cursoService.listarTudos();
+    
+    public List<IdNomeResposta> listar() {
+        return cursoService.listarTodos();
     }
 }

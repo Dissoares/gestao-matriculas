@@ -67,5 +67,5 @@ public class MatrizCurricular extends PanacheEntityBase {
     private Coordenador coordenador;
 
     @Column(nullable = false)
-    private Boolean ativo = true;
+    private boolean ativo = true;
 }

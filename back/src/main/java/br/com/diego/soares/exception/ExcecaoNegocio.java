@@ -17,11 +17,11 @@ public class ExcecaoNegocio extends RuntimeException {
         this.codigo = codigo;
     }
 
-    public Response.Status obterStatus() {
+    public Response.Status getStatus() {
         return status;
     }
 
-    public String obterCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 }
