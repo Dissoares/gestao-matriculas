@@ -5,22 +5,22 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "bundler",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "target": "es2022",
+    "module": "preserve",
+    "lib": ["es2022", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "strict": false,
+    "strict": true,
     "paths": {
       "@front/auth/interceptors": ["./libs/auth/interceptors/index.ts"],
       "@front/shared/guards": ["./libs/shared/guards/index.ts"],
       "@front/shared/enums": ["./libs/shared/enums/index.ts"],
       "@front/shared/models": ["./libs/shared/models/index.ts"],
       "@front/shared/services": ["./libs/shared/services/index.ts"],
-      "@front/shared/environments": ["./libs/shared/environments/index.ts"]
+      "@front/environments": ["./apps/webApp/src/environments/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

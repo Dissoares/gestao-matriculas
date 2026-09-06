@@ -4,10 +4,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test",
-    "lint": "nx lint"
+    "start": "nx serve webApp",
+    "build": "nx build webApp",
+    "build:hml": "nx build webApp --configuration=hml",
+    "build:prod": "nx build webApp --configuration=prod",
+    "test": "nx test webApp",
+    "lint": "nx lint webApp"
   },
   "dependencies": {
     "@angular/animations": "20.3.30",
