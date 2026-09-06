@@ -1,4 +1,4 @@
-import { Curso } from './.interface';
+import { Curso } from './curso.interface';
 
 export interface Aluno {
   id: number;

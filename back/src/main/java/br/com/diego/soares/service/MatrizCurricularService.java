@@ -25,14 +25,15 @@ import br.com.diego.soares.entity.Professor;
 import br.com.diego.soares.entity.Horario;
 import jakarta.transaction.Transactional;
 import br.com.diego.soares.entity.Curso;
-import jakarta.ws.rs.core.Response;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import jakarta.inject.Inject;
 import java.util.Collection;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+@Slf4j
 @ApplicationScoped
 public class MatrizCurricularService {
 
@@ -67,6 +68,8 @@ public class MatrizCurricularService {
 
     @Transactional
     public MatrizResposta criar(RequisicaoCriarMatriz requisicao, String idKeycloak) {
+        log.info("Criando matriz curricular. coordenador={}, disciplina={}", idKeycloak, requisicao.disciplinaId());
+
         Coordenador coordenador = obterCoordenador(idKeycloak);
         Disciplina disciplina = obterDisciplina(requisicao.disciplinaId());
         Professor professor = obterProfessor(requisicao.professorId());
@@ -87,6 +90,7 @@ public class MatrizCurricularService {
 
         repositorioMatriz.persist(matriz);
 
+        log.info("Matriz curricular criada. id={}", matriz.getId());
         return matrizMapper.paraResposta(matriz, 0);
     }
 
@@ -116,6 +120,8 @@ public class MatrizCurricularService {
 
     @Transactional
     public MatrizResposta atualizar(RequisicaoAtualizarMatriz requisicao, Long idMatriz, String idKeycloak) {
+        log.info("Atualizando matriz curricular. id={}, coordenador={}", idMatriz, idKeycloak);
+
         MatrizCurricular matriz = obterMatrizDoCoordenador(idMatriz, idKeycloak);
         Professor professor = obterProfessor(requisicao.professorId());
         Horario horario = obterHorario(requisicao.horarioId());
@@ -134,6 +140,8 @@ public class MatrizCurricularService {
 
     @Transactional
     public void excluir(Long idMatriz, String idKeycloak) {
+        log.info("Excluindo matriz curricular. id={}, coordenador={}", idMatriz, idKeycloak);
+
         MatrizCurricular matriz = obterMatrizDoCoordenador(idMatriz, idKeycloak);
 
         if (repositorioMatricula.contarPorIdMatriz(idMatriz) > 0) {
@@ -152,31 +160,34 @@ public class MatrizCurricularService {
     }
 
     private Coordenador obterCoordenador(String idKeycloak) {
-        return repositorioCoordenador.buscarPorIdKeycloak(idKeycloak).orElseThrow(() -> naoEncontrado("coordenador"));
+        return repositorioCoordenador.buscarPorIdKeycloak(idKeycloak)
+                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("coordenador"));
     }
 
     private MatrizCurricular obterMatrizDoCoordenador(Long idMatriz, String idKeycloak) {
-        MatrizCurricular matriz = repositorioMatriz.buscarAtivaDoCoordenadorPorId(idMatriz, idKeycloak)
-                .orElseThrow(() -> naoEncontrado("aula da matriz curricular"));
-        matriz.getCursosAutorizados().size();
-        return matriz;
+        return repositorioMatriz.buscarAtivaDoCoordenadorPorId(idMatriz, idKeycloak)
+                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("aula da matriz curricular"));
     }
 
     private Disciplina obterDisciplina(Long idDisciplina) {
-        return repositorioDisciplina.findByIdOptional(idDisciplina).orElseThrow(() -> naoEncontrado("disciplina"));
+        return repositorioDisciplina.findByIdOptional(idDisciplina)
+                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("disciplina"));
     }
 
     private Professor obterProfessor(Long idProfessor) {
-        return repositorioProfessor.findByIdOptional(idProfessor).orElseThrow(() -> naoEncontrado("professor"));
+        return repositorioProfessor.findByIdOptional(idProfessor)
+                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("professor"));
     }
 
     private Horario obterHorario(Long idHorario) {
-        return repositorioHorario.findByIdOptional(idHorario).orElseThrow(() -> naoEncontrado("horário"));
+        return repositorioHorario.findByIdOptional(idHorario)
+                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("horário"));
     }
 
     private List<Curso> obterCursos(Set<Long> idsCursos) {
         return idsCursos.stream()
-                .map(idCurso -> repositorioCurso.findByIdOptional(idCurso).orElseThrow(() -> naoEncontrado("curso " + idCurso)))
+                .map(idCurso -> repositorioCurso.findByIdOptional(idCurso)
+                        .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("curso " + idCurso)))
                 .toList();
     }
 
@@ -210,9 +221,5 @@ public class MatrizCurricularService {
         } catch (IllegalArgumentException excecao) {
             throw new ExcecaoNegocio("Período inválido. Use 1 para manhã, 2 para tarde ou 3 para noite.");
         }
-    }
-
-    private ExcecaoNegocio naoEncontrado(String recurso) {
-        return new ExcecaoNegocio(Response.Status.NOT_FOUND, "nao_encontrado", "Não foi encontrado: " + recurso + ".");
     }
 }

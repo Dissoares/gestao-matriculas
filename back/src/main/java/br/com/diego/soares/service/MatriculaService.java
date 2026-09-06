@@ -14,10 +14,12 @@ import br.com.diego.soares.entity.Matricula;
 import jakarta.transaction.Transactional;
 import br.com.diego.soares.entity.Aluno;
 import jakarta.ws.rs.core.Response;
+import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import jakarta.inject.Inject;
 import java.util.List;
 
+@Slf4j
 @ApplicationScoped
 public class MatriculaService {
 
@@ -53,11 +55,13 @@ public class MatriculaService {
 
     @Transactional
     public MatriculaResposta matricular(Long idMatriz, String idKeycloak) {
+        log.info("Realizando matrícula. aluno={}, matriz={}", idKeycloak, idMatriz);
+
         Aluno aluno = obterAluno(idKeycloak);
         MatrizCurricular matriz = repositorioMatriz.buscarPorIdParaAtualizacao(idMatriz);
 
         if (matriz == null || !matriz.isAtivo()) {
-            throw naoEncontrado("aula disponível");
+            throw ExcecaoNegocio.naoEncontrado("aula disponível");
         }
 
         validarCursoAutorizado(aluno, matriz);
@@ -81,6 +85,7 @@ public class MatriculaService {
 
         repositorioMatricula.persist(matricula);
 
+        log.info("Matrícula realizada. aluno={}, matriz={}, matricula={}", idKeycloak, idMatriz, matricula.getId());
         return matriculaMapper.paraResposta(matricula);
     }
 
@@ -93,19 +98,16 @@ public class MatriculaService {
     }
 
     private Aluno obterAluno(String idKeycloak) {
-        return repositorioAluno.buscarPorIdKeycloak(idKeycloak).orElseThrow(() -> naoEncontrado("aluno"));
+        return repositorioAluno.buscarPorIdKeycloak(idKeycloak)
+                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("aluno"));
     }
 
     private void validarCursoAutorizado(Aluno aluno, MatrizCurricular matriz) {
         boolean autorizado = matriz.getCursosAutorizados().stream()
-                .anyMatch(curso -> curso.id.equals(aluno.getCurso().id));
+                .anyMatch(curso -> curso.getId().equals(aluno.getCurso().getId()));
 
         if (!autorizado) {
             throw new ExcecaoNegocio(Response.Status.FORBIDDEN, "curso_nao_autorizado", "Esta aula não é autorizada para o seu curso.");
         }
-    }
-
-    private ExcecaoNegocio naoEncontrado(String recurso) {
-        return new ExcecaoNegocio(Response.Status.NOT_FOUND, "nao_encontrado", "Não foi encontrado: " + recurso + ".");
     }
 }

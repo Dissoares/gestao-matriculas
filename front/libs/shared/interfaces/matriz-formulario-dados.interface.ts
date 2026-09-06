@@ -1,5 +1,5 @@
-import { ReferenciasMatrizCurricular } from './.interface';
-import { MatrizCurricular } from './.interface';
+import { ReferenciasMatrizCurricular } from './referencias-matriz-curricular.interface';
+import { MatrizCurricular } from './matriz-curricular.interface';
 
 export interface MatrizFormularioDados {
   referencias: ReferenciasMatrizCurricular;

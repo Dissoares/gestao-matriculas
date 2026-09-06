@@ -7,27 +7,25 @@ import br.com.diego.soares.enums.PeriodoEnum;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalTime;
-import java.util.Optional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @ApplicationScoped
 public class MatrizCurricularRepository implements PanacheRepository<MatrizCurricular> {
 
     public List<MatrizCurricular> buscarAtivasDoCoordenador(String idKeycloak, LocalTime horaInicio, LocalTime horaFim, PeriodoEnum periodo, Long cursoId, Integer quantidadeMaxima) {
         StringBuilder jpql = new StringBuilder("""
-                                                    SELECT DISTINCT 
-                                                        matriz 
-                                                    FROM MatrizCurricular matriz
-                                                    JOIN FETCH matriz.disciplina
-                                                    JOIN FETCH matriz.professor
-                                                    JOIN FETCH matriz.horario horario
-                                                    LEFT JOIN FETCH matriz.cursosAutorizados
-                                                    WHERE 
-                                                        matriz.coordenador.keycloakId = :keycloakId
-                                                        AND matriz.ativo = true
-                                               """);
+                SELECT DISTINCT matriz
+                FROM MatrizCurricular matriz
+                JOIN FETCH matriz.disciplina
+                JOIN FETCH matriz.professor
+                JOIN FETCH matriz.horario horario
+                LEFT JOIN FETCH matriz.cursosAutorizados
+                WHERE matriz.coordenador.keycloakId = :keycloakId
+                AND matriz.ativo = true
+                """);
 
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("keycloakId", idKeycloak);
@@ -65,7 +63,20 @@ public class MatrizCurricularRepository implements PanacheRepository<MatrizCurri
     }
 
     public Optional<MatrizCurricular> buscarAtivaDoCoordenadorPorId(Long idMatriz, String idKeycloak) {
-        return find("id = ?1 and ativo = true and coordenador.keycloakId = ?2", idMatriz, idKeycloak).firstResultOptional();
+        return getEntityManager().createQuery("""
+                SELECT DISTINCT matriz FROM MatrizCurricular matriz
+                JOIN FETCH matriz.disciplina
+                JOIN FETCH matriz.professor
+                JOIN FETCH matriz.horario
+                LEFT JOIN FETCH matriz.cursosAutorizados
+                WHERE matriz.id = :id
+                AND matriz.ativo = true
+                AND matriz.coordenador.keycloakId = :keycloakId
+                """, MatrizCurricular.class)
+                .setParameter("id", idMatriz)
+                .setParameter("keycloakId", idKeycloak)
+                .getResultStream()
+                .findFirst();
     }
 
     public MatrizCurricular buscarPorIdParaAtualizacao(Long idMatriz) {
@@ -84,18 +95,15 @@ public class MatrizCurricularRepository implements PanacheRepository<MatrizCurri
     public List<MatrizCurricular> buscarAulasDisponiveisParaCurso(Long idCurso) {
         return getEntityManager()
                 .createQuery("""
-                                    SELECT 
-                                        DISTINCT matriz 
-                                    FROM MatrizCurricular matriz
-                                    JOIN FETCH matriz.disciplina
-                                    JOIN FETCH matriz.professor
-                                    JOIN FETCH matriz.horario
-                                    JOIN matriz.cursosAutorizados curso
-                                        WHERE matriz.ativo = true 
-                                        AND curso.id = :cursoId
-                                 """, MatrizCurricular.class)
+                        SELECT DISTINCT matriz FROM MatrizCurricular matriz
+                        JOIN FETCH matriz.disciplina
+                        JOIN FETCH matriz.professor
+                        JOIN FETCH matriz.horario
+                        JOIN matriz.cursosAutorizados curso
+                        WHERE matriz.ativo = true
+                        AND curso.id = :cursoId
+                        """, MatrizCurricular.class)
                 .setParameter("cursoId", idCurso)
                 .getResultList();
     }
-
 }

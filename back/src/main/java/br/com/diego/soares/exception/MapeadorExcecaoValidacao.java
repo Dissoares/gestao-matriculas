@@ -17,11 +17,21 @@ public class MapeadorExcecaoValidacao implements ExceptionMapper<ConstraintViola
 
     @Override
     public Response toResponse(ConstraintViolationException excecao) {
-        String mensagem = excecao.getConstraintViolations().stream().map(violacao -> {
-            String caminho = violacao.getPropertyPath().toString();
-            String campo = caminho.contains(".") ? caminho.substring(caminho.lastIndexOf('.') + 1) : caminho;
-            return campo + ": " + violacao.getMessage();
-        }).findFirst().orElse("Dados inválidos.");
-        return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(new RespostaErro(Instant.now(), 400, "erro_de_validacao", mensagem, uriInfo.getPath())).build();
+        String mensagem = excecao.getConstraintViolations().stream()
+                .map(violacao -> {
+                    String caminho = violacao.getPropertyPath().toString();
+                    String campo = caminho.contains(".")
+                            ? caminho.substring(caminho.lastIndexOf('.') + 1)
+                            : caminho;
+                    return campo + ": " + violacao.getMessage();
+                })
+                .findFirst()
+                .orElse("Dados inválidos.");
+
+        RespostaErro corpo = new RespostaErro(Instant.now(), 400, "erro_de_validacao", mensagem, uriInfo.getPath());
+        return Response.status(Response.Status.BAD_REQUEST)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(corpo)
+                .build();
     }
 }

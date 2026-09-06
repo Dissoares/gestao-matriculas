@@ -4,12 +4,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
 public enum PeriodoEnum {
-    MANHA(1,"MANHÃ"),
-    TARDE(2,"TARDE"),
-    NOITE(3,"NOITE");
+    MANHA(1, "MANHÃ"),
+    TARDE(2, "TARDE"),
+    NOITE(3, "NOITE");
+
+    private static final Map<Integer, PeriodoEnum> MAPA = Arrays.stream(values())
+            .collect(Collectors.toMap(PeriodoEnum::getCodigo, Function.identity()));
 
     private final Integer codigo;
     private final String descricao;
@@ -38,12 +45,10 @@ public enum PeriodoEnum {
 
     @JsonCreator
     public static PeriodoEnum fromCodigo(Integer codigo) {
-        for (PeriodoEnum dia : values()) {
-            if (dia.codigo.equals(codigo)) {
-                return dia;
-            }
+        PeriodoEnum resultado = MAPA.get(codigo);
+        if (resultado == null) {
+            throw new IllegalArgumentException("Código inválido para PeriodoEnum: " + codigo);
         }
-
-        throw new IllegalArgumentException("Código inválido para PeriodoEnum: " + codigo);
+        return resultado;
     }
 }

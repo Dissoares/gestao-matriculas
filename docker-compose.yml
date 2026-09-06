@@ -55,6 +55,7 @@ services:
       QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8180/realms/get-matriculas
       QUARKUS_OIDC_CLIENT_ID: get-matriculas-back
       QUARKUS_OIDC_TOKEN_ISSUER: http://localhost:8180/realms/get-matriculas
+      QUARKUS_HTTP_CORS_ORIGINS: http://localhost:4200
     ports:
       - "8080:8080"
     restart: on-failure

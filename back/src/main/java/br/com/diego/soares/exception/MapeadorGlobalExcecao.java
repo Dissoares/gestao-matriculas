@@ -16,6 +16,15 @@ public class MapeadorGlobalExcecao implements ExceptionMapper<ExcecaoNegocio> {
 
     @Override
     public Response toResponse(ExcecaoNegocio excecao) {
-        return Response.status(excecao.getStatus()).type(MediaType.APPLICATION_JSON).entity(new RespostaErro(Instant.now(), excecao.getStatus().getStatusCode(), excecao.getCodigo(), excecao.getMessage(), uriInfo.getPath())).build();
+        RespostaErro corpo = new RespostaErro(
+                Instant.now(),
+                excecao.getStatus().getStatusCode(),
+                excecao.getCodigo(),
+                excecao.getMessage(),
+                uriInfo.getPath());
+        return Response.status(excecao.getStatus())
+                .type(MediaType.APPLICATION_JSON)
+                .entity(corpo)
+                .build();
     }
 }

@@ -17,6 +17,10 @@ public class ExcecaoNegocio extends RuntimeException {
         this.codigo = codigo;
     }
 
+    public static ExcecaoNegocio naoEncontrado(String recurso) {
+        return new ExcecaoNegocio(Response.Status.NOT_FOUND, "nao_encontrado", "Não foi encontrado: " + recurso + ".");
+    }
+
     public Response.Status getStatus() {
         return status;
     }
