@@ -39,16 +39,10 @@
         <td>{{ aula.professor.nome }}</td>
         <td>
           <i class="pi pi-clock" style="margin-right: 0.4rem; color: var(--p-text-muted-color)"></i>
-          {{ descreverHorario(aula) }}
+          {{ aula.horario | horario }}
         </td>
         <td style="text-align: center">
-          <p-tag [value]="aula.vagasDisponiveis + ' vagas'" [severity]="
-                aula.vagasDisponiveis > 5
-                  ? 'success'
-                  : aula.vagasDisponiveis > 0
-                    ? 'warn'
-                    : 'danger'
-              " />
+          <p-tag [value]="aula.vagasDisponiveis + ' vagas'" [severity]="severidadeVagas(aula.vagasDisponiveis)" />
         </td>
         <td>
           <p-button label="Matricular" icon="pi pi-check" size="small" [loading]="matriculando() === aula.id"

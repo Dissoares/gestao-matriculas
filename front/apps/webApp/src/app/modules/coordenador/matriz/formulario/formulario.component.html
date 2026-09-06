@@ -48,12 +48,8 @@
       <label>Horário</label>
       <p-select formControlName="horarioId" [options]="referencias()?.horarios ?? []" optionLabel="id" optionValue="id"
         placeholder="Selecione o horário" styleClass="w-full">
-        <ng-template let-horario #item>{{
-          descreverHorario(horario)
-          }}</ng-template>
-        <ng-template let-horario #selectedItem>{{
-          descreverHorario(horario)
-          }}</ng-template>
+        <ng-template let-horario #item>{{ horario | horario:'select' }}</ng-template>
+        <ng-template let-horario #selectedItem>{{ horario | horario:'select' }}</ng-template>
       </p-select>
       @if (campoInvalido('horarioId')) {
       <small class="campo-erro">Selecione um horário.</small>

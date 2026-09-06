@@ -1,7 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+﻿import { Component, OnInit, inject, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MatriculaService } from '@front/shared/services';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Matricula } from '@front/shared/models';
+import { HorarioPipe } from '@front/shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -19,6 +21,7 @@ import { finalize } from 'rxjs';
     ButtonModule,
     CardModule,
     DatePipe,
+    HorarioPipe,
     ProgressSpinnerModule,
     TableModule,
     ToastModule,
@@ -43,29 +46,13 @@ export class ListagemComponent implements OnInit {
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: (matriculas) => this.matriculas.set(matriculas),
-        error: (erro) =>
+        error: (resposta: HttpErrorResponse) =>
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
-            detail:
-              erro.error?.mensagem ??
-              'Não foi possível carregar as matrículas.',
+            detail: resposta.error?.mensagem ?? 'Não foi possível carregar as matrículas.',
             life: 5000,
           }),
       });
-  }
-
-  public descreverHorario(matricula: Matricula): string {
-    const dias = [
-      '',
-      'Domingo',
-      'Segunda',
-      'Terça',
-      'Quarta',
-      'Quinta',
-      'Sexta',
-      'Sábado',
-    ];
-    return `${dias[matricula.horario.diaSemana]} ${matricula.horario.horaInicio}–${matricula.horario.horaFim}`;
   }
 }

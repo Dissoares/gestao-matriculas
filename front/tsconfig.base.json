@@ -19,6 +19,7 @@
       "@front/shared/guards": ["./libs/shared/guards/index.ts"],
       "@front/shared/enums": ["./libs/shared/enums/index.ts"],
       "@front/shared/models": ["./libs/shared/models/index.ts"],
+      "@front/shared/pipes": ["./libs/shared/pipes/index.ts"],
       "@front/shared/services": ["./libs/shared/services/index.ts"],
       "@front/environments": ["./apps/webApp/src/environments/index.ts"]
     }

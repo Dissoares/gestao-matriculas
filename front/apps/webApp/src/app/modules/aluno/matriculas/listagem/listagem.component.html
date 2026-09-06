@@ -34,7 +34,7 @@
         <td>{{ matricula.professor.nome }}</td>
         <td>
           <i class="pi pi-clock" style="margin-right: 0.4rem; color: var(--p-text-muted-color)"></i>
-          {{ descreverHorario(matricula) }}
+          {{ matricula.horario | horario }}
         </td>
         <td>{{ matricula.dataMatricula | date: 'dd/MM/yyyy HH:mm' }}</td>
       </tr>

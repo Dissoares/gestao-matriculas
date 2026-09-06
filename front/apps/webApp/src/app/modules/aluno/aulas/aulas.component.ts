@@ -1,7 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+﻿import { Component, OnInit, inject, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MatriculaService } from '@front/shared/services';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AulaDisponivel } from '@front/shared/models';
+import { HorarioPipe } from '@front/shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -18,6 +20,7 @@ import { finalize } from 'rxjs';
   imports: [
     ButtonModule,
     CardModule,
+    HorarioPipe,
     ProgressSpinnerModule,
     TableModule,
     TagModule,
@@ -44,11 +47,11 @@ export class AulasComponent implements OnInit {
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: (aulas) => this.aulas.set(aulas),
-        error: (erro) =>
+        error: (resposta: HttpErrorResponse) =>
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
-            detail: this.obterMensagemErro(erro),
+            detail: this.obterMensagemErro(resposta),
             life: 5000,
           }),
       });
@@ -69,31 +72,23 @@ export class AulasComponent implements OnInit {
           });
           this.buscarAulas();
         },
-        error: (erro) =>
+        error: (resposta: HttpErrorResponse) =>
           this.messageService.add({
             severity: 'error',
             summary: 'Erro',
-            detail: this.obterMensagemErro(erro),
+            detail: this.obterMensagemErro(resposta),
             life: 5000,
           }),
       });
   }
 
-  public descreverHorario(aula: AulaDisponivel): string {
-    const dias = [
-      '',
-      'Domingo',
-      'Segunda',
-      'Terça',
-      'Quarta',
-      'Quinta',
-      'Sexta',
-      'Sábado',
-    ];
-    return `${dias[aula.horario.diaSemana]} ${aula.horario.horaInicio}–${aula.horario.horaFim}`;
+  public severidadeVagas(vagasDisponiveis: number): 'success' | 'warn' | 'danger' {
+    if (vagasDisponiveis > 5) return 'success';
+    if (vagasDisponiveis > 0) return 'warn';
+    return 'danger';
   }
 
-  private obterMensagemErro(erro: { error?: { mensagem?: string } }): string {
-    return erro.error?.mensagem ?? 'Não foi possível concluir a operação.';
+  private obterMensagemErro(resposta: HttpErrorResponse): string {
+    return resposta.error?.mensagem ?? 'Não foi possível concluir a operação.';
   }
 }

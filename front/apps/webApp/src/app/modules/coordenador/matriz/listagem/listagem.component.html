@@ -28,11 +28,8 @@
       </div>
       <div class="filtro-campo">
         <label>Período</label>
-        <p-select [(ngModel)]="filtros.periodo" [options]="[
-            { nome: 'Manhã', id: 1 },
-            { nome: 'Tarde', id: 2 },
-            { nome: 'Noite', id: 3 },
-          ]" optionLabel="nome" optionValue="id" [showClear]="true" placeholder="Todos" />
+        <p-select [(ngModel)]="filtros.periodo" [options]="periodos" optionLabel="label" optionValue="codigo"
+          [showClear]="true" placeholder="Todos" />
       </div>
       <div class="filtro-campo">
         <label>Curso autorizado</label>
@@ -77,7 +74,7 @@
         <td>{{ matriz.professor.nome }}</td>
         <td>
           <i class="pi pi-clock" style="margin-right: 0.4rem; color: var(--p-text-muted-color)"></i>
-          {{ descreverHorario(matriz) }}
+          {{ matriz.horario | horario }}
         </td>
         <td>
           <div class="tags-cursos">
@@ -87,13 +84,8 @@
           </div>
         </td>
         <td style="text-align: center">
-          <p-tag [value]="
-                matriz.vagasOcupadas + '/' + matriz.quantidadeMaximaAlunos
-              " [severity]="
-                matriz.vagasOcupadas < matriz.quantidadeMaximaAlunos
-                  ? 'success'
-                  : 'danger'
-              " />
+          <p-tag [value]="matriz.vagasOcupadas + '/' + matriz.quantidadeMaximaAlunos"
+            [severity]="severidadeVagas(matriz)" />
         </td>
         <td>
           <div class="acoes-tabela">

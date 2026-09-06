@@ -1,4 +1,4 @@
-import {
+﻿import {
   ReferenciasMatrizCurricular,
   FiltrosMatrizCurricular,
   MatrizCurricular,
@@ -8,8 +8,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { MatrizCurricularService } from '@front/shared/services';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { HttpErrorResponse } from '@angular/common/http';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Router, RouterLink } from '@angular/router';
+import { PeriodoEnum } from '@front/shared/enums';
+import { HorarioPipe } from '@front/shared/pipes';
 import { MessageModule } from 'primeng/message';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
@@ -31,6 +34,7 @@ import { finalize } from 'rxjs';
     CardModule,
     ConfirmDialogModule,
     FormsModule,
+    HorarioPipe,
     InputNumberModule,
     MessageModule,
     ProgressSpinnerModule,
@@ -50,17 +54,16 @@ export class ListagemComponent implements OnInit {
   private readonly confirmationService = inject(ConfirmationService);
 
   public readonly matrizes = signal<MatrizCurricular[]>([]);
-  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(
-    null,
-  );
+  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(null);
   public readonly carregando = signal(false);
   public readonly mensagemErro = signal('');
+  public readonly periodos = PeriodoEnum.obterTodos();
   public filtros: FiltrosMatrizCurricular = {};
 
   public ngOnInit(): void {
     this.servicoMatriz.listarReferencias().subscribe({
       next: (referencias) => this.referencias.set(referencias),
-      error: (erro) => this.mensagemErro.set(this.obterMensagemErro(erro)),
+      error: (resposta: HttpErrorResponse) => this.mensagemErro.set(this.obterMensagemErro(resposta)),
     });
     this.buscar();
   }
@@ -73,7 +76,7 @@ export class ListagemComponent implements OnInit {
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: (matrizes) => this.matrizes.set(matrizes),
-        error: (erro) => this.mensagemErro.set(this.obterMensagemErro(erro)),
+        error: (resposta: HttpErrorResponse) => this.mensagemErro.set(this.obterMensagemErro(resposta)),
       });
   }
 
@@ -105,11 +108,11 @@ export class ListagemComponent implements OnInit {
             });
             this.buscar();
           },
-          error: (erro) =>
+          error: (resposta: HttpErrorResponse) =>
             this.messageService.add({
               severity: 'error',
               summary: 'Erro',
-              detail: this.obterMensagemErro(erro),
+              detail: this.obterMensagemErro(resposta),
               life: 5000,
             }),
         });
@@ -117,33 +120,15 @@ export class ListagemComponent implements OnInit {
     });
   }
 
-  public descreverHorario(matriz: MatrizCurricular): string {
-    return this.descreverDiaEHorario(matriz.horario);
+  public severidadeVagas(matriz: MatrizCurricular): 'success' | 'danger' {
+    return matriz.vagasOcupadas < matriz.quantidadeMaximaAlunos ? 'success' : 'danger';
   }
 
   public descreverCursos(matriz: MatrizCurricular): string {
     return matriz.cursosAutorizados.map((curso) => curso.nome).join(', ');
   }
 
-  private descreverDiaEHorario(horario: {
-    diaSemana: number;
-    horaInicio: string;
-    horaFim: string;
-  }): string {
-    const dias = [
-      '',
-      'Domingo',
-      'Segunda',
-      'Terça',
-      'Quarta',
-      'Quinta',
-      'Sexta',
-      'Sábado',
-    ];
-    return `${dias[horario.diaSemana]} ${horario.horaInicio}–${horario.horaFim}`;
-  }
-
-  private obterMensagemErro(erro: { error?: { mensagem?: string } }): string {
-    return erro.error?.mensagem ?? 'Não foi possível concluir a operação.';
+  private obterMensagemErro(resposta: HttpErrorResponse): string {
+    return resposta.error?.mensagem ?? 'Não foi possível concluir a operação.';
   }
 }
