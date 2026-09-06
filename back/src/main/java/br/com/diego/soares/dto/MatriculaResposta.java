@@ -7,5 +7,6 @@ public record MatriculaResposta(
         IdNomeResposta disciplina,
         IdNomeResposta professor,
         HorarioResposta horario,
-        LocalDateTime dataMatricula) {
+        LocalDateTime dataMatricula
+) {
 }

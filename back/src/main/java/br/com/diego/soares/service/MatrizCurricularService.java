@@ -74,7 +74,7 @@ public class MatrizCurricularService {
         List<Curso> cursos = obterCursos(requisicao.cursosAutorizadosIds());
 
         validarHorario(horario);
-        validarOfertaEmHorarioDiferente(disciplina.id, horario.id, null);
+        validarOfertaEmHorarioDiferente(disciplina.getId(), horario.getId(), null);
 
         MatrizCurricular matriz = new MatrizCurricular();
         matriz.setCoordenador(coordenador);
@@ -122,7 +122,7 @@ public class MatrizCurricularService {
         List<Curso> cursos = obterCursos(requisicao.cursosAutorizadosIds());
 
         validarHorario(horario);
-        validarOfertaEmHorarioDiferente(matriz.getDisciplina().id, horario.id, idMatriz);
+        validarOfertaEmHorarioDiferente(matriz.getDisciplina().getId(), horario.getId(), idMatriz);
         validarCursosMantemAlunosMatriculados(idMatriz, cursos);
 
         matriz.setProfessor(professor);
@@ -145,10 +145,10 @@ public class MatrizCurricularService {
     @Transactional
     public ReferenciasMatrizResposta listarReferencias() {
         return new ReferenciasMatrizResposta(
-                repositorioDisciplina.listAll().stream().map(d -> new IdNomeResposta(d.id, d.getNome())).toList(),
-                repositorioProfessor.listAll().stream().map(p -> new IdNomeResposta(p.id, p.getNome())).toList(),
-                repositorioHorario.listAll().stream().map(h -> new HorarioResposta(h.id, h.getDiaSemana(), h.getHoraInicio(), h.getHoraFim())).toList(),
-                repositorioCurso.listAll().stream().map(c -> new IdNomeResposta(c.id, c.getNome())).toList());
+                repositorioDisciplina.listAll().stream().map(d -> new IdNomeResposta(d.getId(), d.getNome())).toList(),
+                repositorioProfessor.listAll().stream().map(p -> new IdNomeResposta(p.getId(), p.getNome())).toList(),
+                repositorioHorario.listAll().stream().map(h -> new HorarioResposta(h.getId(), h.getDiaSemana(), h.getHoraInicio(), h.getHoraFim())).toList(),
+                repositorioCurso.listAll().stream().map(c -> new IdNomeResposta(c.getId(), c.getNome())).toList());
     }
 
     private Coordenador obterCoordenador(String idKeycloak) {
@@ -193,10 +193,10 @@ public class MatrizCurricularService {
     }
 
     private void validarCursosMantemAlunosMatriculados(Long matrizId, Collection<Curso> cursosAutorizados) {
-        Set<Long> idsCursos = cursosAutorizados.stream().map(curso -> curso.id).collect(Collectors.toSet());
+        Set<Long> idsCursos = cursosAutorizados.stream().map(Curso::getId).collect(Collectors.toSet());
         boolean removeriaAlunoMatriculado = repositorioMatricula.buscarPorIdMatriz(matrizId).stream()
                 .map(Matricula::getAluno)
-                .map(aluno -> aluno.getCurso().id)
+                .map(aluno -> aluno.getCurso().getId())
                 .anyMatch(idCurso -> !idsCursos.contains(idCurso));
 
         if (removeriaAlunoMatriculado) {

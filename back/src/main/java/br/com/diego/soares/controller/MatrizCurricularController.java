@@ -47,8 +47,7 @@ public class MatrizCurricularController {
     @POST
     @Operation(summary = "Criar uma aula da matriz curricular")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "Aula criada com sucesso",
-                    content = @Content(schema = @Schema(implementation = MatrizResposta.class))),
+            @APIResponse(responseCode = "201", description = "Aula criada com sucesso", content = @Content(schema = @Schema(implementation = MatrizResposta.class))),
             @APIResponse(responseCode = "400", description = "Dados inválidos ou disciplina já ofertada no mesmo horário"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @APIResponse(responseCode = "403", description = "Usuário não possui perfil coordenador")

@@ -32,4 +32,6 @@ public class Aluno extends PanacheEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curso_id", nullable = false)
     private Curso curso;
+
+    public Long getId() { return id; }
 }

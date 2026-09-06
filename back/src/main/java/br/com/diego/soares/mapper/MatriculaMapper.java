@@ -16,9 +16,9 @@ public class MatriculaMapper {
         Horario horario = matriz.getHorario();
         return new MatriculaResposta(
                 matricula.getId(),
-                new IdNomeResposta(matriz.getDisciplina().id, matriz.getDisciplina().getNome()),
-                new IdNomeResposta(matriz.getProfessor().id, matriz.getProfessor().getNome()),
-                new HorarioResposta(horario.id, horario.getDiaSemana(), horario.getHoraInicio(), horario.getHoraFim()),
+                new IdNomeResposta(matriz.getDisciplina().getId(), matriz.getDisciplina().getNome()),
+                new IdNomeResposta(matriz.getProfessor().getId(), matriz.getProfessor().getNome()),
+                new HorarioResposta(horario.getId(), horario.getDiaSemana(), horario.getHoraInicio(), horario.getHoraFim()),
                 matricula.getDataMatricula());
     }
 }

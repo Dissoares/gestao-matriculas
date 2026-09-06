@@ -30,13 +30,17 @@ public class MatriculaRepository implements PanacheRepository<Matricula> {
     public List<Matricula> buscarDoAluno(String idKeycloakAluno) {
         return getEntityManager()
                 .createQuery("""
-                                    SELECT matricula FROM Matricula matricula
+                                    SELECT 
+                                        matricula 
+                                    FROM Matricula matricula
                                     JOIN FETCH matricula.matrizCurricular matriz
                                     JOIN FETCH matriz.disciplina
                                     JOIN FETCH matriz.professor
                                     JOIN FETCH matriz.horario
-                                    WHERE matricula.aluno.keycloakId = :keycloakId
-                                    ORDER BY matricula.dataMatricula DESC
+                                    WHERE 
+                                        matricula.aluno.keycloakId = :keycloakId
+                                    ORDER BY 
+                                        matricula.dataMatricula DESC
                                 """, Matricula.class)
                 .setParameter("keycloakId", idKeycloakAluno)
                 .getResultList();
@@ -45,10 +49,13 @@ public class MatriculaRepository implements PanacheRepository<Matricula> {
     public List<Matricula> buscarPorIdMatriz(Long idMatriz) {
         return getEntityManager()
                 .createQuery("""
-                                    SELECT matricula FROM Matricula matricula
+                                    SELECT 
+                                        matricula 
+                                    FROM Matricula matricula
                                     JOIN FETCH matricula.aluno aluno
                                     JOIN FETCH aluno.curso
-                                    WHERE matricula.matrizCurricular.id = :matrizId
+                                    WHERE 
+                                        matricula.matrizCurricular.id = :matrizId
                                 """, Matricula.class)
                 .setParameter("matrizId", idMatriz)
                 .getResultList();

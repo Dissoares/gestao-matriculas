@@ -10,5 +10,6 @@ public record MatrizResposta(
         List<IdNomeResposta> cursosAutorizados,
         Integer quantidadeMaximaAlunos,
         long vagasOcupadas,
-        boolean ativo) {
+        boolean ativo
+) {
 }

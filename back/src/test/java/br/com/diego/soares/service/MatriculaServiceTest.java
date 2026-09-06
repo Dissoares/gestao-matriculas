@@ -93,7 +93,7 @@ class MatriculaServiceTest {
 
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
-        when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
+        when(repositorioMatricula.existePorAlunoEMatriz(aluno.getId(), 10L)).thenReturn(false);
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(0L);
         when(repositorioMatricula.existeConflitoDeHorario(eq("aluno-1"), eq(DiaSemanaEnum.SEGUNDA), any(), any())).thenReturn(false);
 
@@ -153,7 +153,7 @@ class MatriculaServiceTest {
 
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
-        when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(true);
+        when(repositorioMatricula.existePorAlunoEMatriz(aluno.getId(), 10L)).thenReturn(true);
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
                 novoServico().matricular(10L, "aluno-1")
@@ -171,7 +171,7 @@ class MatriculaServiceTest {
 
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
-        when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
+        when(repositorioMatricula.existePorAlunoEMatriz(aluno.getId(), 10L)).thenReturn(false);
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(1L);
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () ->
@@ -189,7 +189,7 @@ class MatriculaServiceTest {
 
         when(repositorioAluno.buscarPorIdKeycloak("aluno-1")).thenReturn(Optional.of(aluno));
         when(repositorioMatriz.buscarPorIdParaAtualizacao(10L)).thenReturn(matriz);
-        when(repositorioMatricula.existePorAlunoEMatriz(aluno.id, 10L)).thenReturn(false);
+        when(repositorioMatricula.existePorAlunoEMatriz(aluno.getId(), 10L)).thenReturn(false);
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(0L);
         when(repositorioMatricula.existeConflitoDeHorario(eq("aluno-1"), eq(DiaSemanaEnum.SEGUNDA), any(), any())).thenReturn(true);
 

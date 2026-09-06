@@ -23,4 +23,6 @@ public class Coordenador extends PanacheEntity {
     @NotBlank
     @Column(name = "keycloak_id", nullable = false, unique = true)
     private String keycloakId;
+
+    public Long getId() { return id; }
 }

@@ -44,8 +44,8 @@ public class MatriculaService {
     @Transactional
     public List<AulaDisponivelResposta> listarAulasDisponiveis(String idKeycloak) {
         Aluno aluno = obterAluno(idKeycloak);
-        return repositorioMatriz.buscarAulasDisponiveisParaCurso(aluno.getCurso().id).stream()
-                .filter(matriz -> !repositorioMatricula.existePorAlunoEMatriz(aluno.id, matriz.getId()))
+        return repositorioMatriz.buscarAulasDisponiveisParaCurso(aluno.getCurso().getId()).stream()
+                .filter(matriz -> !repositorioMatricula.existePorAlunoEMatriz(aluno.getId(), matriz.getId()))
                 .map(matriz -> matrizMapper.paraAulaDisponivel(matriz, repositorioMatricula.contarPorIdMatriz(matriz.getId())))
                 .filter(aula -> aula.vagasDisponiveis() > 0)
                 .toList();
@@ -62,7 +62,7 @@ public class MatriculaService {
 
         validarCursoAutorizado(aluno, matriz);
 
-        if (repositorioMatricula.existePorAlunoEMatriz(aluno.id, idMatriz)) {
+        if (repositorioMatricula.existePorAlunoEMatriz(aluno.getId(), idMatriz)) {
             throw new ExcecaoNegocio("Você já está matriculado nesta aula.");
         }
 

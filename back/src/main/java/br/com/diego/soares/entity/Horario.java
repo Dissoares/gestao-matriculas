@@ -32,4 +32,6 @@ public class Horario extends PanacheEntity {
     @NotNull
     @Column(name = "hora_fim", nullable = false)
     private LocalTime horaFim;
+
+    public Long getId() { return id; }
 }

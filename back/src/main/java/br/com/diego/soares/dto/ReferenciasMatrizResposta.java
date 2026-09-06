@@ -6,5 +6,6 @@ public record ReferenciasMatrizResposta(
         List<IdNomeResposta> disciplinas,
         List<IdNomeResposta> professores,
         List<HorarioResposta> horarios,
-        List<IdNomeResposta> cursos) {
+        List<IdNomeResposta> cursos
+) {
 }

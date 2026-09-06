@@ -17,13 +17,16 @@ public class MatrizCurricularRepository implements PanacheRepository<MatrizCurri
 
     public List<MatrizCurricular> buscarAtivasDoCoordenador(String idKeycloak, LocalTime horaInicio, LocalTime horaFim, PeriodoEnum periodo, Long cursoId, Integer quantidadeMaxima) {
         StringBuilder jpql = new StringBuilder("""
-                                                    SELECT DISTINCT matriz FROM MatrizCurricular matriz
+                                                    SELECT DISTINCT 
+                                                        matriz 
+                                                    FROM MatrizCurricular matriz
                                                     JOIN FETCH matriz.disciplina
                                                     JOIN FETCH matriz.professor
                                                     JOIN FETCH matriz.horario horario
                                                     LEFT JOIN FETCH matriz.cursosAutorizados
-                                                    WHERE matriz.coordenador.keycloakId = :keycloakId
-                                                      AND matriz.ativo = true
+                                                    WHERE 
+                                                        matriz.coordenador.keycloakId = :keycloakId
+                                                        AND matriz.ativo = true
                                                """);
 
         Map<String, Object> parametros = new HashMap<>();
@@ -69,24 +72,27 @@ public class MatrizCurricularRepository implements PanacheRepository<MatrizCurri
         return findById(idMatriz, LockModeType.PESSIMISTIC_WRITE);
     }
 
-    public boolean existeOfertaAtivaDaDisciplinaNoHorario(Long idDisciplina, Long idHorario, Long idMatrizIgnorada) {
-        String consulta = "disciplina.id = ?1 and horario.id = ?2 and ativo = true";
+    private static final String OFERTA_ATIVA = "disciplina.id = ?1 and horario.id = ?2 and ativo = true";
 
+    public boolean existeOfertaAtivaDaDisciplinaNoHorario(Long idDisciplina, Long idHorario, Long idMatrizIgnorada) {
         if (idMatrizIgnorada != null) {
-            return count(consulta + " and id <> ?3", idDisciplina, idHorario, idMatrizIgnorada) > 0;
+            return count(OFERTA_ATIVA + " and id <> ?3", idDisciplina, idHorario, idMatrizIgnorada) > 0;
         }
-        return count(consulta, idDisciplina, idHorario) > 0;
+        return count(OFERTA_ATIVA, idDisciplina, idHorario) > 0;
     }
 
     public List<MatrizCurricular> buscarAulasDisponiveisParaCurso(Long idCurso) {
         return getEntityManager()
                 .createQuery("""
-                                    SELECT DISTINCT matriz FROM MatrizCurricular matriz
+                                    SELECT 
+                                        DISTINCT matriz 
+                                    FROM MatrizCurricular matriz
                                     JOIN FETCH matriz.disciplina
                                     JOIN FETCH matriz.professor
                                     JOIN FETCH matriz.horario
                                     JOIN matriz.cursosAutorizados curso
-                                    WHERE matriz.ativo = true AND curso.id = :cursoId
+                                        WHERE matriz.ativo = true 
+                                        AND curso.id = :cursoId
                                  """, MatrizCurricular.class)
                 .setParameter("cursoId", idCurso)
                 .getResultList();

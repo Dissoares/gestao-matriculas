@@ -63,16 +63,13 @@ public class MatriculaController {
     @Path("/matriculas/{matrizId}")
     @Operation(summary = "Realizar matrícula em uma aula")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "Matrícula realizada com sucesso",
-                    content = @Content(schema = @Schema(implementation = MatriculaResposta.class))),
+            @APIResponse(responseCode = "201", description = "Matrícula realizada com sucesso", content = @Content(schema = @Schema(implementation = MatriculaResposta.class))),
             @APIResponse(responseCode = "400", description = "Vaga esgotada, conflito de horário ou matrícula duplicada"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @APIResponse(responseCode = "403", description = "Aula não autorizada para o curso do aluno"),
             @APIResponse(responseCode = "404", description = "Aluno ou aula não encontrados")
     })
     public Response matricular(@PathParam("matrizId") Long idMatriz) {
-        return Response.status(Response.Status.CREATED)
-                .entity(servico.matricular(idMatriz, identity.getPrincipal().getName()))
-                .build();
+        return Response.status(Response.Status.CREATED).entity(servico.matricular(idMatriz, identity.getPrincipal().getName())).build();
     }
 }
