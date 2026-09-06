@@ -1,13 +1,14 @@
 import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
+import { environment } from '@front/shared/environments';
 import { PerfilEnum } from '../enums/perfil.enum';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AutenticacaoService {
   private readonly instanciaKeycloak: Keycloak = new Keycloak({
-    url: 'http://localhost:8180',
-    realm: 'get-matriculas',
-    clientId: 'get-matriculas-front',
+    url: environment.keycloakUrl,
+    realm: environment.keycloakRealm,
+    clientId: environment.keycloakClientId,
   });
 
   public async inicializarKeyCloak(): Promise<boolean> {

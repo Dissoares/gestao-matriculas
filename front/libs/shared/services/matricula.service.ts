@@ -1,4 +1,5 @@
 import { AulaDisponivel, Matricula } from '@front/shared/models';
+import { environment } from '@front/shared/environments';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class MatriculaService {
   private readonly clienteHttp = inject(HttpClient);
-  private readonly urlBase = 'http://localhost:8080/api/aluno';
+  private readonly urlBase = `${environment.apiUrl}/api/aluno`;
 
   public listarAulasDisponiveis(): Observable<AulaDisponivel[]> {
     return this.clienteHttp.get<AulaDisponivel[]>(

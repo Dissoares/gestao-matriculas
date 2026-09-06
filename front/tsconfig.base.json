@@ -19,7 +19,8 @@
       "@front/shared/guards": ["./libs/shared/guards/index.ts"],
       "@front/shared/enums": ["./libs/shared/enums/index.ts"],
       "@front/shared/models": ["./libs/shared/models/index.ts"],
-      "@front/shared/services": ["./libs/shared/services/index.ts"]
+      "@front/shared/services": ["./libs/shared/services/index.ts"],
+      "@front/shared/environments": ["./libs/shared/environments/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

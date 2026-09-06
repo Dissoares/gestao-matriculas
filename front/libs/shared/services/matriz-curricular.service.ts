@@ -5,6 +5,7 @@ import {
   RequisicaoCriarMatriz,
   MatrizCurricular,
 } from '@front/shared/models';
+import { environment } from '@front/shared/environments';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class MatrizCurricularService {
   private readonly clienteHttp = inject(HttpClient);
-  private readonly urlBase = 'http://localhost:8080/api/matrizes';
+  private readonly urlBase = `${environment.apiUrl}/api/matrizes`;
 
   public listar(
     filtros: FiltrosMatrizCurricular = {},
