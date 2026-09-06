@@ -18,6 +18,7 @@ import br.com.diego.soares.entity.MatrizCurricular;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.ArgumentMatchers.any;
+import br.com.diego.soares.mapper.MatrizMapper;
 import br.com.diego.soares.entity.Coordenador;
 import br.com.diego.soares.entity.Disciplina;
 import br.com.diego.soares.entity.Matricula;
@@ -47,6 +48,7 @@ class MatrizCurricularServiceTest {
     @Mock HorarioRepository repositorioHorario;
     @Mock CursoRepository repositorioCurso;
     @Mock MatriculaRepository repositorioMatricula;
+    @Mock MatrizMapper matrizMapper;
 
     private MatrizCurricularService novoServico() {
         return new MatrizCurricularService(
@@ -56,7 +58,8 @@ class MatrizCurricularServiceTest {
                 repositorioProfessor,
                 repositorioHorario,
                 repositorioCurso,
-                repositorioMatricula
+                repositorioMatricula,
+                matrizMapper
         );
     }
 
@@ -107,7 +110,7 @@ class MatrizCurricularServiceTest {
         MatrizCurricular criada = captor.getValue();
         assertEquals(disciplina, criada.getDisciplina());
         assertEquals(horario, criada.getHorario());
-        assertTrue(Boolean.TRUE.equals(criada.getAtivo()));
+        assertTrue(criada.isAtivo());
     }
 
     @Test
@@ -116,7 +119,7 @@ class MatrizCurricularServiceTest {
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
         verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
@@ -127,7 +130,7 @@ class MatrizCurricularServiceTest {
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
         verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
@@ -139,7 +142,7 @@ class MatrizCurricularServiceTest {
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
         verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
@@ -152,7 +155,7 @@ class MatrizCurricularServiceTest {
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
         verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
@@ -166,7 +169,7 @@ class MatrizCurricularServiceTest {
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().criar(new RequisicaoCriarMatriz(1L, 2L, 3L, Set.of(4L), 30), "coordenador-1"));
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
         verify(repositorioMatriz, never()).persist(any(MatrizCurricular.class));
     }
 
@@ -190,7 +193,7 @@ class MatrizCurricularServiceTest {
 
         ExcecaoNegocio excecao = assertThrows(ExcecaoNegocio.class, () -> novoServico().atualizar(new RequisicaoAtualizarMatriz(2L, 3L, Set.of(1L)), 10L, "coordenador-1"));
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
     }
 
     @Test
@@ -226,7 +229,7 @@ class MatrizCurricularServiceTest {
 
         novoServico().excluir(10L, "coordenador-1");
 
-        assertFalse(matriz.getAtivo());
+        assertFalse(matriz.isAtivo());
     }
 
     @Test
@@ -238,6 +241,6 @@ class MatrizCurricularServiceTest {
         when(repositorioMatricula.contarPorIdMatriz(10L)).thenReturn(2L);
 
         assertThrows(ExcecaoNegocio.class, () -> novoServico().excluir(10L, "coordenador-1"));
-        assertTrue(matriz.getAtivo());
+        assertTrue(matriz.isAtivo());
     }
 }

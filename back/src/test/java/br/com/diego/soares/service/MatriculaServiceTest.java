@@ -9,8 +9,10 @@ import br.com.diego.soares.exception.ExcecaoNegocio;
 import br.com.diego.soares.entity.MatrizCurricular;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import br.com.diego.soares.mapper.MatriculaMapper;
 import br.com.diego.soares.enums.DiaSemanaEnum;
 import static org.mockito.ArgumentMatchers.any;
+import br.com.diego.soares.mapper.MatrizMapper;
 import static org.mockito.ArgumentMatchers.eq;
 import br.com.diego.soares.entity.Disciplina;
 import br.com.diego.soares.entity.Professor;
@@ -34,12 +36,16 @@ class MatriculaServiceTest {
     @Mock AlunoRepository repositorioAluno;
     @Mock MatrizCurricularRepository repositorioMatriz;
     @Mock MatriculaRepository repositorioMatricula;
+    @Mock MatrizMapper matrizMapper;
+    @Mock MatriculaMapper matriculaMapper;
 
     private MatriculaService novoServico() {
         return new MatriculaService(
                 repositorioAluno,
                 repositorioMatriz,
-                repositorioMatricula
+                repositorioMatricula,
+                matrizMapper,
+                matriculaMapper
         );
     }
 
@@ -107,7 +113,7 @@ class MatriculaServiceTest {
                 novoServico().matricular(10L, "aluno-1")
         );
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
         verify(repositorioMatricula, never()).persist(any(br.com.diego.soares.entity.Matricula.class));
     }
 
@@ -120,7 +126,7 @@ class MatriculaServiceTest {
                 novoServico().matricular(10L, "aluno-1")
         );
 
-        assertEquals(Response.Status.NOT_FOUND, excecao.obterStatus());
+        assertEquals(Response.Status.NOT_FOUND, excecao.getStatus());
         verify(repositorioMatricula, never()).persist(any(br.com.diego.soares.entity.Matricula.class));
     }
 
@@ -136,7 +142,7 @@ class MatriculaServiceTest {
                 novoServico().matricular(10L, "aluno-1")
         );
 
-        assertEquals("curso_nao_autorizado", excecao.obterCodigo());
+        assertEquals("curso_nao_autorizado", excecao.getCodigo());
         verify(repositorioMatricula, never()).persist(any(br.com.diego.soares.entity.Matricula.class));
     }
 
@@ -153,7 +159,7 @@ class MatriculaServiceTest {
                 novoServico().matricular(10L, "aluno-1")
         );
 
-        assertEquals("regra_de_negocio", excecao.obterCodigo());
+        assertEquals("regra_de_negocio", excecao.getCodigo());
         verify(repositorioMatricula, never()).persist(any(br.com.diego.soares.entity.Matricula.class));
     }
 
@@ -172,7 +178,7 @@ class MatriculaServiceTest {
                 novoServico().matricular(10L, "aluno-1")
         );
 
-        assertEquals("regra_de_negocio", excecao.obterCodigo());
+        assertEquals("regra_de_negocio", excecao.getCodigo());
         verify(repositorioMatricula, never()).persist(any(br.com.diego.soares.entity.Matricula.class));
     }
 
@@ -191,7 +197,7 @@ class MatriculaServiceTest {
                 novoServico().matricular(10L, "aluno-1")
         );
 
-        assertEquals("regra_de_negocio", excecao.obterCodigo());
+        assertEquals("regra_de_negocio", excecao.getCodigo());
         verify(repositorioMatricula, never()).persist(any(br.com.diego.soares.entity.Matricula.class));
     }
 }
