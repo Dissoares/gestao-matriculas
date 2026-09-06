@@ -6,7 +6,10 @@ import {
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { interceptorAutorizacao } from '@front/auth/interceptors';
+import {
+  interceptorAutorizacao,
+  interceptorErro,
+} from '@front/auth/interceptors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AutenticacaoService } from '@front/shared/services';
 import { provideRouter } from '@angular/router';
@@ -45,7 +48,9 @@ export const configuracaoApp: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideAnimationsAsync(),
     provideRouter(appRoutes),
-    provideHttpClient(withInterceptors([interceptorAutorizacao])),
+    provideHttpClient(
+      withInterceptors([interceptorAutorizacao, interceptorErro]),
+    ),
     MessageService,
     ConfirmationService,
     providePrimeNG({

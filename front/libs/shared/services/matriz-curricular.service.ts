@@ -4,10 +4,10 @@ import {
   FiltrosMatrizCurricular,
   RequisicaoCriarMatriz,
   MatrizCurricular,
-} from '@front/shared/models';
-import { environment } from '@front/environments';
+} from '@front/shared/interfaces';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { environment } from '@front/environments';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -19,11 +19,13 @@ export class MatrizCurricularService {
     filtros: FiltrosMatrizCurricular = {},
   ): Observable<Array<MatrizCurricular>> {
     let parametros = new HttpParams();
+
     Object.entries(filtros).forEach(([chave, valor]) => {
       if (valor !== undefined && valor !== null && valor !== '') {
         parametros = parametros.set(chave, String(valor));
       }
     });
+
     return this.clienteHttp.get<Array<MatrizCurricular>>(this.urlBase, {
       params: parametros,
     });
@@ -48,12 +50,13 @@ export class MatrizCurricularService {
   }
 
   public atualizar(
-    idMatriz: number,
     requisicao: RequisicaoAtualizarMatriz,
   ): Observable<MatrizCurricular> {
+    const { id, ...corpo } = requisicao;
+    
     return this.clienteHttp.put<MatrizCurricular>(
-      `${this.urlBase}/${idMatriz}`,
-      requisicao,
+      `${this.urlBase}/${id}`,
+      corpo,
     );
   }
 

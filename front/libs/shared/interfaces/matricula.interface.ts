@@ -1,6 +1,6 @@
-import { Disciplina } from './disciplina.model';
-import { Horario } from './horario.model';
-import { Professor } from './professor.model';
+import { Disciplina } from './.interface';
+import { Horario } from './.interface';
+import { Professor } from './.interface';
 
 export interface Matricula {
   id: number;

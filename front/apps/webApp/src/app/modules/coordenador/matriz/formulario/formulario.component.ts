@@ -1,30 +1,28 @@
-﻿import {
+import {
   ReferenciasMatrizCurricular,
   RequisicaoAtualizarMatriz,
   RequisicaoCriarMatriz,
-  MatrizCurricular,
-} from '@front/shared/models';
-import {
   MatrizFormularioDados,
+  MatrizCurricular,
   MatrizForm,
-} from './interfaces/formulario.interfaces';
+} from '@front/shared/interfaces';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  AbstractControl,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatrizCurricularService } from '@front/shared/services';
-import { HttpErrorResponse } from '@angular/common/http';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { HorarioPipe } from '@front/shared/pipes';
-import { MessageModule } from 'primeng/message';
+import { RotasEnum } from '@front/shared/enums';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
+import { Observable, finalize } from 'rxjs';
 import { CardModule } from 'primeng/card';
-import { finalize } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -36,7 +34,6 @@ import { finalize } from 'rxjs';
     CardModule,
     HorarioPipe,
     InputNumberModule,
-    MessageModule,
     MultiSelectModule,
     ReactiveFormsModule,
     RouterLink,
@@ -52,46 +49,15 @@ export class FormularioComponent implements OnInit {
   public readonly referencias = signal<ReferenciasMatrizCurricular | null>(
     null,
   );
+  public readonly rotaMatrizes = `/${RotasEnum.ROTA.COORDENADOR}/${RotasEnum.COORDENADOR.MATRIZ.LISTAR}`;
   public readonly salvando = signal<boolean>(false);
-  public readonly mensagemErro = signal<string>('');
+
   public idMatriz: number | null = null;
   public formulario!: MatrizForm;
 
   public ngOnInit(): void {
     this.criarFormulario();
     this.carregarDadosDaRota();
-  }
-
-  public salvar(): void {
-    const valores = this.formulario.getRawValue();
-
-    if (this.formulario.invalid) {
-      this.formulario.markAllAsTouched();
-      return;
-    }
-
-    this.salvando.set(true);
-
-    const requisicao = this.idMatriz
-      ? this.servicoMatriz.atualizar(this.idMatriz, {
-          professorId: valores.professorId,
-          horarioId: valores.horarioId,
-          cursosAutorizadosIds: valores.cursosAutorizadosIds,
-        } satisfies RequisicaoAtualizarMatriz)
-      : this.servicoMatriz.criar({
-          disciplinaId: valores.disciplinaId,
-          professorId: valores.professorId,
-          horarioId: valores.horarioId,
-          cursosAutorizadosIds: valores.cursosAutorizadosIds,
-          quantidadeMaximaAlunos: valores.quantidadeMaximaAlunos,
-        } satisfies RequisicaoCriarMatriz);
-
-    requisicao.pipe(finalize(() => this.salvando.set(false))).subscribe({
-      next: (): void => this.roteador.navigate(['/coordenador/matrizes']),
-      error: (resposta: HttpErrorResponse): void => {
-        this.mensagemErro.set(this.obterMensagemErro(resposta));
-      },
-    });
   }
 
   private criarFormulario(): void {
@@ -107,8 +73,47 @@ export class FormularioComponent implements OnInit {
     });
   }
 
+  public salvar(): void {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      return;
+    }
+
+    this.salvando.set(true);
+
+    const operacao: Observable<MatrizCurricular> = this.idMatriz
+      ? this.executarAtualizacao()
+      : this.executarCriacao();
+
+    operacao.pipe(finalize(() => this.salvando.set(false))).subscribe({
+      next: (): void => {
+        this.navegarParaListagem();
+      },
+    });
+  }
+
+  private executarCriacao(): Observable<MatrizCurricular> {
+    const requisicao: RequisicaoCriarMatriz = this.formulario.getRawValue();
+    return this.servicoMatriz.criar(requisicao);
+  }
+
+  private executarAtualizacao(): Observable<MatrizCurricular> {
+    const { professorId, horarioId, cursosAutorizadosIds } =
+      this.formulario.getRawValue();
+
+    const requisicao: RequisicaoAtualizarMatriz = {
+      id: this.idMatriz!,
+      professorId,
+      horarioId,
+      cursosAutorizadosIds,
+    };
+
+    return this.servicoMatriz.atualizar(requisicao);
+  }
+
   public campoInvalido(nomeCampo: string): boolean {
-    const campo = this.formulario.get(nomeCampo);
+    const campo: AbstractControl<any, any, any> | null =
+      this.formulario.get(nomeCampo);
     return !!campo && campo.invalid && (campo.touched || campo.dirty);
   }
 
@@ -131,11 +136,12 @@ export class FormularioComponent implements OnInit {
       cursosAutorizadosIds: matriz.cursosAutorizados.map((curso) => curso.id),
       quantidadeMaximaAlunos: matriz.quantidadeMaximaAlunos,
     });
+
     this.formulario.get('disciplinaId')?.disable();
     this.formulario.get('quantidadeMaximaAlunos')?.disable();
   }
 
-  private obterMensagemErro(resposta: HttpErrorResponse): string {
-    return resposta.error?.mensagem ?? 'Não foi possível concluir a operação.';
+  private navegarParaListagem(): void {
+    this.roteador.navigate([this.rotaMatrizes]);
   }
 }

@@ -1,7 +1,7 @@
-import { Curso } from './curso.model';
-import { Disciplina } from './disciplina.model';
-import { Horario } from './horario.model';
-import { Professor } from './professor.model';
+import { Curso } from './.interface';
+import { Disciplina } from './.interface';
+import { Horario } from './.interface';
+import { Professor } from './.interface';
 
 export interface MatrizCurricular {
   id: number;

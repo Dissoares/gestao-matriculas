@@ -1,16 +1,14 @@
-﻿import { Component, OnInit, inject, signal } from '@angular/core';
+import { AulaDisponivel, Matricula } from '@front/shared/interfaces';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MatriculaService } from '@front/shared/services';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AulaDisponivel } from '@front/shared/models';
 import { HorarioPipe } from '@front/shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
+import { Observable, finalize } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { finalize } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -24,9 +22,7 @@ import { finalize } from 'rxjs';
     ProgressSpinnerModule,
     TableModule,
     TagModule,
-    ToastModule,
   ],
-  providers: [MessageService],
 })
 export class AulasComponent implements OnInit {
   private readonly servicoMatricula = inject(MatriculaService);
@@ -42,41 +38,32 @@ export class AulasComponent implements OnInit {
 
   public buscarAulas(): void {
     this.carregando.set(true);
-    this.servicoMatricula
-      .listarAulasDisponiveis()
-      .pipe(finalize(() => this.carregando.set(false)))
-      .subscribe({
-        next: (aulas: Array<AulaDisponivel>): void => this.aulas.set(aulas),
-        error: (resposta: HttpErrorResponse): void => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: this.obterMensagemErro(resposta),
-            life: 5000,
-          });
-        },
-      });
+
+    const operacao: Observable<Array<AulaDisponivel>> =
+      this.servicoMatricula.listarAulasDisponiveis();
+
+    operacao.pipe(finalize(() => this.carregando.set(false))).subscribe({
+      next: (aulas: Array<AulaDisponivel>): void => {
+        this.aulas.set(aulas);
+      },
+    });
   }
 
   public matricular(aula: AulaDisponivel): void {
     this.matriculando.set(aula.id);
-    this.servicoMatricula
-      .matricular(aula.id)
-      .pipe(finalize(() => this.matriculando.set(null)))
-      .subscribe({
-        next: (): void => this.notificarSucessoEAtualizar(),
-        error: (resposta: HttpErrorResponse): void => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: this.obterMensagemErro(resposta),
-            life: 5000,
-          });
-        },
-      });
+    const operacao: Observable<Matricula> = this.servicoMatricula.matricular(
+      aula.id,
+    );
+    operacao.pipe(finalize(() => this.matriculando.set(null))).subscribe({
+      next: (): void => {
+        this.notificarSucessoEAtualizar();
+      },
+    });
   }
 
-  public severidadeVagas(vagasDisponiveis: number): 'success' | 'warn' | 'danger' {
+  public severidadeVagas(
+    vagasDisponiveis: number,
+  ): 'success' | 'warn' | 'danger' {
     if (vagasDisponiveis > 5) return 'success';
     if (vagasDisponiveis > 0) return 'warn';
     return 'danger';
@@ -90,9 +77,5 @@ export class AulasComponent implements OnInit {
       life: 4000,
     });
     this.buscarAulas();
-  }
-
-  private obterMensagemErro(resposta: HttpErrorResponse): string {
-    return resposta.error?.mensagem ?? 'Não foi possível concluir a operação.';
   }
 }

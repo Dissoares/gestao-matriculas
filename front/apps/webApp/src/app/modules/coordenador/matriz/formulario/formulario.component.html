@@ -12,13 +12,10 @@
         </p>
       </div>
       <p-button label="Voltar" icon="pi pi-arrow-left" severity="secondary" [outlined]="true"
-        routerLink="/coordenador/matrizes" />
+        [routerLink]="rotaMatrizes" />
     </div>
   </ng-template>
 
-  @if (mensagemErro()) {
-  <p-message severity="error" [text]="mensagemErro()" styleClass="w-full mb-4" />
-  }
   <form [formGroup]="formulario" (ngSubmit)="salvar()" class="formulario-grid">
     <div class="campo">
       <label>Disciplina</label>
@@ -76,7 +73,7 @@
                 ? 'Salvar alterações'
                 : 'Criar aula'
           " icon="pi pi-check" [loading]="salvando()" />
-      <p-button label="Cancelar" severity="secondary" [outlined]="true" routerLink="/coordenador/matrizes" />
+      <p-button label="Cancelar" severity="secondary" [outlined]="true" [routerLink]="rotaMatrizes" />
     </div>
   </form>
 </p-card>

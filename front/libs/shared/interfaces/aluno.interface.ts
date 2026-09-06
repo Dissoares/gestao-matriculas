@@ -1,4 +1,4 @@
-import { Curso } from './curso.model';
+import { Curso } from './.interface';
 
 export interface Aluno {
   id: number;

@@ -1,4 +1,4 @@
-import { ReferenciasMatrizCurricular, MatrizCurricular } from '@front/shared/models';
+import { ReferenciasMatrizCurricular, MatrizCurricular } from '@front/shared/interfaces';
 import { FormControl, FormGroup } from '@angular/forms';
 
 export interface MatrizFormularioDados {

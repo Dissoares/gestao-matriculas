@@ -1,4 +1,3 @@
-<p-toast />
 <p-confirmdialog />
 
 <p-card styleClass="pagina-card">
@@ -8,13 +7,9 @@
         <h1>Matrizes curriculares</h1>
         <p class="subtitulo">Gerencie as aulas sob sua responsabilidade.</p>
       </div>
-      <p-button label="Nova aula" icon="pi pi-plus" routerLink="/coordenador/matrizes/nova" />
+      <p-button label="Nova aula" icon="pi pi-plus" [routerLink]="rotaNovaMatriz" />
     </div>
   </ng-template>
-
-  @if (mensagemErro()) {
-  <p-message severity="error" [text]="mensagemErro()" styleClass="w-full mb-3" />
-  }
 
   <div class="secao-filtros">
     <div class="filtros-grid">

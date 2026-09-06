@@ -1,28 +1,25 @@
-﻿import {
+import {
   ReferenciasMatrizCurricular,
   FiltrosMatrizCurricular,
   MatrizCurricular,
-} from '@front/shared/models';
+} from '@front/shared/interfaces';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MatrizCurricularService } from '@front/shared/services';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PeriodoEnum, RotasEnum } from '@front/shared/enums';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { HttpErrorResponse } from '@angular/common/http';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Router, RouterLink } from '@angular/router';
-import { PeriodoEnum } from '@front/shared/enums';
 import { HorarioPipe } from '@front/shared/pipes';
-import { MessageModule } from 'primeng/message';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
-import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
+import { Observable, finalize } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { finalize } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -36,16 +33,13 @@ import { finalize } from 'rxjs';
     FormsModule,
     HorarioPipe,
     InputNumberModule,
-    MessageModule,
     ProgressSpinnerModule,
     RouterLink,
     SelectModule,
     TableModule,
     TagModule,
-    ToastModule,
     TooltipModule,
   ],
-  providers: [MessageService, ConfirmationService],
 })
 export class ListagemComponent implements OnInit {
   private readonly servicoMatriz = inject(MatrizCurricularService);
@@ -54,10 +48,13 @@ export class ListagemComponent implements OnInit {
   private readonly confirmationService = inject(ConfirmationService);
 
   public readonly matrizes = signal<Array<MatrizCurricular>>([]);
-  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(null);
+  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(
+    null,
+  );
   public readonly carregando = signal<boolean>(false);
-  public readonly mensagemErro = signal<string>('');
   public readonly periodos = PeriodoEnum.obterTodos();
+  public readonly rotaNovaMatriz = `/${RotasEnum.ROTA.COORDENADOR}/${RotasEnum.COORDENADOR.MATRIZ.NOVA}`;
+
   public filtros: FiltrosMatrizCurricular = {};
 
   public ngOnInit(): void {
@@ -67,14 +64,15 @@ export class ListagemComponent implements OnInit {
 
   public buscar(): void {
     this.carregando.set(true);
-    this.mensagemErro.set('');
-    this.servicoMatriz
-      .listar(this.filtros)
-      .pipe(finalize(() => this.carregando.set(false)))
-      .subscribe({
-        next: (matrizes: Array<MatrizCurricular>): void => this.matrizes.set(matrizes),
-        error: (resposta: HttpErrorResponse): void => this.mensagemErro.set(this.obterMensagemErro(resposta)),
-      });
+
+    const operacao: Observable<Array<MatrizCurricular>> =
+      this.servicoMatriz.listar(this.filtros);
+
+    operacao.pipe(finalize(() => this.carregando.set(false))).subscribe({
+      next: (matrizes: Array<MatrizCurricular>): void => {
+        this.matrizes.set(matrizes);
+      },
+    });
   }
 
   public limparFiltros(): void {
@@ -83,7 +81,13 @@ export class ListagemComponent implements OnInit {
   }
 
   public editar(matriz: MatrizCurricular): void {
-    this.roteador.navigate(['/coordenador/matrizes', matriz.id, 'editar']);
+    this.roteador.navigate([
+      '/',
+      RotasEnum.ROTA.COORDENADOR,
+      RotasEnum.COORDENADOR.MATRIZ.LISTAR,
+      matriz.id,
+      'editar',
+    ]);
   }
 
   public excluir(matriz: MatrizCurricular): void {
@@ -99,7 +103,9 @@ export class ListagemComponent implements OnInit {
   }
 
   public severidadeVagas(matriz: MatrizCurricular): 'success' | 'danger' {
-    return matriz.vagasOcupadas < matriz.quantidadeMaximaAlunos ? 'success' : 'danger';
+    return matriz.vagasOcupadas < matriz.quantidadeMaximaAlunos
+      ? 'success'
+      : 'danger';
   }
 
   public descreverCursos(matriz: MatrizCurricular): string {
@@ -107,14 +113,20 @@ export class ListagemComponent implements OnInit {
   }
 
   private carregarReferencias(): void {
-    this.servicoMatriz.listarReferencias().subscribe({
-      next: (referencias: ReferenciasMatrizCurricular): void => this.referencias.set(referencias),
-      error: (resposta: HttpErrorResponse): void => this.mensagemErro.set(this.obterMensagemErro(resposta)),
+    const operacao: Observable<ReferenciasMatrizCurricular> =
+      this.servicoMatriz.listarReferencias();
+
+    operacao.subscribe({
+      next: (referencias: ReferenciasMatrizCurricular): void => {
+        this.referencias.set(referencias);
+      },
     });
   }
 
   private confirmarExclusao(matriz: MatrizCurricular): void {
-    this.servicoMatriz.excluir(matriz.id).subscribe({
+    const operacao: Observable<void> = this.servicoMatriz.excluir(matriz.id);
+
+    operacao.subscribe({
       next: (): void => {
         this.messageService.add({
           severity: 'success',
@@ -124,18 +136,6 @@ export class ListagemComponent implements OnInit {
         });
         this.buscar();
       },
-      error: (resposta: HttpErrorResponse): void => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: this.obterMensagemErro(resposta),
-          life: 5000,
-        });
-      },
     });
-  }
-
-  private obterMensagemErro(resposta: HttpErrorResponse): string {
-    return resposta.error?.mensagem ?? 'Não foi possível concluir a operação.';
   }
 }
