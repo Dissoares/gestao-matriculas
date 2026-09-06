@@ -5,7 +5,7 @@ import {
   RequisicaoCriarMatriz,
   MatrizCurricular,
 } from '@front/shared/models';
-import { environment } from '@front/shared/environments';
+import { environment } from '@front/environments';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';

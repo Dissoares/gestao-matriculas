@@ -1,5 +1,5 @@
+import { environment } from '@front/environments';
 import { AulaDisponivel, Matricula } from '@front/shared/models';
-import { environment } from '@front/shared/environments';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

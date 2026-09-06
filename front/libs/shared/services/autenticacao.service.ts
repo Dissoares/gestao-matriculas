@@ -1,5 +1,5 @@
 import Keycloak, { KeycloakInitOptions } from 'keycloak-js';
-import { environment } from '@front/shared/environments';
+import { environment } from '@front/environments';
 import { PerfilEnum } from '../enums/perfil.enum';
 import { Injectable } from '@angular/core';
 
