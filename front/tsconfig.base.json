@@ -21,7 +21,7 @@
       "@front/shared/interfaces": ["./libs/shared/interfaces/index.ts"],
       "@front/shared/pipes": ["./libs/shared/pipes/index.ts"],
       "@front/shared/services": ["./libs/shared/services/index.ts"],
-      "@front/environments": ["./apps/webApp/src/environments/index.ts"]
+      "@front/environments": ["./apps/gestao-matrizes/src/environments/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

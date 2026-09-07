@@ -4,12 +4,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "nx serve webApp",
-    "build": "nx build webApp",
-    "build:hml": "nx build webApp --configuration=hml",
-    "build:prod": "nx build webApp --configuration=prod",
-    "test": "nx test webApp",
-    "lint": "nx lint webApp"
+    "start": "nx serve gestao-matrizes",
+    "build": "nx build gestao-matrizes",
+    "build:hml": "nx build gestao-matrizes --configuration=hml",
+    "build:prod": "nx build gestao-matrizes --configuration=prod",
+    "test": "nx test gestao-matrizes",
+    "lint": "nx lint gestao-matrizes"
   },
   "dependencies": {
     "@angular/animations": "20.3.30",

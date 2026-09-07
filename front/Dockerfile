@@ -6,9 +6,9 @@ RUN npm install --legacy-peer-deps && \
 COPY . .
 ENV NX_DAEMON=false
 ENV NX_SKIP_NX_CACHE=true
-RUN npx nx build webApp --configuration=production
+RUN npx nx build gestao-matrizes --configuration=production
 
 FROM nginx:alpine
-COPY --from=build /app/dist/apps/webApp/browser /usr/share/nginx/html
+COPY --from=build /app/dist/apps/gestao-matrizes/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80

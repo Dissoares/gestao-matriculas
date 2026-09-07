@@ -1,9 +1,9 @@
 {
-  "name": "webApp",
+  "name": "gestao-matrizes",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/webApp/src",
+  "sourceRoot": "apps/gestao-matrizes/src",
   "tags": ["type:app", "scope:web"],
   "targets": {
     "build": {
@@ -13,26 +13,26 @@
       ],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/webApp",
-        "browser": "apps/webApp/src/main.ts",
-        "tsConfig": "apps/webApp/tsconfig.app.json",
+        "outputPath": "dist/apps/gestao-matrizes",
+        "browser": "apps/gestao-matrizes/src/main.ts",
+        "tsConfig": "apps/gestao-matrizes/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/webApp/public"
+            "input": "apps/gestao-matrizes/public"
           }
         ],
         "styles": [
-          "apps/webApp/src/styles.scss"
+          "apps/gestao-matrizes/src/styles.scss"
         ]
       },
       "configurations": {
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/webApp/src/environments/environment.ts",
-              "with": "apps/webApp/src/environments/environment.prod.ts"
+              "replace": "apps/gestao-matrizes/src/environments/environment.ts",
+              "with": "apps/gestao-matrizes/src/environments/environment.prod.ts"
             }
           ],
           "budgets": [
@@ -52,8 +52,8 @@
         "hml": {
           "fileReplacements": [
             {
-              "replace": "apps/webApp/src/environments/environment.ts",
-              "with": "apps/webApp/src/environments/environment.hml.ts"
+              "replace": "apps/gestao-matrizes/src/environments/environment.ts",
+              "with": "apps/gestao-matrizes/src/environments/environment.hml.ts"
             }
           ],
           "budgets": [
@@ -83,13 +83,13 @@
       "defaultConfiguration": "development",
       "configurations": {
         "production": {
-          "buildTarget": "webApp:build:production"
+          "buildTarget": "gestao-matrizes:build:production"
         },
         "hml": {
-          "buildTarget": "webApp:build:hml"
+          "buildTarget": "gestao-matrizes:build:hml"
         },
         "development": {
-          "buildTarget": "webApp:build:development"
+          "buildTarget": "gestao-matrizes:build:development"
         }
       }
     },
@@ -106,9 +106,9 @@
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "webApp:build",
+        "buildTarget": "gestao-matrizes:build",
         "port": 4200,
-        "staticFilePath": "dist/apps/webApp/browser",
+        "staticFilePath": "dist/apps/gestao-matrizes/browser",
         "spa": true
       }
     }
