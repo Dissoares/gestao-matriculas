@@ -12,6 +12,6 @@ export class PerfilEnum {
   }
 
   public static buscarPorCodigo(codigo: number): PerfilEnum | undefined {
-    return this.obterTodos().find((skill) => skill.codigo === codigo);
+    return this.obterTodos().find((perfil) => perfil.codigo === codigo);
   }
 }

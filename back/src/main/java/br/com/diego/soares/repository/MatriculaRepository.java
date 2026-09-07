@@ -20,11 +20,11 @@ public class MatriculaRepository implements PanacheRepository<Matricula> {
 
     public boolean existeConflitoDeHorario(String idKeycloakAluno, DiaSemanaEnum diaSemana, LocalTime inicio, LocalTime fim) {
         return count("""
-                aluno.keycloakId = ?1
-                and matrizCurricular.horario.diaSemana = ?2
-                and matrizCurricular.horario.horaInicio < ?4
-                and matrizCurricular.horario.horaFim > ?3
-                """, idKeycloakAluno, diaSemana, inicio, fim) > 0;
+                            aluno.keycloakId = ?1
+                            and matrizCurricular.horario.diaSemana = ?2
+                            and matrizCurricular.horario.horaInicio < ?4
+                            and matrizCurricular.horario.horaFim > ?3
+                            """, idKeycloakAluno, diaSemana, inicio, fim) > 0;
     }
 
     public List<Matricula> buscarDoAluno(String idKeycloakAluno) {

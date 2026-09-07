@@ -13,6 +13,6 @@ export class PeriodoEnum {
   }
 
   public static buscarPorCodigo(codigo: number): PeriodoEnum | undefined {
-    return this.obterTodos().find((skill) => skill.codigo === codigo);
+    return this.obterTodos().find((periodo) => periodo.codigo === codigo);
   }
 }

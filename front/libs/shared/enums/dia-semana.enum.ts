@@ -25,6 +25,6 @@ export class DiaSemanaEnum {
   }
 
   public static buscarPorCodigo(codigo: number): DiaSemanaEnum | undefined {
-    return this.obterTodos().find((skill) => skill.codigo === codigo);
+    return this.obterTodos().find((dia) => dia.codigo === codigo);
   }
 }

@@ -1,4 +1,4 @@
-import { AutenticacaoService } from '../services/autenticacao.service';
+import { AutenticacaoService } from '@front/shared/services';
 import { CanActivateFn, Router } from '@angular/router';
 import { PerfilEnum, RotasEnum } from '../enums';
 import { inject } from '@angular/core';

@@ -1,7 +1,7 @@
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 
@@ -18,8 +18,4 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
   ],
 })
-export class ContentComponent implements OnInit {
-  constructor() {}
-
-  public ngOnInit() {}
-}
+export class ContentComponent {}

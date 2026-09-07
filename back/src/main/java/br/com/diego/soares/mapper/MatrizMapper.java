@@ -30,7 +30,7 @@ public class MatrizMapper {
                 new IdNomeResposta(matriz.getDisciplina().getId(), matriz.getDisciplina().getNome()),
                 new IdNomeResposta(matriz.getProfessor().getId(), matriz.getProfessor().getNome()),
                 paraHorarioResposta(matriz.getHorario()),
-                (int) Math.max(0L, (long) matriz.getQuantidadeMaximaAlunos() - vagasOcupadas));
+                (int) Math.max(0L, matriz.getQuantidadeMaximaAlunos() - vagasOcupadas));
     }
 
     private HorarioResposta paraHorarioResposta(Horario horario) {

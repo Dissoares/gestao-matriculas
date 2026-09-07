@@ -39,8 +39,12 @@
       <label>Horário</label>
       <p-select formControlName="horarioId" [options]="referencias()?.horarios ?? []" optionLabel="id" optionValue="id"
         placeholder="Selecione o horário" styleClass="w-full">
-        <ng-template let-horario #item>{{ horario | horario:'select' }}</ng-template>
-        <ng-template let-horario #selectedItem>{{ horario | horario:'select' }}</ng-template>
+        <ng-template let-horario #item>{{
+          horario | horario: 'select'
+          }}</ng-template>
+        <ng-template let-horario #selectedItem>{{
+          horario | horario: 'select'
+          }}</ng-template>
       </p-select>
       @if (campoInvalido('horarioId')) {
       <small class="campo-erro">Selecione um horário.</small>
@@ -67,12 +71,12 @@
 
     <div class="campo-full acoes-formulario">
       <p-button type="submit" [label]="
-            salvando()
-              ? 'Salvando...'
-              : idMatriz
-                ? 'Salvar alterações'
-                : 'Criar aula'
-          " icon="pi pi-check" [loading]="salvando()" />
+          salvando()
+            ? 'Salvando...'
+            : idMatriz
+              ? 'Salvar alterações'
+              : 'Criar aula'
+        " icon="pi pi-check" [loading]="salvando()" />
       <p-button label="Cancelar" severity="secondary" [outlined]="true" [routerLink]="rotaMatrizes" />
     </div>
   </form>
