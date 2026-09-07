@@ -10,7 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.security.OAuthFlows;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 
 @ApplicationPath("/")
-@OpenAPIDefinition(info = @Info(title = "Gestão de Matrículas API", version = "1.0.0"))
+@OpenAPIDefinition(info = @Info(title = "Gestão de Matrizes API", version = "1.0.0"))
 @SecurityScheme(
         securitySchemeName = "keycloak",
         type = SecuritySchemeType.OAUTH2,

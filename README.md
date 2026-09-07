@@ -1,4 +1,4 @@
-# Gestão de Matrículas
+# Gestão de Matrizes
 
 Sistema acadêmico de gestão de matrizes curriculares e matrícula de alunos em aulas.
 
@@ -21,7 +21,7 @@ Sistema acadêmico de gestão de matrizes curriculares e matrícula de alunos em
 
 ---
 
-## Executar o comando no diretório principal: gestao-matriculas
+## Executar o comando no diretório principal: gestao-matrizes
 ```bash
 docker compose up --build 
 ```
@@ -87,7 +87,7 @@ valida curso autorizado, vagas esgotadas, choque de horário e matrícula bem-su
 ## Arquitetura
 
 ```
-gestao-matriculas/
+gestao-matrizes/
 ├── back/              # API REST (Quarkus)
 │   ├── controller/    # Endpoints JAX-RS
 │   ├── service/       # Regras de negócio

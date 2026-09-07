@@ -1,7 +1,7 @@
 {
   "realm": "get-matriculas",
   "enabled": true,
-  "displayName": "Gestão de Matrículas",
+  "displayName": "Gestão de Matrizes",
   "registrationAllowed": false,
   "resetPasswordAllowed": true,
   "bruteForceProtected": true,
