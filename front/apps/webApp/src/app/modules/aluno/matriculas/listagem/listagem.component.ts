@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MatriculaService } from '@front/shared/services';
 import { Matricula } from '@front/shared/interfaces';
@@ -14,6 +14,7 @@ import { CardModule } from 'primeng/card';
   selector: 'app-matriculas-listagem',
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ButtonModule,
     CardModule,

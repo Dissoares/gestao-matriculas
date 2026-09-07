@@ -1,14 +1,15 @@
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { AutenticacaoService } from '@front/shared/services';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { PerfilEnum, RotasEnum } from '@front/shared/enums';
 import { ItemMenu } from '@front/shared/interfaces';
-import { Component, inject, OnInit } from '@angular/core';
 
 @Component({
   standalone: true,
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
+  styleUrl: './sidebar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterLinkActive],
 })
 export class SidebarComponent implements OnInit {

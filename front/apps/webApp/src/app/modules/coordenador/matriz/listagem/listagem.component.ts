@@ -3,7 +3,7 @@ import {
   FiltrosMatrizCurricular,
   MatrizCurricular,
 } from '@front/shared/interfaces';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MatrizCurricularService } from '@front/shared/services';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -25,7 +25,8 @@ import { TagModule } from 'primeng/tag';
   standalone: true,
   selector: 'app-listagem',
   templateUrl: './listagem.component.html',
-  styleUrls: ['./listagem.component.scss'],
+  styleUrl: './listagem.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ButtonModule,
     CardModule,

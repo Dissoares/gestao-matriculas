@@ -1,5 +1,5 @@
 import { AulaDisponivel, Matricula } from '@front/shared/interfaces';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MatriculaService } from '@front/shared/services';
 import { HorarioPipe } from '@front/shared/pipes';
@@ -15,6 +15,7 @@ import { TagModule } from 'primeng/tag';
   selector: 'app-aulas',
   templateUrl: './aulas.component.html',
   styleUrl: './aulas.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ButtonModule,
     CardModule,

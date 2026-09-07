@@ -1,5 +1,5 @@
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { AutenticacaoService } from '@front/shared/services';
-import { Component, inject, OnInit } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
@@ -8,7 +8,8 @@ import { AvatarModule } from 'primeng/avatar';
   standalone: true,
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ToolbarModule, ButtonModule, AvatarModule],
 })
 export class HeaderComponent implements OnInit {

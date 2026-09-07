@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { AutenticacaoService } from '@front/shared/services';
 import { PerfilEnum, RotasEnum } from '@front/shared/enums';
 import { ButtonModule } from 'primeng/button';
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
   imports: [ButtonModule, CardModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   private readonly autenticacaoService = inject(AutenticacaoService);

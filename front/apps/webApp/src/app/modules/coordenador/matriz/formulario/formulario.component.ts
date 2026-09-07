@@ -13,7 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { MatrizCurricularService } from '@front/shared/services';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -28,7 +28,8 @@ import { CardModule } from 'primeng/card';
   standalone: true,
   selector: 'app-formulario',
   templateUrl: './formulario.component.html',
-  styleUrls: ['./formulario.component.scss'],
+  styleUrl: './formulario.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ButtonModule,
     CardModule,
@@ -112,8 +113,7 @@ export class FormularioComponent implements OnInit {
   }
 
   public campoInvalido(nomeCampo: string): boolean {
-    const campo: AbstractControl<any, any, any> | null =
-      this.formulario.get(nomeCampo);
+    const campo: AbstractControl | null = this.formulario.get(nomeCampo);
     return !!campo && campo.invalid && (campo.touched || campo.dirty);
   }
 
