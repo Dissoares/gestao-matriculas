@@ -1,10 +1,14 @@
 <aside class="sidebar">
+  <div class="sidebar-logo">
+    <i class="pi pi-graduation-cap sidebar-logo-icone"></i>
+    <span class="sidebar-logo-texto">Gestão de<br />Matrículas</span>
+  </div>
   <nav>
     @for (item of itensMenu; track item.rota) {
-      <a class="menu-item" [routerLink]="item.rota" routerLinkActive="menu-item--ativo">
-        <i [class]="item.icon"></i>
-        <span>{{ item.label }}</span>
-      </a>
+    <a class="menu-item" [routerLink]="item.rota" routerLinkActive="menu-item--ativo">
+      <i [class]="item.icon"></i>
+      <span>{{ item.label }}</span>
+    </a>
     }
   </nav>
 </aside>
