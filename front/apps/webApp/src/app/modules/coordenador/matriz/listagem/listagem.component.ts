@@ -7,15 +7,13 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@ang
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MatrizCurricularService } from '@front/shared/services';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { PeriodoEnum, RotasEnum } from '@front/shared/enums';
+import { RotasEnum } from '@front/shared/enums';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { FiltrosComponent } from './filtros/filtros.component';
 import { Router, RouterLink } from '@angular/router';
 import { HorarioPipe } from '@front/shared/pipes';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
-import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { Observable, finalize } from 'rxjs';
 import { CardModule } from 'primeng/card';
@@ -31,12 +29,10 @@ import { TagModule } from 'primeng/tag';
     ButtonModule,
     CardModule,
     ConfirmDialogModule,
-    FormsModule,
+    FiltrosComponent,
     HorarioPipe,
-    InputNumberModule,
     ProgressSpinnerModule,
     RouterLink,
-    SelectModule,
     TableModule,
     TagModule,
     TooltipModule,
@@ -49,36 +45,26 @@ export class ListagemComponent implements OnInit {
   private readonly confirmationService = inject(ConfirmationService);
 
   public readonly matrizes = signal<Array<MatrizCurricular>>([]);
-  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(
-    null,
-  );
+  public readonly referencias = signal<ReferenciasMatrizCurricular | null>(null);
   public readonly carregando = signal<boolean>(false);
-  public readonly periodos = PeriodoEnum.obterTodos();
   public readonly rotaNovaMatriz = `/${RotasEnum.ROTA.COORDENADOR}/${RotasEnum.COORDENADOR.MATRIZ.NOVA}`;
-
-  public filtros: FiltrosMatrizCurricular = {};
 
   public ngOnInit(): void {
     this.carregarReferencias();
     this.buscar();
   }
 
-  public buscar(): void {
+  public buscar(filtros: FiltrosMatrizCurricular = {}): void {
     this.carregando.set(true);
 
     const operacao: Observable<Array<MatrizCurricular>> =
-      this.servicoMatriz.listar(this.filtros);
+      this.servicoMatriz.listar(filtros);
 
     operacao.pipe(finalize(() => this.carregando.set(false))).subscribe({
       next: (matrizes: Array<MatrizCurricular>): void => {
         this.matrizes.set(matrizes);
       },
     });
-  }
-
-  public limparFiltros(): void {
-    this.filtros = {};
-    this.buscar();
   }
 
   public editar(matriz: MatrizCurricular): void {
@@ -107,10 +93,6 @@ export class ListagemComponent implements OnInit {
     return matriz.vagasOcupadas < matriz.quantidadeMaximaAlunos
       ? 'success'
       : 'danger';
-  }
-
-  public descreverCursos(matriz: MatrizCurricular): string {
-    return matriz.cursosAutorizados.map((curso) => curso.nome).join(', ');
   }
 
   private carregarReferencias(): void {

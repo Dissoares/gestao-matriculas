@@ -11,36 +11,7 @@
     </div>
   </ng-template>
 
-  <div class="secao-filtros">
-    <div class="filtros-grid">
-      <div class="filtro-campo">
-        <label>Horário inicial</label>
-        <input pInputText type="time" [(ngModel)]="filtros.horaInicio" />
-      </div>
-      <div class="filtro-campo">
-        <label>Horário final</label>
-        <input pInputText type="time" [(ngModel)]="filtros.horaFim" />
-      </div>
-      <div class="filtro-campo">
-        <label>Período</label>
-        <p-select [(ngModel)]="filtros.periodo" [options]="periodos" optionLabel="label" optionValue="codigo"
-          [showClear]="true" placeholder="Todos" />
-      </div>
-      <div class="filtro-campo">
-        <label>Curso autorizado</label>
-        <p-select [(ngModel)]="filtros.cursoId" [options]="referencias()?.cursos ?? []" optionLabel="nome"
-          optionValue="id" [showClear]="true" placeholder="Todos" />
-      </div>
-      <div class="filtro-campo">
-        <label>Máximo de alunos</label>
-        <p-inputnumber [(ngModel)]="filtros.quantidadeMaxima" [min]="1" [useGrouping]="false" placeholder="Qualquer" />
-      </div>
-      <div class="filtro-acoes">
-        <p-button label="Filtrar" icon="pi pi-filter" (onClick)="buscar()" />
-        <p-button label="Limpar" severity="secondary" [outlined]="true" (onClick)="limparFiltros()" />
-      </div>
-    </div>
-  </div>
+  <app-filtros-matriz [referencias]="referencias()" (buscar)="buscar($event)" />
 
   @if (carregando()) {
   <div class="estado-carregando">
