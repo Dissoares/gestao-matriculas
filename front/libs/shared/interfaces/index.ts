@@ -5,6 +5,7 @@ export * from './curso.interface';
 export * from './disciplina.interface';
 export * from './filtros-matriz-curricular.interface';
 export * from './horario.interface';
+export * from './item-menu.interface';
 export * from './matricula.interface';
 export * from './matriz-curricular.interface';
 export * from './matriz-form.interface';

@@ -8,22 +8,23 @@
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.04);
 }
 
-.sidebar-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--p-text-muted-color);
-  padding: 0.5rem 1rem 0.25rem;
-}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1rem;
+  color: var(--p-text-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.15s;
 
-:host ::ng-deep .p-panelmenu-panel {
-  border: none;
-  border-radius: 0;
-}
+  &:hover {
+    background: var(--p-surface-100);
+  }
 
-:host ::ng-deep .p-panelmenu-header-content {
-  border-radius: 0;
-  border: none;
-  padding: 0.6rem 1rem;
+  &--ativo {
+    background: var(--p-primary-50);
+    color: var(--p-primary-color);
+    font-weight: 600;
+  }
 }

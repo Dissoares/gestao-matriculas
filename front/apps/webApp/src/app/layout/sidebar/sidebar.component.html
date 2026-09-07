@@ -1,3 +1,10 @@
 <aside class="sidebar">
-  <p-panelmenu [model]="itensMenu" styleClass="sidebar-menu" />
+  <nav>
+    @for (item of itensMenu; track item.rota) {
+      <a class="menu-item" [routerLink]="item.rota" routerLinkActive="menu-item--ativo">
+        <i [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
 </aside>
