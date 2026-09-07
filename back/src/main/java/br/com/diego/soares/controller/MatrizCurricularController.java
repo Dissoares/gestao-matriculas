@@ -45,9 +45,9 @@ public class MatrizCurricularController {
     SecurityIdentity identity;
 
     @POST
-    @Operation(summary = "Criar uma aula da matriz curricular")
+    @Operation(summary = "Criar uma matriz curricular")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "Aula criada com sucesso", content = @Content(schema = @Schema(implementation = MatrizResposta.class))),
+            @APIResponse(responseCode = "201", description = "Matriz criada com sucesso", content = @Content(schema = @Schema(implementation = MatrizResposta.class))),
             @APIResponse(responseCode = "400", description = "Dados inválidos ou disciplina já ofertada no mesmo horário"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @APIResponse(responseCode = "403", description = "Usuário não possui perfil coordenador")
@@ -59,9 +59,9 @@ public class MatrizCurricularController {
     }
 
     @GET
-    @Operation(summary = "Listar e filtrar as aulas do coordenador")
+    @Operation(summary = "Listar e filtrar as matrizes do coordenador")
     @APIResponses({
-            @APIResponse(responseCode = "200", description = "Lista de aulas da matriz curricular do coordenador"),
+            @APIResponse(responseCode = "200", description = "Lista de matrizes curriculares do coordenador"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @APIResponse(responseCode = "403", description = "Usuário não possui perfil coordenador")
     })
@@ -88,12 +88,12 @@ public class MatrizCurricularController {
 
     @GET
     @Path("/{id}")
-    @Operation(summary = "Consultar uma aula da própria matriz")
+    @Operation(summary = "Consultar uma matriz curricular")
     @APIResponses({
-            @APIResponse(responseCode = "200", description = "Aula encontrada"),
+            @APIResponse(responseCode = "200", description = "Matriz encontrada"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @APIResponse(responseCode = "403", description = "Usuário não possui perfil coordenador"),
-            @APIResponse(responseCode = "404", description = "Aula não encontrada ou pertence a outro coordenador")
+            @APIResponse(responseCode = "404", description = "Matriz não encontrada ou pertence a outro coordenador")
     })
     public MatrizResposta buscarPorId(@PathParam("id") Long idMatriz) {
         return servico.buscarPorId(idMatriz, identity.getPrincipal().getName());
@@ -101,13 +101,13 @@ public class MatrizCurricularController {
 
     @PUT
     @Path("/{id}")
-    @Operation(summary = "Editar professor, horário e cursos autorizados de uma aula")
+    @Operation(summary = "Editar professor, horário e cursos autorizados de uma matriz")
     @APIResponses({
-            @APIResponse(responseCode = "200", description = "Aula atualizada com sucesso"),
+            @APIResponse(responseCode = "200", description = "Matriz atualizada com sucesso"),
             @APIResponse(responseCode = "400", description = "Alteração removeria alunos matriculados ou dados inválidos"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @APIResponse(responseCode = "403", description = "Usuário não possui perfil coordenador"),
-            @APIResponse(responseCode = "404", description = "Aula não encontrada ou pertence a outro coordenador")
+            @APIResponse(responseCode = "404", description = "Matriz não encontrada ou pertence a outro coordenador")
     })
     public MatrizResposta atualizar(@PathParam("id") Long idMatriz, @Valid RequisicaoAtualizarMatriz requisicao) {
         return servico.atualizar(requisicao, idMatriz, identity.getPrincipal().getName());
@@ -115,13 +115,13 @@ public class MatrizCurricularController {
 
     @DELETE
     @Path("/{id}")
-    @Operation(summary = "Excluir logicamente uma aula sem matrículas")
+    @Operation(summary = "Excluir logicamente uma matriz sem matrículas")
     @APIResponses({
-            @APIResponse(responseCode = "204", description = "Aula desativada com sucesso"),
-            @APIResponse(responseCode = "400", description = "Existem alunos matriculados nesta aula"),
+            @APIResponse(responseCode = "204", description = "Matriz desativada com sucesso"),
+            @APIResponse(responseCode = "400", description = "Existem alunos matriculados nesta matriz"),
             @APIResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @APIResponse(responseCode = "403", description = "Usuário não possui perfil coordenador"),
-            @APIResponse(responseCode = "404", description = "Aula não encontrada ou pertence a outro coordenador")
+            @APIResponse(responseCode = "404", description = "Matriz não encontrada ou pertence a outro coordenador")
     })
     public Response excluir(@PathParam("id") Long idMatriz) {
         servico.excluir(idMatriz, identity.getPrincipal().getName());

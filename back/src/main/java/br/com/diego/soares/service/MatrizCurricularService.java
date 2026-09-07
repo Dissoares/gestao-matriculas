@@ -145,7 +145,7 @@ public class MatrizCurricularService {
         MatrizCurricular matriz = obterMatrizDoCoordenador(idMatriz, idKeycloak);
 
         if (repositorioMatricula.contarPorIdMatriz(idMatriz) > 0) {
-            throw new ExcecaoNegocio("Não é possível excluir uma aula que possui alunos matriculados.");
+            throw new ExcecaoNegocio("Essta matriz não pode ser excluída pois tem um ou mais alunos matriculados.");
         }
         matriz.setAtivo(false);
     }
@@ -166,7 +166,7 @@ public class MatrizCurricularService {
 
     private MatrizCurricular obterMatrizDoCoordenador(Long idMatriz, String idKeycloak) {
         return repositorioMatriz.buscarAtivaDoCoordenadorPorId(idMatriz, idKeycloak)
-                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("aula da matriz curricular"));
+                .orElseThrow(() -> ExcecaoNegocio.naoEncontrado("matriz curricular"));
     }
 
     private Disciplina obterDisciplina(Long idDisciplina) {

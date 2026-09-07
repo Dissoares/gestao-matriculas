@@ -2,12 +2,12 @@
   <ng-template #header>
     <div class="pagina-card-header">
       <div>
-        <h1>{{ idMatriz ? 'Editar aula' : 'Nova aula' }}</h1>
+        <h1>{{ idMatriz ? 'Editar matriz' : 'Nova matriz' }}</h1>
         <p class="subtitulo">
           {{
           idMatriz
           ? 'Disciplina e quantidade de vagas não são alteráveis.'
-          : 'Preencha os dados da aula a ser ofertada.'
+          : 'Preencha os dados da matriz a ser ofertada.'
           }}
         </p>
       </div>
@@ -75,7 +75,7 @@
             ? 'Salvando...'
             : idMatriz
               ? 'Salvar alterações'
-              : 'Criar aula'
+              : 'Criar matriz'
         " icon="pi pi-check" [loading]="salvando()" />
       <p-button label="Cancelar" severity="secondary" [outlined]="true" [routerLink]="rotaMatrizes" />
     </div>

@@ -5,9 +5,9 @@
     <div class="pagina-card-header">
       <div>
         <h1>Matrizes curriculares</h1>
-        <p class="subtitulo">Gerencie as aulas sob sua responsabilidade.</p>
+        <p class="subtitulo">Gerencie suas matrizes.</p>
       </div>
-      <p-button label="Nova aula" icon="pi pi-plus" [routerLink]="rotaNovaMatriz" />
+      <p-button label="Nova matriz" icon="pi pi-plus" [routerLink]="rotaNovaMatriz" />
     </div>
   </ng-template>
 
@@ -49,7 +49,7 @@
   </div>
   } @else {
   <p-table [value]="matrizes()" dataKey="id" [paginator]="true" [rows]="8" [rowsPerPageOptions]="[8, 16, 32]"
-    [showCurrentPageReport]="true" currentPageReportTemplate="{first} a {last} de {totalRecords} aulas"
+    [showCurrentPageReport]="true" currentPageReportTemplate="{first} a {last} de {totalRecords} matrizes"
     styleClass="p-datatable-sm p-datatable-striped p-datatable-gridlines">
     <ng-template #header>
       <tr>
@@ -96,7 +96,7 @@
         <td colspan="6">
           <div class="estado-vazio">
             <i class="pi pi-inbox"></i>
-            <span>Nenhuma aula encontrada para os filtros selecionados.</span>
+            <span>Nenhuma matriz encontrada para os filtros selecionados.</span>
           </div>
         </td>
       </tr>

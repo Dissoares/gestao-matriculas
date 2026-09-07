@@ -92,7 +92,7 @@ export class ListagemComponent implements OnInit {
 
   public excluir(matriz: MatrizCurricular): void {
     this.confirmationService.confirm({
-      message: `Deseja excluir logicamente a aula de <strong>${matriz.disciplina.nome}</strong>? Esta ação não pode ser desfeita.`,
+      message: `Deseja excluir a matriz de <strong>${matriz.disciplina.nome}</strong>? Esta ação não pode ser desfeita.`,
       header: 'Confirmar exclusão',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Excluir',
@@ -131,7 +131,7 @@ export class ListagemComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Sucesso',
-          detail: 'Aula excluída com sucesso.',
+          detail: 'Matriz excluída com sucesso.',
           life: 4000,
         });
         this.buscar();

@@ -113,10 +113,10 @@ Documentação completa no Swagger UI.
 
 | Método | Path                        | Descrição                              |
 |--------|-----------------------------|----------------------------------------|
-| POST   | `/api/matrizes`             | Criar aula da matriz curricular        |
-| GET    | `/api/matrizes`             | Listar e filtrar aulas do coordenador  |
+| POST   | `/api/matrizes`             | Criar matriz curricular                |
+| GET    | `/api/matrizes`             | Listar e filtrar matrizes do coordenador |
 | GET    | `/api/matrizes/referencias` | Dados pré-cadastrados do formulário    |
-| GET    | `/api/matrizes/{id}`        | Detalhar uma aula                      |
+| GET    | `/api/matrizes/{id}`        | Detalhar uma matriz curricular         |
 | PUT    | `/api/matrizes/{id}`        | Editar professor, horário e cursos     |
 | DELETE | `/api/matrizes/{id}`        | Exclusão lógica (bloqueada se há matriculados) |
 

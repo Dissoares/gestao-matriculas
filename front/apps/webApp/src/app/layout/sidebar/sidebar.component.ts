@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
           rota: `/${RotasEnum.ROTA.COORDENADOR}/${RotasEnum.COORDENADOR.MATRIZ.LISTAR}`,
         },
         {
-          label: 'Nova Aula',
+          label: 'Nova matriz',
           icon: 'pi pi-plus',
           rota: `/${RotasEnum.ROTA.COORDENADOR}/${RotasEnum.COORDENADOR.MATRIZ.NOVA}`,
         },
